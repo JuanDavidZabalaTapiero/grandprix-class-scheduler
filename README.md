@@ -57,7 +57,26 @@ ruff check .
 ruff check . --fix
 ```
 
-## Ejecutar App
+## 🔒 Automatización con pre-commit
+El proyecto utiliza pre-commit para ejecutar automáticamente
+`Black` y `Ruff` antes de cada commit.
+
+### Inicializar pre-commit
+En la raíz del proyecto, ejecutar una sola vez:
+
+```bash
+pre-commit install
+```
+
+Salida esperada:
+
+```bash
+pre-commit installed at .git\hooks\pre-commit
+```
+
+---
+
+## ▶ Ejecutar App
 En la `raíz` del proyecto, ejecutar:
 
 ```bash
