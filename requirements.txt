@@ -1,0 +1,13 @@
+# Backend (API) + Frontend (jinja2)
+Flask==3.1.2
+
+# == CÓDIGO ==
+
+# Formateo de código .py
+black==26.1.0
+
+# Detectar errores + Ordenar imports
+ruff==0.15.0
+
+# Automatizar formateo + checks antes del commit
+pre-commit==4.5.1

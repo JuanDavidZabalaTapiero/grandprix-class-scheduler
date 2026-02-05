@@ -1,0 +1,13 @@
+# ENTORNO VIRTUAL
+.venv
+
+# == IDE ==
+.vscode/
+
+# == CACHE ==
+
+# python
+__pycache__/
+
+# ruff
+.ruff_cache
