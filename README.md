@@ -42,6 +42,7 @@ En la `raíz` del proyecto:
 
 ```bash
 pip install -r requirements.txt
+pip install -r requirements.txt # desarrollo
 ```
 
 ---

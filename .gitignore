@@ -1,6 +1,9 @@
 # ENTORNO VIRTUAL
 .venv
 
+# VARIABLES DE ENTORNO
+.env
+
 # == IDE ==
 .vscode/
 
