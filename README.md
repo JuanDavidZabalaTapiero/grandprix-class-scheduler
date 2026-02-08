@@ -12,10 +12,22 @@ en la academia de conducción **Grand Prix**.
 ---
 
 ## 🛠️ Tecnologías
-- Flask
-- Black – formateo automático de código
-- Ruff – detección de errores y orden de imports
-- Pre-commit – ejecución automática de `Black` y `Ruff` antes de cada **commit**
+- Backend
+  - Flask
+
+- Calidad de Código
+  - Black - formateo automático de código
+  - Ruff - detección de errores y orden de imports
+  - Pre-commit - ejecución automática de `Black` y `Ruff` antes de cada **commit**
+  
+- Frontend
+  - Bootstrap (CSS / JS)
+  - Sass: preprocesador CSS
+  - Gulp: automatización de tareas frontend
+  - gulp-sass: compilación de archivos SCSS
+  - gulp-clean-css: minificación CSS
+  - gulp-terser: minificación JS
+  - gulp-rename: renombrado de archivos
 
 ---
 
@@ -42,8 +54,20 @@ En la `raíz` del proyecto:
 
 ```bash
 pip install -r requirements.txt
-pip install -r requirements.txt # desarrollo
+pip install -r requirements-dev.txt # desarrollo
 ```
+
+---
+
+##  🎨 Frontend (Dev)
+
+En la carpeta `frontend` del proyecto:
+
+```bash
+npm install # Instalar dependencias
+npx gulp # Ejecutar gulp (watch)
+```
+> Requiere Node.js y npm instalados.
 
 ---
 
@@ -63,7 +87,7 @@ El proyecto utiliza pre-commit para ejecutar automáticamente
 `Black` y `Ruff` antes de cada commit.
 
 ### Inicializar pre-commit
-En la raíz del proyecto, ejecutar una sola vez:
+En la `raíz` del proyecto, ejecutar una sola vez:
 
 ```bash
 pre-commit install
@@ -81,5 +105,5 @@ pre-commit installed at .git\hooks\pre-commit
 En la `raíz` del proyecto, ejecutar:
 
 ```bash
-py run.py
+python run.py
 ```
