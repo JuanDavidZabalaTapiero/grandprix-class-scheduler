@@ -30,10 +30,10 @@ en la academia de conducción **Grand Prix**.
   - Bootstrap-Icons
   - Sass: preprocesador CSS
   - Gulp: automatización de tareas frontend
-  - gulp-sass: compilación de archivos SCSS
-  - gulp-clean-css: minificación CSS
-  - gulp-terser: minificación JS
-  - gulp-rename: renombrado de archivos
+    - gulp-sass: compilación de archivos SCSS
+    - gulp-clean-css: minificación CSS
+    - gulp-terser: minificación JS
+    - gulp-rename: renombrado de archivos
 
 ---
 
