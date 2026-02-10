@@ -11,8 +11,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "bootstrap": "^5.3.8",
-    "bootstrap-icons": "^1.13.1"
+    "bootstrap": "^5.3.8"
   },
   "devDependencies": {
     "gulp": "^5.0.1",
