@@ -38,15 +38,7 @@ function watcher() {
     watch(paths.jsAll, scripts);
 }
 
-// === TAREAS SOLAS ===
-
-function iconsSVG() {
-    return src("node_modules/bootstrap-icons/icons/*.svg")
-        .pipe(dest("../app/static/icons"));
-}
-
 // === EXPORTAR TAREAS ===
 exports.styles = styles;
 exports.scripts = scripts;
-exports.iconsSVG = iconsSVG;
 exports.default = series(parallel(styles, scripts), watcher);
