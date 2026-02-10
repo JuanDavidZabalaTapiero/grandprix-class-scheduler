@@ -13,8 +13,6 @@ const paths = {
     jsOutput: "../app/static/js"
 }
 
-// === TAREAS MODO WATCH ===
-
 // COMPILAR Y MINIFICAR SCSS
 function styles() {
     return src(paths.scssNoPartials, { base: "scss" })
