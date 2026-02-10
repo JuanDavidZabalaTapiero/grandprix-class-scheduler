@@ -13,10 +13,12 @@ const paths = {
     jsOutput: "../app/static/js"
 }
 
+// === TAREAS MODO WATCH ===
+
 // COMPILAR Y MINIFICAR SCSS
 function styles() {
     return src(paths.scssNoPartials, { base: "scss" })
-        .pipe(sass({quietDeps: true}).on("error", sass.logError))
+        .pipe(sass({ quietDeps: true }).on("error", sass.logError))
         .pipe(cleanCSS())
         .pipe(rename({ suffix: ".min" }))
         .pipe(dest(paths.cssOutput));
@@ -36,7 +38,15 @@ function watcher() {
     watch(paths.jsAll, scripts);
 }
 
-// EXPORTAR TAREAS
+// === TAREAS SOLAS ===
+
+function iconsSVG() {
+    return src("node_modules/bootstrap-icons/icons/*.svg")
+        .pipe(dest("../app/static/icons"));
+}
+
+// === EXPORTAR TAREAS ===
 exports.styles = styles;
 exports.scripts = scripts;
+exports.iconsSVG = iconsSVG;
 exports.default = series(parallel(styles, scripts), watcher);

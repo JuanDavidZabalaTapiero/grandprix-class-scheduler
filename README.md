@@ -12,8 +12,13 @@ en la academia de conducción **Grand Prix**.
 ---
 
 ## 🛠️ Tecnologías
+- BD: MySQL
+
 - Backend
   - Flask
+  - ORM: Flask-SQLAlchemy
+  - Migraciones: Flask-Migrate
+  - Leer .env: python-dotenv
 
 - Calidad de Código
   - Black - formateo automático de código
@@ -22,6 +27,7 @@ en la academia de conducción **Grand Prix**.
   
 - Frontend
   - Bootstrap (CSS / JS)
+  - Bootstrap-Icons
   - Sass: preprocesador CSS
   - Gulp: automatización de tareas frontend
   - gulp-sass: compilación de archivos SCSS
