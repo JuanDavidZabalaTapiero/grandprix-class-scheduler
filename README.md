@@ -68,13 +68,13 @@ pip install -r requirements-dev.txt # desarrollo
 
 ## 🔑 Variables de entorno
 
-En la `raíz` del proyecto crear un archivo `.env` con las siguientes variables:
+En la `raíz` del proyecto, crea un archivo llamado `.env` y define las siguientes variables:
 
 ```.env
 SECRET_KEY=mi_llave_secreta
 DATABASE_URL=mysql+mysqldb://user:pass@host/db_name
 ```
-> Recuerda cambiar el valor de las variables según tu caso.
+> Asegúrate de reemplazar los valores de ejemplo con los correspondientes a tu entorno de desarrollo.
 
 ---
 
