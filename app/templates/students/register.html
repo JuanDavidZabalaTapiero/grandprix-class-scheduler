@@ -1,0 +1,24 @@
+{% extends "students/home.html" %}
+
+{% block title %}Registrar | {{super()}}{% endblock %}
+
+{% block body %}
+<h1>Registrar Alumno</h1>
+
+<form method="post" novalidate>
+    <!-- CSRF -->
+    {{form.hidden_tag()}}
+
+    <div>
+        <!-- DOCUMENT ID -->
+        {{form.document_id.label}}
+        {{form.document_id()}}
+        {% for error in form.document_id.errors %}
+        <p>{{error}}</p>
+        {% endfor %}
+
+        <!-- SUBMIT -->
+        {{ form.submit() }}
+    </div>
+</form>
+{% endblock %}

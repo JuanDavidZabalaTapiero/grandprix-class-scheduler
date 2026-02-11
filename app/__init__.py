@@ -2,7 +2,7 @@ from flask import Flask, render_template
 
 from .blueprints import register_blueprints
 from .config import Config
-from .extensions import db, migrate
+from .extensions import csrf, db, migrate
 
 
 def create_app():
@@ -14,6 +14,7 @@ def create_app():
     # == INICIALIZAR EXTENSIONES ==
     db.init_app(app)
     migrate.init_app(app, db)
+    csrf.init_app(app)
 
     # == IMPORTAR MODELOS (MIGRACIONES) ==
     from app.db import models  # noqa: F401

@@ -18,7 +18,8 @@ en la academia de conducción **Grand Prix**.
   - Flask
   - ORM: Flask-SQLAlchemy
   - Migraciones: Flask-Migrate
-  - Leer .env: python-dotenv
+  - Variables de entorno: python-dotenv
+  - Formularios: Flask-WTF
 
 - Calidad de Código
   - Black - formateo automático de código
@@ -65,6 +66,18 @@ pip install -r requirements-dev.txt # desarrollo
 
 ---
 
+## 🔑 Variables de entorno
+
+En la `raíz` del proyecto crear un archivo `.env` con las siguientes variables:
+
+```.env
+SECRET_KEY=mi_llave_secreta
+DATABASE_URL=mysql+mysqldb://user:pass@host/db_name
+```
+> Recuerda cambiar el valor de las variables según tu caso.
+
+---
+
 ##  🎨 Frontend (Dev)
 
 En la carpeta `frontend` del proyecto:
@@ -107,7 +120,7 @@ pre-commit installed at .git\hooks\pre-commit
 
 ---
 
-## ▶ Ejecutar App
+## 🎮 Ejecutar App
 En la `raíz` del proyecto, ejecutar:
 
 ```bash

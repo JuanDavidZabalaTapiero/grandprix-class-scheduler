@@ -3,10 +3,7 @@
 {% block title %}Alumnos{% endblock %}
 
 {% block body %}
-<img src="{{ url_for('static', filename='icons/people-fill.svg') }}">
-
 <h1>Alumnos</h1>
 
-<a href="">Registrar</a>
-
+<a href="{{url_for('students.register_student_form')}}">Registrar</a>
 {% endblock %}

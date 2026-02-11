@@ -1,8 +1,10 @@
-# VARIABLES DE ENTORNO
+# === BACKEND (API) + FRONTEND (jinja2) ===
+Flask==3.1.2
+
+
+# === LEER VARIABLES DE ENTORNO ===
 python-dotenv==1.2.1
 
-# BACKEND (API) + FRONTEND (jinja2)
-Flask==3.1.2
 
 # === DB ===
 
@@ -14,4 +16,8 @@ mysqlclient==2.2.7
 
 # MIGRACIONES
 Flask-Migrate==4.1.0
+
+
+# === FORMULARIOS ===
+Flask-WTF==1.2.2
 
