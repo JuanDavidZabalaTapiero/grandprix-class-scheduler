@@ -126,3 +126,77 @@ En la `raíz` del proyecto, ejecutar:
 ```bash
 python run.py
 ```
+
+---
+
+## </> Recomendaciones (Dev)
+
+### 📦 Modelos (DB)
+Para agregar un nuevo modelo:
+1. Crear el archivo dentro de: `app/db/models/`
+2. Registrar el modelo en: `app/db/models/__init__.py`
+
+> Esto es necesario para que Alembic detecte los cambios correctamente.
+
+---
+
+### 🔄 Migraciones
+Después de crear o modificar un modelo:
+
+```bash
+flask db migrate -m "mensaje descriptivo" # Crear migración
+flask db upgrade # Aplicar migración
+```
+
+---
+
+### 🧩 Blueprints
+Un Blueprint agrupa toda la lógica relacionada con una sección específica de la aplicación (por ejemplo: students, instructors, vehicles, etc.).
+
+Cada blueprint debe contener:
+- `routes.py` → Endpoints HTTP
+- `services/` → Lógica de negocio
+- `forms/` → Formularios (WTForms)
+- `exceptions.py` → Excepciones del dominio
+
+Crear el blueprint en: `app/blueprints/`
+
+Luego registrarlo en: `app/blueprints/__init__.py`
+
+---
+
+### ⚠️ Manejo de Excepciones
+La aplicación separa las excepciones por capas:
+
+**🔹Excepciones Globales**
+
+Ubicación: 
+```bash
+app/core/exceptions.py
+```
+
+> Contiene `AppError`, la clase base para todos los errores controlados del sistema.
+
+**🔹Excepciones de Base de Datos**
+
+Ubicación: 
+
+```bash
+app/db/exceptions.py
+```
+
+**🔹Excepciones de Dominio (Blueprint)**
+
+Cada blueprint debe tener su propio archivo: `exceptions.py`
+
+> Todas deben heredar de `AppError` para manejar los mensajes personalizados.
+
+---
+
+### 🎨 Vistas (Templates)
+Ubicación: `app/templates/`
+
+Recomendaciones:
+- Todas las vistas deben extender `base.html`.
+
+

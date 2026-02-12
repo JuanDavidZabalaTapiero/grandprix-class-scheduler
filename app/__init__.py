@@ -8,21 +8,21 @@ from .extensions import csrf, db, migrate
 def create_app():
     app = Flask(__name__)
 
-    # == CONFIG ==
+    # === CONFIG ===
     app.config.from_object(Config)
 
-    # == INICIALIZAR EXTENSIONES ==
+    # === INICIALIZAR EXTENSIONES ===
     db.init_app(app)
     migrate.init_app(app, db)
     csrf.init_app(app)
 
-    # == IMPORTAR MODELOS (MIGRACIONES) ==
+    # === IMPORTAR MODELOS (MIGRACIONES) ===
     from app.db import models  # noqa: F401
 
-    # == REGISTRAR BLUEPRINTS ==
+    # === REGISTRAR BLUEPRINTS ===
     register_blueprints(app)
 
-    # == ERRORES ==
+    # === ERRORES ===
 
     # 404
     @app.errorhandler(404)

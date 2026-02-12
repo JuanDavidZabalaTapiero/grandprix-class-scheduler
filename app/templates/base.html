@@ -13,8 +13,26 @@
 </head>
 
 <body>
-    {% block body %}
+    <!-- HEADER -->
+    {% block header %}
+    {% include "components/header.html" %}
     {% endblock %}
+
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block main %}
+        {% endblock %}
+    </main>
 
     <!-- BOOTSTRAP (JS) -->
     <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>

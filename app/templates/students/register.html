@@ -2,7 +2,7 @@
 
 {% block title %}Registrar | {{super()}}{% endblock %}
 
-{% block body %}
+{% block main %}
 <h1>Registrar Alumno</h1>
 
 <form method="post" novalidate>
@@ -17,8 +17,21 @@
         <p>{{error}}</p>
         {% endfor %}
 
-        <!-- SUBMIT -->
-        {{ form.submit() }}
+        <!-- NAME -->
+        {{form.name.label}}
+        {{form.name()}}
+        {% for error in form.name.errors %}
+        <p>{{error}}</p>
+        {% endfor %}
+
+        {{form.phone.label}}
+        {{form.phone()}}
+        {% for error in form.phone.errors %}
+        <p>{{error}}</p>
+        {% endfor %}
     </div>
+
+    <!-- SUBMIT -->
+    {{ form.submit() }}
 </form>
 {% endblock %}

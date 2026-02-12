@@ -8,7 +8,9 @@ class RegisterStudentForm(FlaskForm):
         "Nº de documento",
         validators=[
             DataRequired(message="El documento es obligatorio"),
-            Length(max=50),
+            Length(
+                max=50, message="El documento no puede tener más de %(max)% caracteres"
+            ),
             Regexp(
                 r"^[0-9A-Za-z\-\.]+$",
                 message="El documento solo puede contener letras, números, guiones o puntos",
@@ -20,7 +22,11 @@ class RegisterStudentForm(FlaskForm):
         "Nombre completo",
         validators=[
             DataRequired(message="El nombre es obligatorio"),
-            Length(min=3, max=255),
+            Length(
+                min=3,
+                max=255,
+                message="El nombre debe tener entre %(min)d y %(max)d caracteres",
+            ),
         ],
     )
 
@@ -28,7 +34,9 @@ class RegisterStudentForm(FlaskForm):
         "Teléfono",
         validators=[
             DataRequired(message="El teléfono es obligatorio"),
-            Length(min=7, max=20),
+            Length(
+                min=7, max=20, message="Debe tener entre %(min)d y %(max)d caracteres"
+            ),
             Regexp(
                 r"^[0-9\+\-\s]+$",
                 message="El teléfono solo puede contener números, espacios, + o -",
