@@ -1,5 +1,7 @@
 from flask import Flask, render_template
 
+from app.core.logging_config import configure_logging
+
 from .blueprints import register_blueprints
 from .config import Config
 from .extensions import csrf, db, migrate
@@ -28,5 +30,8 @@ def create_app():
     @app.errorhandler(404)
     def page_not_found(error):
         return render_template("errors/404.html")
+
+    # === LOGS ===
+    configure_logging(app)
 
     return app

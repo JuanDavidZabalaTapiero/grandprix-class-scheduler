@@ -7,13 +7,16 @@
 # == IDE ==
 .vscode/
 
-# == CACHE ==
+# == CACHE / LOGS ==
 
 # python
 __pycache__/
 
 # ruff
 .ruff_cache
+
+# logging
+logs/
 
 # == FRONTEND ==
 node_modules/

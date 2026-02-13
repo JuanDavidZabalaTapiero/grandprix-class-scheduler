@@ -44,4 +44,4 @@ class RegisterStudentForm(FlaskForm):
         ],
     )
 
-    submit = SubmitField("Registrar alumno")
+    submit = SubmitField("Registrar")

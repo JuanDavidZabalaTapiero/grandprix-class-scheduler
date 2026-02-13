@@ -2,9 +2,9 @@ from app.core.exceptions import AppError
 
 
 class StudentError(AppError):
-    default_message = "Ocurrió un error inesperado"
+    pass
 
 
 # === CREATE ===
 class StudentDocumentAlreadyExists(StudentError):
-    default_message = "Ya existe un estudiante con este documento"
+    default_message = "Ya existe un alumno con este número de documento"

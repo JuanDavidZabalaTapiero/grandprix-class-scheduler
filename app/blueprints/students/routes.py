@@ -41,7 +41,9 @@ def register_student():
     try:
         create_student(form.data)
 
-        flash("Estudiante registrado correctamente", "success")
+        flash("Alumno registrado correctamente", "success")
+
+        # VIEW: HOME
         return redirect(url_for("students.home"))
 
     except DatabaseConnectionError as e:
@@ -51,6 +53,7 @@ def register_student():
         flash(str(e), "danger")
 
     except Exception:
-        flash("Error inesperado del sistema", "danger")
+        flash("Error inesperado del sistema. Vuelva a intentar más tarde", "danger")
 
-    return redirect(url_for("students.home"))
+    # VIEW: REGISTRO + FORM
+    return render_template("students/register.html", form=form)

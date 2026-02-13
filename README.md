@@ -12,21 +12,18 @@ en la academia de conducción **Grand Prix**.
 ---
 
 ## 🛠️ Tecnologías
-- BD: MySQL
+- 🗄️ Base de datos: MySQL
 
-- Backend
+- ⚙️ Backend
   - Flask
   - ORM: Flask-SQLAlchemy
   - Migraciones: Flask-Migrate
   - Variables de entorno: python-dotenv
   - Formularios: Flask-WTF
+  - Mensajería: Flash
+  - Logs: logging (módulo estándar de Python)
 
-- Calidad de Código
-  - Black - formateo automático de código
-  - Ruff - detección de errores y orden de imports
-  - Pre-commit - ejecución automática de `Black` y `Ruff` antes de cada **commit**
-  
-- Frontend
+- 🎨 Frontend
   - Bootstrap (CSS / JS)
   - Bootstrap-Icons
   - Sass: preprocesador CSS
@@ -35,6 +32,12 @@ en la academia de conducción **Grand Prix**.
     - gulp-clean-css: minificación CSS
     - gulp-terser: minificación JS
     - gulp-rename: renombrado de archivos
+
+- 🧹 Calidad de Código
+  - Black - formateo automático de código
+  - Ruff - detección de errores y orden de imports
+  - Pre-commit - ejecución automática de `Black` y `Ruff` antes de cada **commit**
+
 
 ---
 
@@ -93,15 +96,15 @@ npx gulp # Ejecutar gulp (watch)
 ## 🎨 Formateo y análisis de código
 
 ```bash
-# Black
+# Formatear
 black .
 
-# Ruff
+# Analizar
 ruff check .
 ruff check . --fix
 ```
 
-## 🔒 Automatización con pre-commit
+## 🔒 Pre-commit
 El proyecto utiliza pre-commit para ejecutar automáticamente
 `Black` y `Ruff` antes de cada commit.
 
@@ -132,6 +135,12 @@ python run.py
 ## </> Recomendaciones (Dev)
 
 ### 📦 Modelos (DB)
+Ubicación:
+
+```bash
+app/db/models/
+```
+
 Para agregar un nuevo modelo:
 1. Crear el archivo dentro de: `app/db/models/`
 2. Registrar el modelo en: `app/db/models/__init__.py`
@@ -151,6 +160,12 @@ flask db upgrade # Aplicar migración
 ---
 
 ### 🧩 Blueprints
+Ubicación:
+
+```bash
+app/blueprints/
+```
+
 Un Blueprint agrupa toda la lógica relacionada con una sección específica de la aplicación (por ejemplo: students, instructors, vehicles, etc.).
 
 Cada blueprint debe contener:
@@ -168,7 +183,7 @@ Luego registrarlo en: `app/blueprints/__init__.py`
 ### ⚠️ Manejo de Excepciones
 La aplicación separa las excepciones por capas:
 
-**🔹Excepciones Globales**
+**🔹Globales**
 
 Ubicación: 
 ```bash
@@ -177,7 +192,7 @@ app/core/exceptions.py
 
 > Contiene `AppError`, la clase base para todos los errores controlados del sistema.
 
-**🔹Excepciones de Base de Datos**
+**🔹Base de Datos**
 
 Ubicación: 
 
@@ -185,7 +200,7 @@ Ubicación:
 app/db/exceptions.py
 ```
 
-**🔹Excepciones de Dominio (Blueprint)**
+**🔹Dominio (Blueprint)**
 
 Cada blueprint debe tener su propio archivo: `exceptions.py`
 
@@ -193,10 +208,52 @@ Cada blueprint debe tener su propio archivo: `exceptions.py`
 
 ---
 
+### 📄 Logging
+La aplicación utiliza el módulo estándar `logging` de Python.
+
+#### 📁 Configuración
+Ubicación:
+
+```bash
+app/core/logging_config.py
+```
+
+**Características**:
+- Logs almacenados en `logs/app.log`
+- amaño máximo por archivo: 10KB
+- Hasta 5 archivos de respaldo
+- No se muestran logs en la terminal
+- Nivel mínimo configurado: `INFO`
+
+#### 🧠 Uso en módulos
+En cualquier archivo donde se necesiten logs:
+
+```python
+import logging
+
+logger = logging.getLogger(__name__)
+```
+
+Métodos disponibles:
+
+```python
+logger.info("Informational message")
+logger.warning("Business warning")
+logger.error("Handled error")
+logger.exception("Unexpected error")  # incluye traceback
+```
+
+#### 📌 Convenciones
+- Los mensajes deben escribirse en **inglés**.
+- Evitar el uso de f-strings en logging.
+
+---
+
 ### 🎨 Vistas (Templates)
-Ubicación: `app/templates/`
+Ubicación: 
 
-Recomendaciones:
-- Todas las vistas deben extender `base.html`.
+```bash
+app/templates/
+```
 
-
+> Recomendación: Todas las vistas deben extender: `base.html`
