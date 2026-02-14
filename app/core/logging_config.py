@@ -1,29 +1,31 @@
 import logging
 import os
+import re
 from logging.handlers import RotatingFileHandler
 
 
-def configure_logging(app):
+# DESACTIVAR CÓDIGO ANSI
+class NoColorFormatter(logging.Formatter):
+    def format(self, record):
+        message = super().format(record)
+        ansi_escape = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
+        return ansi_escape.sub("", message)
+
+
+# === CONFIG LOGS ===
+def configure_logging():
 
     # CREAR CARPETA LOGS/ EN RAÍZ
-    if not os.path.exists("logs"):
-        os.mkdir("logs")
+    os.makedirs("logs", exist_ok=True)
 
     # === FILEHANDLER ===
-
-    # ELIMINAR HANDLERS POR DEFECTO
-    app.logger.handlers.clear()
-
-    formatter = logging.Formatter(
-        "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
-    )
+    formatter = NoColorFormatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s")
 
     file_handler = RotatingFileHandler("logs/app.log", maxBytes=10240, backupCount=5)
-
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
 
-    # AÑADIR A FLASK
-    app.logger.addHandler(file_handler)
-    app.logger.setLevel(logging.INFO)
-    app.logger.propagate = False
+    # === ROOT LOGGER ===
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    root_logger.addHandler(file_handler)

@@ -16,10 +16,10 @@ logger = logging.getLogger(__name__)
 
 def create_student(data: dict) -> Student:
     try:
-        # DATOS + LIMPIEZA
-        document_id = data["document_id"].strip()
-        name = data["name"].strip()
-        phone = data["phone"].strip()
+        # DATOS
+        document_id = data["document_id"]
+        name = data["name"]
+        phone = data["phone"]
 
         # REGISTRAR
         student = Student(document_id=document_id, name=name, phone=phone)

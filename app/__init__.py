@@ -1,5 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask
 
+from app.core.error_handlers import register_error_handlers
 from app.core.logging_config import configure_logging
 
 from .blueprints import register_blueprints
@@ -10,28 +11,24 @@ from .extensions import csrf, db, migrate
 def create_app():
     app = Flask(__name__)
 
+    # === LOGS ===
+    configure_logging()
+
     # === CONFIG ===
     app.config.from_object(Config)
 
-    # === INICIALIZAR EXTENSIONES ===
+    # === EXTENSIONES ===
     db.init_app(app)
     migrate.init_app(app, db)
     csrf.init_app(app)
 
-    # === IMPORTAR MODELOS (MIGRACIONES) ===
+    # === MODELOS (MIGRACIONES) ===
     from app.db import models  # noqa: F401
 
-    # === REGISTRAR BLUEPRINTS ===
+    # === BLUEPRINTS ===
     register_blueprints(app)
 
     # === ERRORES ===
-
-    # 404
-    @app.errorhandler(404)
-    def page_not_found(error):
-        return render_template("errors/404.html")
-
-    # === LOGS ===
-    configure_logging(app)
+    register_error_handlers(app)
 
     return app

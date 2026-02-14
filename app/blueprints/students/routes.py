@@ -1,3 +1,5 @@
+import logging
+
 from flask import Blueprint, flash, redirect, render_template, url_for
 
 # EXCEPCIONES
@@ -11,7 +13,14 @@ from .forms import RegisterStudentForm
 # SERVICIOS
 from .services.create_student import create_student
 
+logger = logging.getLogger(__name__)
+
 students_bp = Blueprint("students", __name__)
+
+
+# ====================
+# RUTAS
+# ====================
 
 
 @students_bp.get("/")
@@ -39,7 +48,13 @@ def register_student():
 
     # VALIDACIÓN (OK) -> MANEJAR REGISTRO
     try:
-        create_student(form.data)
+        data = {
+            "document_id": form.document_id.data,
+            "name": form.name.data,
+            "phone": form.phone.data,
+        }
+
+        create_student(data)
 
         flash("Alumno registrado correctamente", "success")
 
@@ -53,6 +68,7 @@ def register_student():
         flash(str(e), "danger")
 
     except Exception:
+        logger.exception("Unexpected error while registering student")
         flash("Error inesperado del sistema. Vuelva a intentar más tarde", "danger")
 
     # VIEW: REGISTRO + FORM
