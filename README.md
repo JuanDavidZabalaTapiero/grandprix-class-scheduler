@@ -1,4 +1,4 @@
-# 🚘 App – Gestión de Clases Prácticas
+<h1 align="center">🚘 App – Gestión de Clases Prácticas</h1>
 
 Aplicación web desarrollada con **Flask** para la gestión de clases prácticas
 en la academia de conducción **Grand Prix**.
@@ -132,7 +132,7 @@ python run.py
 
 ---
 
-## </> Recomendaciones (Dev)
+<h2 align="center">💡 Recomendaciones (Dev)</h2>
 
 ### 📦 Modelos (DB)
 Ubicación:
