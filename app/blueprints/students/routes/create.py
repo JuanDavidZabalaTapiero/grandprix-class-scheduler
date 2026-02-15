@@ -1,34 +1,19 @@
 import logging
 
-from flask import Blueprint, flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, url_for
 
-# EXCEPCIONES
+from app.blueprints.students import students_bp  # BLUEPRINT
+from app.blueprints.students.exceptions import StudentError
+from app.blueprints.students.forms import RegisterStudentForm  # FORMULARIO
+from app.blueprints.students.services.create_student import (
+    CreateStudentInput,
+    create_student,
+)  # SERVICIO
 from app.db.exceptions import DatabaseConnectionError
-
-from .exceptions import StudentError
-
-# FORMULARIOS
-from .forms import RegisterStudentForm
-
-# SERVICIOS
-from .services.create_student import CreateStudentInput, create_student
 
 logger = logging.getLogger(__name__)
 
-students_bp = Blueprint("students", __name__)
 
-
-# ====================
-# RUTAS
-# ====================
-
-
-@students_bp.get("/")
-def home():
-    return render_template("students/home.html")
-
-
-# === CREATE ===
 @students_bp.get("/register")
 def register_student_form():
     form = RegisterStudentForm()
@@ -42,9 +27,7 @@ def register_student():
 
     # VALIDACIÓN (ERROR)
     if not form.validate_on_submit():
-        return render_template(
-            "students/register.html", form=form
-        )  # RENDERIZAR FORM ACTUALIZADO
+        return render_template("students/register.html", form=form)
 
     # VALIDACIÓN (OK) -> MANEJAR REGISTRO
     try:

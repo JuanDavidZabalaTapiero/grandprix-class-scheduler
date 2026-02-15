@@ -1,7 +1,7 @@
-from .students.routes import students_bp
-from .tests.routes import tests_bp
+from .core.routes import core_bp
+from .students import students_bp
 
 
 def register_blueprints(app):
-    app.register_blueprint(tests_bp)
+    app.register_blueprint(core_bp)
     app.register_blueprint(students_bp)

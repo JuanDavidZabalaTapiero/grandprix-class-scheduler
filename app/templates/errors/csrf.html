@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Error de seguridad{% endblock %}
+
+{% block main %}
+<h1>Error de seguridad</h1>
+<p>La sesión ha expirado o la solicitud no es válida.</p>
+<p>Por favor, actualiza la página e intenta nuevamente.</p>
+<a href="{{ url_for('students.home') }}">Inicio</a>
+{% endblock %}

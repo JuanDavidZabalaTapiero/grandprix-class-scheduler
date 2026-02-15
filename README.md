@@ -169,7 +169,7 @@ app/blueprints/
 Un Blueprint agrupa toda la lógica relacionada con una sección específica de la aplicación (por ejemplo: students, instructors, vehicles, etc.).
 
 Cada blueprint debe contener:
-- `routes.py` → Endpoints HTTP
+- `routes/` → Endpoints HTTP
 - `services/` → Lógica de negocio
 - `forms/` → Formularios (WTForms)
 - `exceptions.py` → Excepciones del dominio
