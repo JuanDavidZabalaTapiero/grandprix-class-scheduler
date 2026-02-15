@@ -11,7 +11,7 @@ from .exceptions import StudentError
 from .forms import RegisterStudentForm
 
 # SERVICIOS
-from .services.create_student import create_student
+from .services.create_student import CreateStudentInput, create_student
 
 logger = logging.getLogger(__name__)
 
@@ -48,13 +48,13 @@ def register_student():
 
     # VALIDACIÓN (OK) -> MANEJAR REGISTRO
     try:
-        data = {
-            "document_id": form.document_id.data,
-            "name": form.name.data,
-            "phone": form.phone.data,
-        }
+        input_data = CreateStudentInput(
+            document_id=form.document_id.data,
+            name=form.name.data,
+            phone=form.phone.data,
+        )
 
-        create_student(data)
+        create_student(input_data)
 
         flash("Alumno registrado correctamente", "success")
 

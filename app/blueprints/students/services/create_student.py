@@ -1,4 +1,5 @@
 import logging
+from dataclasses import dataclass
 
 from sqlalchemy.exc import IntegrityError, OperationalError, SQLAlchemyError
 
@@ -10,16 +11,32 @@ from app.db.exceptions import DatabaseConnectionError
 from app.db.models import Student
 from app.extensions import db
 
-# LOGS
 logger = logging.getLogger(__name__)
 
 
-def create_student(data: dict) -> Student:
+# =========================
+# INPUT CONTRACT
+# =========================
+
+
+@dataclass
+class CreateStudentInput:
+    document_id: str
+    name: str
+    phone: str
+
+
+# =========================
+# SERVICE
+# =========================
+
+
+def create_student(data: CreateStudentInput) -> Student:
     try:
         # DATOS
-        document_id = data["document_id"]
-        name = data["name"]
-        phone = data["phone"]
+        document_id = data.document_id
+        name = data.name
+        phone = data.phone
 
         # REGISTRAR
         student = Student(document_id=document_id, name=name, phone=phone)

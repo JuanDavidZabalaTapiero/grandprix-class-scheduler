@@ -7,8 +7,25 @@ from .blueprints import register_blueprints
 from .config import Config
 from .extensions import csrf, db, migrate
 
+# =========================
+# CONFIG VALIDATION
+# =========================
 
-def create_app():
+
+def validate_config(app: Flask) -> None:
+    if not app.config.get("SECRET_KEY"):
+        raise RuntimeError("SECRET_KEY is not configured")
+
+    if not app.config.get("SQLALCHEMY_DATABASE_URI"):
+        raise RuntimeError("SQLALCHEMY_DATABASE_URI is not configured")
+
+
+# =========================
+# APP FACTORY
+# =========================
+
+
+def create_app() -> Flask:
     app = Flask(__name__)
 
     # === LOGS ===
@@ -16,6 +33,7 @@ def create_app():
 
     # === CONFIG ===
     app.config.from_object(Config)
+    validate_config(app)  # FAIL-FAST
 
     # === EXTENSIONES ===
     db.init_app(app)

@@ -6,10 +6,11 @@ from logging.handlers import RotatingFileHandler
 
 # DESACTIVAR CÓDIGO ANSI
 class NoColorFormatter(logging.Formatter):
+    ANSI_ESCAPE = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
+
     def format(self, record):
         message = super().format(record)
-        ansi_escape = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
-        return ansi_escape.sub("", message)
+        return self.ANSI_ESCAPE.sub("", message)
 
 
 # === CONFIG LOGS ===
@@ -17,15 +18,23 @@ def configure_logging():
 
     # CREAR CARPETA LOGS/ EN RAÍZ
     os.makedirs("logs", exist_ok=True)
+    log_path = os.path.abspath("logs/app.log")
 
-    # === FILEHANDLER ===
     formatter = NoColorFormatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s")
 
-    file_handler = RotatingFileHandler("logs/app.log", maxBytes=10240, backupCount=5)
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+
+    # VERIFICAR SI YA EXISTE UN ROTATINGFILEHANDLER
+    for handler in root_logger.handlers:
+        if (
+            isinstance(handler, RotatingFileHandler)
+            and os.path.abspath(handler.baseFilename) == log_path
+        ):
+            return  # YA ESTÁ CONFIGURADO -> SALIR
+
+    file_handler = RotatingFileHandler(log_path, maxBytes=10240, backupCount=5)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
 
-    # === ROOT LOGGER ===
-    root_logger = logging.getLogger()
-    root_logger.setLevel(logging.INFO)
     root_logger.addHandler(file_handler)
