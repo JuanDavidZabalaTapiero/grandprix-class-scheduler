@@ -183,7 +183,7 @@ Luego registrarlo en: `app/blueprints/__init__.py`
 ### ⚠️ Manejo de Excepciones
 La aplicación separa las excepciones por capas:
 
-**🔹Globales**
+**🔹 Globales**
 
 Ubicación: 
 ```bash
@@ -192,19 +192,28 @@ app/core/exceptions.py
 
 > Contiene `AppError`, la clase base para todos los errores controlados del sistema.
 
-**🔹Base de Datos**
+**🔹 Base de Datos**
 
-Ubicación: 
+Ubicación:
 
 ```bash
 app/db/exceptions.py
 ```
 
-**🔹Dominio (Blueprint)**
+**🔹 Dominio (Blueprint)**
 
 Cada blueprint debe tener su propio archivo: `exceptions.py`
 
-> Todas deben heredar de `AppError` para manejar los mensajes personalizados.
+> Todas deben heredar de `AppError` para manejar mensajes personalizados.
+
+#### 💫 Estrategia de Manejo por Capas
+La aplicación implementa una estrategia de manejo de errores por niveles:
+
+- **Services**: Deben capturar excepciones conocidas y esperadas de infraestructura (por ejemplo, errores de base de datos) y traducirlas a excepciones de dominio.
+
+- **Routes (Blueprints)**: Deben capturar únicamente excepciones de dominio esperadas y mostrar mensajes adecuados al usuario.
+
+- **Error Handlers globales**: Se encargan de capturar excepciones inesperadas (errores de programación o fallos no previstos) y mostrar una página 500 genérica sin exponer información sensible.
 
 ---
 

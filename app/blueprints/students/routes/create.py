@@ -50,9 +50,5 @@ def register_student():
     except StudentError as e:
         flash(str(e), "danger")
 
-    except Exception:
-        logger.exception("Unexpected error while registering student")
-        flash("Error inesperado del sistema. Vuelva a intentar más tarde", "danger")
-
     # VIEW: REGISTRO + FORM
     return render_template("students/register.html", form=form)
