@@ -220,8 +220,7 @@ La aplicación implementa una estrategia de manejo de errores por niveles:
 ### 📄 Logging
 La aplicación utiliza el módulo estándar `logging` de Python.
 
-#### 📁 Configuración
-Ubicación:
+**Ubicación (configuración)**:
 
 ```bash
 app/core/logging_config.py
@@ -234,7 +233,8 @@ app/core/logging_config.py
 - No se muestran logs en la terminal
 - Nivel mínimo configurado: `INFO`
 
-#### 🧠 Uso en módulos
+**Uso en módulos**
+
 En cualquier archivo donde se necesiten logs:
 
 ```python
