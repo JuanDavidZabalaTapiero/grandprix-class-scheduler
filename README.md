@@ -220,20 +220,20 @@ La aplicación implementa una estrategia de manejo de errores por niveles:
 ### 📄 Logging
 La aplicación utiliza el módulo estándar `logging` de Python.
 
-**Ubicación (configuración)**:
+**🔹 Ubicación (configuración)**:
 
 ```bash
 app/core/logging_config.py
 ```
 
-**Características**:
+**🔹 Características**:
 - Logs almacenados en `logs/app.log`
 - amaño máximo por archivo: 10KB
 - Hasta 5 archivos de respaldo
 - No se muestran logs en la terminal
 - Nivel mínimo configurado: `INFO`
 
-**Uso en módulos**
+**🔹 Uso en módulos**
 
 En cualquier archivo donde se necesiten logs:
 
@@ -243,7 +243,7 @@ import logging
 logger = logging.getLogger(__name__)
 ```
 
-Métodos disponibles:
+**🔹 Métodos disponibles**:
 
 ```python
 logger.info("Informational message")
