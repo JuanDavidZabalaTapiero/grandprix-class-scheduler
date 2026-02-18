@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}405{% endblock %}
+
+{% block main %}
+<h1>405</h1>
+<p>Método no permitido para esta ruta.</p>
+<a href="{{ url_for('students.home') }}">Inicio</a>
+{% endblock %}

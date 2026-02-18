@@ -29,7 +29,7 @@ def create_app() -> Flask:
     app = Flask(__name__)
 
     # === LOGS ===
-    configure_logging()
+    configure_logging(app)
 
     # === CONFIG ===
     app.config.from_object(Config)

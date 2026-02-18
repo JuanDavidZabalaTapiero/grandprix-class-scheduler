@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}{{ code }}{% endblock %}
+
+{% block main %}
+<h1>{{ code }}</h1>
+<p>Ha ocurrido un error al procesar tu solicitud.</p>
+<p>Por favor, intenta nuevamente o contacta con soporte si el problema persiste.</p>
+<a href="{{ url_for('students.home') }}">Inicio</a>
+{% endblock %}

@@ -1,7 +1,7 @@
 import logging
-import os
 import re
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
 
 # DESACTIVAR CÓDIGO ANSI
@@ -14,12 +14,15 @@ class NoColorFormatter(logging.Formatter):
 
 
 # === CONFIG LOGS ===
-def configure_logging():
+def configure_logging(app):
 
-    # CREAR CARPETA LOGS/ EN RAÍZ
-    os.makedirs("logs", exist_ok=True)
-    log_path = os.path.abspath("logs/app.log")
+    # == DIRECTORIO DE LOGS ==
+    logs_dir = Path(app.instance_path) / "logs"
+    logs_dir.mkdir(parents=True, exist_ok=True)  # CREAR CARPETA
 
+    log_path = logs_dir / "app.log"
+
+    # == CONFIG ==
     formatter = NoColorFormatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s")
 
     root_logger = logging.getLogger()
@@ -29,7 +32,7 @@ def configure_logging():
     for handler in root_logger.handlers:
         if (
             isinstance(handler, RotatingFileHandler)
-            and os.path.abspath(handler.baseFilename) == log_path
+            and Path(handler.baseFilename) == log_path
         ):
             return  # YA ESTÁ CONFIGURADO -> SALIR
 
