@@ -16,7 +16,7 @@ __pycache__/
 .ruff_cache
 
 # logging
-logs/
+instance/logs/
 
 # == FRONTEND ==
 node_modules/

@@ -227,7 +227,7 @@ app/core/logging_config.py
 ```
 
 **🔹 Características**:
-- Logs almacenados en `logs/app.log`
+- Logs almacenados en `instance/logs/app.log`
 - amaño máximo por archivo: 10KB
 - Hasta 5 archivos de respaldo
 - No se muestran logs en la terminal
