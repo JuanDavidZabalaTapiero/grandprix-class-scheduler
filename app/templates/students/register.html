@@ -1,37 +1,85 @@
-{% extends "students/home.html" %}
+{% extends "base.html" %}
 
-{% block title %}Registrar | {{super()}}{% endblock %}
+{% block title %}Registrar Alumno{% endblock %}
 
 {% block main %}
-<h1>Registrar Alumno</h1>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
 
-<form method="post" novalidate>
-    <!-- CSRF -->
-    {{form.hidden_tag()}}
+        <!-- BTN: VOLVER -->
+        <div class="mb-3">
+            <a href="{{ url_for('students.home') }}"
+                class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center">
+                <!-- ICON: ARROW LEFT -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-left me-1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                </svg>
+                Volver
+            </a>
+        </div>
 
-    <div>
-        <!-- DOCUMENT ID -->
-        {{form.document_id.label}}
-        {{form.document_id()}}
-        {% for error in form.document_id.errors %}
-        <p>{{error}}</p>
-        {% endfor %}
+        <!-- FORM -->
+        <div class="card shadow-sm">
+            <div class="card-body">
 
-        <!-- NAME -->
-        {{form.name.label}}
-        {{form.name()}}
-        {% for error in form.name.errors %}
-        <p>{{error}}</p>
-        {% endfor %}
+                <h1 class="h4 mb-4 text-center">
+                    Registrar Alumno
+                </h1>
 
-        {{form.phone.label}}
-        {{form.phone()}}
-        {% for error in form.phone.errors %}
-        <p>{{error}}</p>
-        {% endfor %}
+                <form method="post" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <!-- DOCUMENT ID -->
+                    <div class="mb-3">
+                        {{ form.document_id.label(class="form-label") }}
+                        {{ form.document_id(
+                        class="form-control" + (" is-invalid" if form.document_id.errors else "")
+                        ) }}
+                        {% for error in form.document_id.errors %}
+                        <div class="invalid-feedback">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- NAME -->
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(
+                        class="form-control" + (" is-invalid" if form.name.errors else "")
+                        ) }}
+                        {% for error in form.name.errors %}
+                        <div class="invalid-feedback">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- PHONE -->
+                    <div class="mb-3">
+                        {{ form.phone.label(class="form-label") }}
+                        {{ form.phone(
+                        class="form-control" + (" is-invalid" if form.phone.errors else "")
+                        ) }}
+                        {% for error in form.phone.errors %}
+                        <div class="invalid-feedback">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- SUBMIT -->
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
     </div>
-
-    <!-- SUBMIT -->
-    {{ form.submit() }}
-</form>
+</div>
 {% endblock %}
