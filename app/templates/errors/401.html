@@ -3,7 +3,19 @@
 {% block title %}401{% endblock %}
 
 {% block main %}
-<h1>401</h1>
-<p>No estás autenticado para acceder a esta página.</p>
-<a href="{{ url_for('students.home') }}">Inicio</a>
+<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="text-center">
+
+        <h1 class="display-1 fw-bold text-warning">401</h1>
+
+        <p class="lead mb-4">
+            No estás autenticado para acceder a esta página.
+        </p>
+
+        <a href="{{ url_for('students.home') }}" class="btn btn-primary">
+            Ir al inicio
+        </a>
+
+    </div>
+</div>
 {% endblock %}
