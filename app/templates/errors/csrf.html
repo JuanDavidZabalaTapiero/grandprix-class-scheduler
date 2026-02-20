@@ -1,20 +1,6 @@
-{% extends "base.html" %}
+{% extends "errors/base_error.html" %}
 
-{% block title %}Error de seguridad{% endblock %}
-
-{% block main %}
-<div class="container d-flex align-items-center justify-content-center" style="min-height: 80vh;">
-    <div class="text-center">
-        <h1 class="display-4 fw-bold text-warning">Error de seguridad</h1>
-        <p class="text-muted mb-2">
-            La sesión ha expirado o la solicitud no es válida.
-        </p>
-        <p class="text-muted mb-4">
-            Actualiza la página e intenta nuevamente.
-        </p>
-        <a href="{{ url_for('students.home') }}" class="btn btn-primary">
-            Volver al inicio
-        </a>
-    </div>
-</div>
-{% endblock %}
+{% set code = 400 %}
+{% set color = "text-warning" %}
+{% set title = "Error de seguridad" %}
+{% set message = "La sesión ha expirado o la solicitud no es válida. Actualiza la página e intenta nuevamente." %}

@@ -28,7 +28,7 @@
                     Registrar Alumno
                 </h1>
 
-                <form method="post" novalidate>
+                <form method="post" novalidate id="registerStudentForm">
                     {{ form.hidden_tag() }}
 
                     <!-- DOCUMENT ID -->
@@ -72,7 +72,11 @@
 
                     <!-- SUBMIT -->
                     <div class="d-grid">
-                        {{ form.submit(class="btn btn-primary") }}
+                        <button type="submit" id="submitBtn" class="btn btn-primary">
+                            <span id="btnText">Registrar</span>
+                            <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"
+                                aria-hidden="true"></span>
+                        </button>
                     </div>
 
                 </form>
@@ -82,4 +86,17 @@
 
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="module">
+    import { attachLoadingOnSubmit } from "{{url_for('static', filename='js/core/form.min.js')}}";
+
+    attachLoadingOnSubmit("registerStudentForm", {
+        buttonId: "submitBtn",
+        spinnerId: "btnSpinner",
+        textId: "btnText",
+        loadingText: "Registrando..."
+    });
+</script>
 {% endblock %}

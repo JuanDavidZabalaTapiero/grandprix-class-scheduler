@@ -1,21 +1,6 @@
-{% extends "base.html" %}
+{% extends "errors/base_error.html" %}
 
-{% block title %}400{% endblock %}
-
-{% block main %}
-<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
-    <div class="text-center">
-
-        <h1 class="display-1 fw-bold text-danger">400</h1>
-
-        <p class="lead mb-4">
-            Solicitud inválida.
-        </p>
-
-        <a href="{{ url_for('students.home') }}" class="btn btn-primary">
-            Volver al inicio
-        </a>
-
-    </div>
-</div>
-{% endblock %}
+{% set code = 400 %}
+{% set color = "text-danger" %}
+{% set title = "Solicitud inválida" %}
+{% set message = "La solicitud enviada no es válida." %}

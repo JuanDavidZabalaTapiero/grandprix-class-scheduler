@@ -1,18 +1,6 @@
-{% extends "base.html" %}
+{% extends "errors/base_error.html" %}
 
-{% block title %}405{% endblock %}
-
-{% block main %}
-<div class="container d-flex align-items-center justify-content-center" style="min-height: 80vh;">
-    <div class="text-center">
-        <h1 class="display-1 fw-bold text-secondary">405</h1>
-        <h2 class="mb-3">Método no permitido</h2>
-        <p class="text-muted mb-4">
-            El método HTTP utilizado no está permitido para esta ruta.
-        </p>
-        <a href="{{ url_for('students.home') }}" class="btn btn-primary">
-            Volver al inicio
-        </a>
-    </div>
-</div>
-{% endblock %}
+{% set code = 405 %}
+{% set color = "text-secondary" %}
+{% set title = "Método no permitido" %}
+{% set message = "El método HTTP utilizado no está permitido para esta ruta." %}

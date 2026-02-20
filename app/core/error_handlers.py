@@ -10,19 +10,19 @@ logger = logging.getLogger(__name__)
 
 def register_error_handlers(app):
 
-    @app.errorhandler(404)
-    def page_not_found(error):
-        return render_template("errors/404.html"), 404
-
+    # === CSRF ===
     @app.errorhandler(CSRFError)
     def handle_csrf_error(error):
+        # LOG
         logger.warning(
             "CSRF validation failed | reason=%s",
             error.description,
         )
 
+        # RENDER
         return render_template("errors/csrf.html"), 400
 
+    # === HTTP ===
     @app.errorhandler(HTTPException)
     def handle_http_exception(error):
         logger.warning(
@@ -39,6 +39,7 @@ def register_error_handlers(app):
                 error.code,
             )
 
+    # === EXCEPTION ===
     @app.errorhandler(Exception)
     def handle_unexpected_error(error):
         logger.exception("Unhandled exception occurred")
