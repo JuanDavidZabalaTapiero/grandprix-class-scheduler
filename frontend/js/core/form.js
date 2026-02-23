@@ -6,7 +6,6 @@ export function attachLoadingOnSubmit(formId, options = {}) {
         buttonId,
         spinnerId,
         textId,
-        loadingText = "Procesando..."
     } = options;
 
     form.addEventListener("submit", () => {
@@ -18,6 +17,6 @@ export function attachLoadingOnSubmit(formId, options = {}) {
 
         btn.disabled = true;
         spinner.classList.remove("d-none");
-        text.textContent = loadingText;
+        text.classList.add("d-none")
     })
 }
