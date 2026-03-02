@@ -10,6 +10,7 @@ from app.blueprints.students.services.create_student import (
     create_student,
 )  # SERVICIO
 from app.db.exceptions import DatabaseConnectionError
+from app.extensions import db
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,9 @@ def register_student():
             phone=form.phone.data,
         )
 
-        create_student(input_data)
+        # COMMIT
+        with db.session.begin():
+            create_student(input_data)
 
         flash("Alumno registrado correctamente", "success")
 

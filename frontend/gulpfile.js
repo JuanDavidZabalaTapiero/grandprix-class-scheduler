@@ -1,7 +1,6 @@
 const { src, dest, watch, series, parallel } = require("gulp");
 const sass = require("gulp-sass")(require("sass"));
 const cleanCSS = require("gulp-clean-css");
-const rename = require("gulp-rename");
 const terser = require("gulp-terser");
 
 // RUTAS

@@ -31,7 +31,6 @@ en la academia de conducción **Grand Prix**.
     - gulp-sass: compilación de archivos SCSS
     - gulp-clean-css: minificación CSS
     - gulp-terser: minificación JS
-    - gulp-rename: renombrado de archivos
 
 - 🧹 Calidad de Código
   - Black - formateo automático de código
@@ -228,7 +227,7 @@ app/core/logging_config.py
 
 **🔹 Características**:
 - Logs almacenados en `instance/logs/app.log`
-- amaño máximo por archivo: 10KB
+- Tamaño máximo por archivo: 10KB
 - Hasta 5 archivos de respaldo
 - No se muestran logs en la terminal
 - Nivel mínimo configurado: `INFO`

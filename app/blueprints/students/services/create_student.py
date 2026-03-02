@@ -40,15 +40,12 @@ def create_student(data: CreateStudentInput) -> Student:
 
         # REGISTRAR
         student = Student(document_id=document_id, name=name, phone=phone)
-
         db.session.add(student)
-        db.session.commit()
+        db.session.flush()
 
         return student
 
     except IntegrityError as e:
-        db.session.rollback()
-
         error_code = e.orig.args[0]
 
         # ERROR: DUPLICATE
@@ -63,12 +60,10 @@ def create_student(data: CreateStudentInput) -> Student:
         raise StudentError() from e
 
     except OperationalError as e:
-        db.session.rollback()
         logger.exception("Database connection error while creating student")
         raise DatabaseConnectionError() from e
 
     except SQLAlchemyError as e:
-        db.session.rollback()
         logger.exception(
             "Unexpected SQLAlchemyError while creating student | document_id=%s",
             document_id,
