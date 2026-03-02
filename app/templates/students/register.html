@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Registrar Alumno{% endblock %}
+{% block title %}Registrar | Alumnos{% endblock %}
 
 {% block main %}
 <div class="row justify-content-center">
@@ -90,7 +90,7 @@
 
 {% block scripts %}
 <script type="module">
-    import { attachLoadingOnSubmit } from "{{url_for('static', filename='js/core/form.min.js')}}";
+    import { attachLoadingOnSubmit } from "{{url_for('static', filename='js/forms/attachLoadingOnSubmit.js')}}";
 
     attachLoadingOnSubmit("registerStudentForm", {
         buttonId: "submitBtn",

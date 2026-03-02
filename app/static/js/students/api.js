@@ -1,0 +1,1 @@
+export async function searchStudents(e){const t=await fetch(`/api/students?search=${encodeURIComponent(e)}`);let r;try{r=await t.json()}catch{throw new Error("Respuesta inválida del servidor")}if(!t.ok)throw new Error(r.message);return r.data}

@@ -1,0 +1,1 @@
+export function showInputError(e,t){e.classList.add("is-invalid");let n=e.parentElement.querySelector(".invalid-feedback");n||(n=document.createElement("div"),n.className="invalid-feedback",e.parentElement.appendChild(n)),n.textContent=t}export function clearValidation(e){e.classList.remove("is-invalid");const t=e.parentElement.querySelector(".invalid-feedback");t&&t.remove()}

@@ -1,0 +1,1 @@
+export function renderSpinner(n){n&&(n.innerHTML='\n        <div class="text-center p-3">\n            <div class="spinner-border text-primary"></div>\n        </div>\n    ')}

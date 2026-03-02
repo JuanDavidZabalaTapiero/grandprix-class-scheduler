@@ -1,0 +1,1 @@
+export function normalizeSearchTerm(e){return e.trim().toUpperCase()}export function validateSearchTerm(e){return!e||e.length<2?"Ingrese al menos 2 caracteres":null}

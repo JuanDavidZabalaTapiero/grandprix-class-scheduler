@@ -1,0 +1,1 @@
+export function showFlash(t,e){const n=document.getElementById("flash-container");if(!n)return;const s=document.createElement("div");s.className=`alert alert-${t} alert-dismissible fade show`,s.innerHTML=`${e} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`,n.appendChild(s)}

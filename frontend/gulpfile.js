@@ -18,7 +18,6 @@ function styles() {
     return src(paths.scssNoPartials, { base: "scss" })
         .pipe(sass({ quietDeps: true }).on("error", sass.logError))
         .pipe(cleanCSS())
-        .pipe(rename({ suffix: ".min" }))
         .pipe(dest(paths.cssOutput));
 }
 
@@ -26,7 +25,6 @@ function styles() {
 function scripts() {
     return src(paths.jsAll, { base: "js" })
         .pipe(terser())
-        .pipe(rename({ suffix: ".min" }))
         .pipe(dest(paths.jsOutput))
 }
 
