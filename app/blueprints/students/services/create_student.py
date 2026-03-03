@@ -1,13 +1,13 @@
 import logging
 from dataclasses import dataclass
 
-from sqlalchemy.exc import IntegrityError, OperationalError, SQLAlchemyError
+from sqlalchemy.exc import IntegrityError
 
 from app.blueprints.students.exceptions import (
     StudentDocumentAlreadyExists,
     StudentError,
 )
-from app.db.exceptions import DatabaseConnectionError
+from app.db.decorators import handle_db_exceptions
 from app.db.models import Student
 from app.extensions import db
 
@@ -31,6 +31,7 @@ class CreateStudentInput:
 # =========================
 
 
+@handle_db_exceptions
 def create_student(data: CreateStudentInput) -> Student:
     try:
         # DATOS
@@ -55,17 +56,6 @@ def create_student(data: CreateStudentInput) -> Student:
 
         logger.exception(
             "Unexpected IntegrityError while creating student | document_id=%s",
-            document_id,
-        )
-        raise StudentError() from e
-
-    except OperationalError as e:
-        logger.exception("Database connection error while creating student")
-        raise DatabaseConnectionError() from e
-
-    except SQLAlchemyError as e:
-        logger.exception(
-            "Unexpected SQLAlchemyError while creating student | document_id=%s",
             document_id,
         )
         raise StudentError() from e

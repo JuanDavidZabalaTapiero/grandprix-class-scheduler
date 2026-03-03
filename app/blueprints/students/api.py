@@ -2,9 +2,8 @@ import logging
 
 from flask import Blueprint, jsonify, request
 
-from app.blueprints.students.exceptions import StudentError
 from app.blueprints.students.services.search_students import search_students
-from app.db.exceptions import DatabaseConnectionError
+from app.core.exceptions import AppError
 
 logger = logging.getLogger(__name__)
 
@@ -17,11 +16,10 @@ def get_students():
 
     try:
         students = search_students(term)
-        data = [{"id": s.id, "name": s.name} for s in students]
+        data = [
+            {"id": s.id, "document_id": s.document_id, "name": s.name} for s in students
+        ]
         return jsonify({"data": data}), 200
 
-    except DatabaseConnectionError as e:
-        return jsonify({"message": str(e)}), 503
-
-    except StudentError as e:
-        return jsonify({"message": str(e)}), 400
+    except AppError as e:
+        return jsonify({"message": str(e)}), e.status_code

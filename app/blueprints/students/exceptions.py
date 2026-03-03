@@ -5,6 +5,13 @@ class StudentError(AppError):
     pass
 
 
-# === CREATE ===
+# === COMMON ===
+class StudentNotFound(StudentError):
+    default_message = "El alumno no existe"
+    status_code = 404
+
+
+# === CREATE / UPDATE ===
 class StudentDocumentAlreadyExists(StudentError):
     default_message = "Ya existe un alumno con este número de documento"
+    status_code = 409

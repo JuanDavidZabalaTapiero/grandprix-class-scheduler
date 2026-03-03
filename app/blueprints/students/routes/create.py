@@ -1,18 +1,13 @@
-import logging
-
 from flask import flash, redirect, render_template, url_for
 
 from app.blueprints.students import students_bp  # BLUEPRINT
-from app.blueprints.students.exceptions import StudentError
 from app.blueprints.students.forms import RegisterStudentForm  # FORMULARIO
 from app.blueprints.students.services.create_student import (
     CreateStudentInput,
     create_student,
 )  # SERVICIO
-from app.db.exceptions import DatabaseConnectionError
+from app.core.exceptions import AppError
 from app.extensions import db
-
-logger = logging.getLogger(__name__)
 
 
 @students_bp.get("/register")
@@ -47,10 +42,7 @@ def register_student():
         # VIEW: HOME
         return redirect(url_for("students.home"))
 
-    except DatabaseConnectionError as e:
-        flash(str(e), "danger")
-
-    except StudentError as e:
+    except AppError as e:
         flash(str(e), "danger")
 
     # VIEW: REGISTRO + FORM

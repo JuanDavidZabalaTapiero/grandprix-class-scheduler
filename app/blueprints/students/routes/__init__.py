@@ -1,3 +1,3 @@
-from . import create, home
+from . import create, edit, home
 
-__all__ = ["home", "create"]
+__all__ = ["home", "create", "edit"]
