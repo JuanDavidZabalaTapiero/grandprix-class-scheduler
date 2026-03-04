@@ -1,7 +1,7 @@
 from flask import flash, redirect, render_template, url_for
 
 from app.blueprints.students import students_bp  # BLUEPRINT
-from app.blueprints.students.forms import RegisterStudentForm  # FORMULARIO
+from app.blueprints.students.forms import RegisterStudentForm  # FORM
 from app.blueprints.students.services.create_student import (
     CreateStudentInput,
     create_student,
@@ -12,6 +12,8 @@ from app.extensions import db
 
 @students_bp.get("/register")
 def register_student_form():
+
+    # GENERAR FORMULARIO
     form = RegisterStudentForm()
 
     return render_template("students/register.html", form=form)
@@ -19,13 +21,15 @@ def register_student_form():
 
 @students_bp.post("/register")
 def register_student():
+
+    # CAPTURAR FORMULARIO (DATOS)
     form = RegisterStudentForm()
 
-    # VALIDACIÓN (ERROR)
+    # VALIDACIÓN: ERROR
     if not form.validate_on_submit():
         return render_template("students/register.html", form=form)
 
-    # VALIDACIÓN (OK) -> MANEJAR REGISTRO
+    # VALIDACIÓN: OK
     try:
         input_data = CreateStudentInput(
             document_id=form.document_id.data,
@@ -34,16 +38,17 @@ def register_student():
         )
 
         # COMMIT
-        with db.session.begin():
-            create_student(input_data)
+        create_student(input_data)
+        db.session.commit()
 
+        # MENSAJE
         flash("Alumno registrado correctamente", "success")
 
-        # VIEW: HOME
         return redirect(url_for("students.home"))
 
+    # ERROR
     except AppError as e:
+        db.session.rollback()
         flash(str(e), "danger")
 
-    # VIEW: REGISTRO + FORM
     return render_template("students/register.html", form=form)

@@ -1,7 +1,32 @@
-{% extends "base.html" %}
+{% extends "students/forms/_form_layout.html" %}
 
 {% block title %}Editar | Alumnos{% endblock %}
 
-{% block main %}
-<h1>EDITAR</h1>
+{% set title = "Editar Alumno" %}
+
+{% block form_content %}
+<form id="edit-student-form" method="post" novalidate>
+    {% include "students/forms/_form.html" %}
+
+    <!-- SUBMIT -->
+    <div class="d-grid">
+        <button type="submit" id="edit-student-submit" class="btn btn-primary">
+            <span id="edit-student-submit-text">Actualizar</span>
+            <span id="edit-student-submit-spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"
+                aria-hidden="true"></span>
+        </button>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script type="module">
+    import { attachLoadingOnSubmit } from "{{url_for('static', filename='js/forms/attachLoadingOnSubmit.js')}}";
+
+    attachLoadingOnSubmit("edit-student-form", {
+        buttonId: "edit-student-submit",
+        spinnerId: "edit-student-submit-spinner",
+        textId: "edit-student-submit-text",
+    });
+</script>
 {% endblock %}

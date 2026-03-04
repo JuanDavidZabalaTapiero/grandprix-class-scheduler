@@ -17,7 +17,8 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class CreateStudentInput:
+class UpdateStudentInput:
+    student: Student
     document_id: str
     name: str
     phone: str
@@ -29,15 +30,19 @@ class CreateStudentInput:
 
 
 @handle_db_exceptions
-def create_student(data: CreateStudentInput) -> Student:
+def update_student(data: UpdateStudentInput) -> Student:
     try:
         # DATOS
+        student = data.student
         document_id = data.document_id
         name = data.name
         phone = data.phone
 
-        # REGISTRAR
-        student = Student(document_id=document_id, name=name, phone=phone)
+        # ACTUALIZAR
+        student.document_id = document_id
+        student.name = name
+        student.phone = phone
+
         db.session.add(student)
         db.session.flush()
 

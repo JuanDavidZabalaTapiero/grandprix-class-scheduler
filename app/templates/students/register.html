@@ -1,101 +1,33 @@
-{% extends "base.html" %}
+{% extends "students/forms/_form_layout.html" %}
 
 {% block title %}Registrar | Alumnos{% endblock %}
 
-{% block main %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
+{% set title = "Registrar Alumno" %}
 
-        <!-- BTN: VOLVER -->
-        <div class="mb-3">
-            <a href="{{ url_for('students.home') }}"
-                class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center">
-                <!-- ICON: ARROW LEFT -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-left me-1" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-                </svg>
-                Volver
-            </a>
-        </div>
+{% block form_content %}
+<form id="register-student-form" method="post" novalidate>
+    {% include "students/forms/_form.html" %}
 
-        <!-- FORM -->
-        <div class="card shadow-sm">
-            <div class="card-body">
-
-                <h1 class="h4 mb-4 text-center">
-                    Registrar Alumno
-                </h1>
-
-                <form method="post" novalidate id="registerStudentForm">
-                    {{ form.hidden_tag() }}
-
-                    <!-- DOCUMENT ID -->
-                    <div class="mb-3">
-                        {{ form.document_id.label(class="form-label") }}
-                        {{ form.document_id(
-                        class="form-control" + (" is-invalid" if form.document_id.errors else "")
-                        ) }}
-                        {% for error in form.document_id.errors %}
-                        <div class="invalid-feedback">
-                            {{ error }}
-                        </div>
-                        {% endfor %}
-                    </div>
-
-                    <!-- NAME -->
-                    <div class="mb-3">
-                        {{ form.name.label(class="form-label") }}
-                        {{ form.name(
-                        class="form-control" + (" is-invalid" if form.name.errors else "")
-                        ) }}
-                        {% for error in form.name.errors %}
-                        <div class="invalid-feedback">
-                            {{ error }}
-                        </div>
-                        {% endfor %}
-                    </div>
-
-                    <!-- PHONE -->
-                    <div class="mb-3">
-                        {{ form.phone.label(class="form-label") }}
-                        {{ form.phone(
-                        class="form-control" + (" is-invalid" if form.phone.errors else "")
-                        ) }}
-                        {% for error in form.phone.errors %}
-                        <div class="invalid-feedback">
-                            {{ error }}
-                        </div>
-                        {% endfor %}
-                    </div>
-
-                    <!-- SUBMIT -->
-                    <div class="d-grid">
-                        <button type="submit" id="submitBtn" class="btn btn-primary">
-                            <span id="btnText">Registrar</span>
-                            <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"
-                                aria-hidden="true"></span>
-                        </button>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
-
+    <!-- SUBMIT -->
+    <div class="d-grid">
+        <button type="submit" id="register-student-submit" class="btn btn-primary">
+            <span id="register-student-submit-text">Registrar</span>
+            <span id="register-student-submit-spinner" class="spinner-border spinner-border-sm ms-2 d-none"
+                role="status" aria-hidden="true"></span>
+        </button>
     </div>
-</div>
+
+</form>
 {% endblock %}
 
 {% block scripts %}
 <script type="module">
     import { attachLoadingOnSubmit } from "{{url_for('static', filename='js/forms/attachLoadingOnSubmit.js')}}";
 
-    attachLoadingOnSubmit("registerStudentForm", {
-        buttonId: "submitBtn",
-        spinnerId: "btnSpinner",
-        textId: "btnText",
+    attachLoadingOnSubmit("register-student-form", {
+        buttonId: "register-student-submit",
+        spinnerId: "register-student-submit-spinner",
+        textId: "register-student-submit-text",
     });
 </script>
 {% endblock %}

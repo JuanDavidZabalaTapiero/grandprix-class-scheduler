@@ -1,4 +1,5 @@
 import logging
+from functools import wraps
 
 from sqlalchemy.exc import OperationalError, SQLAlchemyError
 
@@ -11,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def handle_db_exceptions(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)

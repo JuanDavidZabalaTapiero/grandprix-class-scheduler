@@ -36,7 +36,9 @@ def configure_logging(app):
         ):
             return  # YA ESTÁ CONFIGURADO -> SALIR
 
-    file_handler = RotatingFileHandler(log_path, maxBytes=10240, backupCount=5)
+    file_handler = RotatingFileHandler(
+        log_path, maxBytes=10240, backupCount=5, delay=True
+    )
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
 
