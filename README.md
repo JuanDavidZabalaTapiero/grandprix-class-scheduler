@@ -24,6 +24,7 @@ en la academia de conducción **Grand Prix**.
   - Logs: logging (módulo estándar de Python)
 
 - 🎨 Frontend
+  - Sweetalert2: Mensajería
   - Bootstrap (CSS / JS)
   - Bootstrap-Icons
   - Sass: preprocesador CSS

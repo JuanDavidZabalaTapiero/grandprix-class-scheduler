@@ -38,7 +38,9 @@
     </main>
 
     <!-- BOOTSTRAP (JS) -->
-    <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/vendor/bootstrap.bundle.min.js')}}"></script>
+    <!-- SWEETALERT -->
+    <script src="{{ url_for('static', filename='js/vendor/sweetalert2.all.min.js') }}"></script>
     <!-- JS PROPIO -->
     {% block scripts %}
     {% endblock %}
