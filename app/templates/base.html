@@ -10,6 +10,8 @@
     <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" type="image/x-icon">
     <!-- BOOTSTRAP (CSS) -->
     <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.css')}}">
+    <!-- SWEETALERT2 (CSS) -->
+     <link rel="stylesheet" href="{{url_for('static', filename='css/sweetalert2.css')}}">
 </head>
 
 <body>
@@ -39,8 +41,8 @@
 
     <!-- BOOTSTRAP (JS) -->
     <script src="{{url_for('static', filename='js/vendor/bootstrap.bundle.min.js')}}"></script>
-    <!-- SWEETALERT -->
-    <script src="{{ url_for('static', filename='js/vendor/sweetalert2.all.min.js') }}"></script>
+    <!-- SWEETALERT2 (JS) -->
+    <script src="{{ url_for('static', filename='js/vendor/sweetalert2.min.js') }}"></script>
     <!-- JS PROPIO -->
     {% block scripts %}
     {% endblock %}
