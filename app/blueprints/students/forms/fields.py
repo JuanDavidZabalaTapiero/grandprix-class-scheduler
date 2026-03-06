@@ -22,6 +22,12 @@ def normalize_name(value: str) -> str:
     return value
 
 
+def normalize_phone(value: str) -> str:
+    if value:
+        return value.strip()
+    return value
+
+
 # =========================
 # CAMPOS REUTILIZABLES
 # =========================
@@ -74,4 +80,5 @@ def phone_field():
                 message="El teléfono solo puede contener números, espacios, + o -",
             ),
         ],
+        filters=[normalize_phone],
     )

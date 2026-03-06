@@ -13,13 +13,11 @@ def register_error_handlers(app):
     # === CSRF ===
     @app.errorhandler(CSRFError)
     def handle_csrf_error(error):
-        # LOG
         logger.warning(
             "CSRF validation failed | reason=%s",
             error.description,
         )
 
-        # RENDER
         return render_template("errors/csrf.html"), 400
 
     # === HTTP ===

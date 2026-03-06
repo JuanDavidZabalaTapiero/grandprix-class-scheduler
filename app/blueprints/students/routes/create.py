@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, url_for
+from flask import redirect, render_template, url_for
 
 from app.blueprints.students import students_bp  # BLUEPRINT
 from app.blueprints.students.forms import RegisterStudentForm  # FORM
@@ -7,7 +7,7 @@ from app.blueprints.students.services.create_student import (
     create_student,
 )  # SERVICIO
 from app.core.exceptions import AppError
-from app.extensions import db
+from app.core.transactions import run_service
 
 
 @students_bp.get("/register")
@@ -22,33 +22,26 @@ def register_student_form():
 @students_bp.post("/register")
 def register_student():
 
-    # CAPTURAR FORMULARIO (DATOS)
+    # FORM
     form = RegisterStudentForm()
 
-    # VALIDACIÓN: ERROR
     if not form.validate_on_submit():
         return render_template("students/register.html", form=form)
 
-    # VALIDACIÓN: OK
+    # DATOS
+    input_data = CreateStudentInput(
+        document_id=form.document_id.data,
+        name=form.name.data,
+        phone=form.phone.data,
+    )
+
+    # EJECUTAR SERVICIO
     try:
-        input_data = CreateStudentInput(
-            document_id=form.document_id.data,
-            name=form.name.data,
-            phone=form.phone.data,
+        run_service(
+            lambda: create_student(input_data), "Alumno registrado correctamente"
         )
-
-        # COMMIT
-        create_student(input_data)
-        db.session.commit()
-
-        # MENSAJE
-        flash("Alumno registrado correctamente", "success")
 
         return redirect(url_for("students.home"))
 
-    # ERROR
-    except AppError as e:
-        db.session.rollback()
-        flash(str(e), "danger")
-
-    return render_template("students/register.html", form=form)
+    except AppError:
+        return render_template("students/register.html", form=form)

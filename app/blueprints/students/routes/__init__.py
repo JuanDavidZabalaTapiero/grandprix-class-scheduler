@@ -4,7 +4,7 @@ from app.blueprints.students import students_bp
 from app.core.exceptions import AppError
 
 
-# MANEJAR ERROR INESPERADO
+# MANEJAR ERROR (DEFAULT)
 @students_bp.errorhandler(AppError)
 def handle_app_error(error):
     flash(str(error), "danger")
