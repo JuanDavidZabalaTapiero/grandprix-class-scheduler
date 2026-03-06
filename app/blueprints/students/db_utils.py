@@ -1,6 +1,6 @@
 import logging
 
-from app.blueprints.students.exceptions import (
+from .exceptions import (
     StudentDocumentAlreadyExists,
     StudentError,
 )
@@ -17,7 +17,7 @@ def handle_student_integrity_error(e, document_id: str):
 
         raise StudentDocumentAlreadyExists() from e
 
-    # # ERROR: UNKNOWN INTEGRITY ERROR
+    # ERROR: UNKNOWN INTEGRITY ERROR
     logger.exception(
         "Unexpected IntegrityError | document_id=%s",
         document_id,

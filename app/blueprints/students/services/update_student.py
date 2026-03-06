@@ -3,9 +3,9 @@ from dataclasses import dataclass
 
 from sqlalchemy.exc import IntegrityError
 
+from app.blueprints.students.db_utils import handle_student_integrity_error
 from app.db.decorators import handle_db_exceptions
 from app.db.models import Student
-from app.db.utils import handle_student_integrity_error
 from app.extensions import db
 
 logger = logging.getLogger(__name__)
@@ -42,8 +42,6 @@ def update_student(data: UpdateStudentInput) -> Student:
         student.document_id = document_id
         student.name = name
         student.phone = phone
-
-        db.session.add(student)
         db.session.flush()
 
         return student
