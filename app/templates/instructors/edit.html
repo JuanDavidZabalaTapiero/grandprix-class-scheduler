@@ -1,0 +1,33 @@
+{% extends "layouts/form_page.html" %}
+
+{% block title %}Editar | Instructores{% endblock %}
+
+{% set title = "Editar Instructor" %}
+{% set back_endpoint = "instructors.home" %}
+
+{% block form_content %}
+<form id="edit-instructor-form" method="post" novalidate>
+    {% include "instructors/forms/_form.html" %}
+
+    <!-- SUBMIT -->
+    <div class="d-grid">
+        <button type="submit" id="edit-instructor-submit" class="btn btn-primary">
+            <span id="edit-instructor-submit-text">Actualizar</span>
+            <span id="edit-instructor-submit-spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"
+                aria-hidden="true"></span>
+        </button>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script type="module">
+    import { attachLoadingOnSubmit } from "{{url_for('static', filename='js/forms/attachLoadingOnSubmit.js')}}";
+
+    attachLoadingOnSubmit("edit-instructor-form", {
+        buttonId: "edit-instructor-submit",
+        spinnerId: "edit-instructor-submit-spinner",
+        textId: "edit-instructor-submit-text",
+    });
+</script>
+{% endblock %}

@@ -1,8 +1,9 @@
-{% extends "students/forms/_form_layout.html" %}
+{% extends "layouts/form_page.html" %}
 
 {% block title %}Registrar | Alumnos{% endblock %}
 
 {% set title = "Registrar Alumno" %}
+{% set back_endpoint = "students.home" %}
 
 {% block form_content %}
 <form id="register-student-form" method="post" novalidate>

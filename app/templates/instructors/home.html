@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+<!-- IMPORTS -->
+{% from "macros/buttons.html" import edit_button, delete_button %}
+
+{% block title %}Instructores{% endblock %}
+
+{% block main %}
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Instructores</h1>
+
+        <a href="{{ url_for('instructors.register_form') }}"
+            class="btn btn-primary d-inline-flex align-items-center gap-2">
+
+            <!-- ICON: PLUS -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+            </svg>
+
+            Registrar
+        </a>
+    </div>
+
+    {% if instructors %}
+
+    <!-- TABLE -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+
+            <thead class="table-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th class="text-center">Editar</th>
+                    <th class="text-center">Eliminar</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for i in instructors %}
+                <tr>
+
+                    <td class="fw-semibold">
+                        {{ i.name }}
+                    </td>
+
+                    <!-- EDIT -->
+                    <td class="text-center">
+                        {{ edit_button( url_for('instructors.edit_form', instructor_id=i.id)) }}
+                    </td>
+
+                    <!-- DELETE -->
+                    <td class="text-center">
+                        {{ delete_button(url_for('instructors.delete', instructor_id=i.id),
+                        form_class="instructor-delete-form") }}
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-info">
+        No hay instructores registrados
+    </div>
+
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="module">
+    import { attachDeleteConfirmation } from "{{ url_for('static', filename='js/ui/confirmDelete.js') }}";
+
+    attachDeleteConfirmation(document, "instructor-delete-form", "instructor");
+</script>
+{% endblock %}

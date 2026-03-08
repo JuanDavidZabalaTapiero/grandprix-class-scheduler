@@ -1,18 +1,11 @@
-from flask import redirect, url_for
-
 from app.blueprints.students import students_bp  # BLUEPRINT
-from app.blueprints.students.services.delete_student import (
-    delete_student as delete_student_service,
-)  # SERVICIO
-from app.core.transactions import run_service
+from app.blueprints.students.services.delete_student import delete_student  # SERVICIO
+from app.core.crud.routes.delete import DeleteRoute
 
-
-@students_bp.post("/<int:student_id>/delete")
-def delete_student(student_id):
-
-    # EJECUTAR SERVICIO
-    run_service(
-        lambda: delete_student_service(student_id), "Alumno eliminado correctamente"
-    )
-
-    return redirect(url_for("students.home"))
+DeleteRoute(
+    blueprint=students_bp,
+    service=delete_student,
+    url_param="student_id",
+    success_message="Alumno eliminado correctamente",
+    redirect_endpoint="students.home",
+)

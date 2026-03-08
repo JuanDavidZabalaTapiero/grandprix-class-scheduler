@@ -1,0 +1,8 @@
+{% from "macros/forms.html" import render_field, render_checkbox %}
+
+{{ form.hidden_tag() }}
+
+{{ render_field(form.name) }}
+{{ render_field(form.phone) }}
+{{ render_field(form.contract) }}
+{{ render_checkbox(form.enabled) }}

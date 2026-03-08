@@ -1,8 +1,9 @@
-{% extends "students/forms/_form_layout.html" %}
+{% extends "layouts/form_page.html" %}
 
 {% block title %}Editar | Alumnos{% endblock %}
 
 {% set title = "Editar Alumno" %}
+{% set back_endpoint = "students.home" %}
 
 {% block form_content %}
 <form id="edit-student-form" method="post" novalidate>

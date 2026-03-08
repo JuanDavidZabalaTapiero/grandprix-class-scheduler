@@ -4,7 +4,7 @@ import { searchStudents } from "../students/api.js";
 import { renderStudents } from "../students/ui.js";
 import { showFlash } from "../ui/flash.js";
 import { renderSpinner } from "../ui/loading.js";
-import { attachDeleteConfirmation } from "../students/components/confirmDelete.js";
+import { attachDeleteConfirmation } from "../ui/confirmDelete.js";
 
 export function initStudentSearch({ formId, inputId, resultsId }) {
     const form = document.getElementById(formId);
@@ -14,8 +14,8 @@ export function initStudentSearch({ formId, inputId, resultsId }) {
     if (!form || !input || !results) return;
 
     // REGISTRAR EVENTO: ALERT
-    attachDeleteConfirmation(results);
-
+    attachDeleteConfirmation(results, "student-delete-form", "alumno");
+    
     form.addEventListener("submit", async (e) => {
 
         // === FORM ===

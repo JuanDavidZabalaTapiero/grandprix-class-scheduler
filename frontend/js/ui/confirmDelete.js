@@ -1,15 +1,18 @@
-export function attachDeleteConfirmation(container) {
+export function attachDeleteConfirmation(container, formClass = "delete-form", entityName = "registro") {
     if (!container) return;
 
     container.addEventListener("submit", function (e) {
+        
+        // FORM
         const form = e.target;
+        if (!form.classList.contains(formClass)) return;
 
-        if (!form.classList.contains("student-delete-form")) return;
-
+        // DETENER SUBMIT
         e.preventDefault();
 
+        // ALERTA
         Swal.fire({
-            title: "¿Eliminar alumno?",
+            title: `¿Eliminar ${entityName}?`,
             text: "Esta acción no se puede deshacer",
             icon: "warning",
             showCancelButton: true,
@@ -21,5 +24,5 @@ export function attachDeleteConfirmation(container) {
                 form.submit();
             }
         });
-    });
+    })
 }

@@ -1,5 +1,3 @@
-import re
-
 from wtforms import StringField
 from wtforms.validators import DataRequired, Length, Regexp
 
@@ -11,20 +9,6 @@ from wtforms.validators import DataRequired, Length, Regexp
 def normalize_document(value: str) -> str:
     if value:
         return value.strip().upper()
-    return value
-
-
-def normalize_name(value: str) -> str:
-    if value:
-        value = value.strip()
-        value = re.sub(r"\s+", " ", value)
-        return value.upper()
-    return value
-
-
-def normalize_phone(value: str) -> str:
-    if value:
-        return value.strip()
     return value
 
 
@@ -47,38 +31,4 @@ def document_field():
             ),
         ],
         filters=[normalize_document],
-    )
-
-
-def name_field():
-    return StringField(
-        "Nombre completo",
-        validators=[
-            DataRequired(message="El nombre es obligatorio"),
-            Length(
-                min=3,
-                max=255,
-                message="El nombre debe tener entre %(min)d y %(max)d caracteres",
-            ),
-        ],
-        filters=[normalize_name],
-    )
-
-
-def phone_field():
-    return StringField(
-        "Teléfono",
-        validators=[
-            DataRequired(message="El teléfono es obligatorio"),
-            Length(
-                min=7,
-                max=20,
-                message="El teléfono debe tener entre %(min)d y %(max)d caracteres",
-            ),
-            Regexp(
-                r"^[0-9\+\-\s]+$",
-                message="El teléfono solo puede contener números, espacios, + o -",
-            ),
-        ],
-        filters=[normalize_phone],
     )

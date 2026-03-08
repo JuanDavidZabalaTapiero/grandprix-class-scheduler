@@ -1,14 +1,28 @@
 import logging
 
-from flask import render_template
+from flask import flash, redirect, render_template, url_for
 from flask_wtf.csrf import CSRFError
 from jinja2 import TemplateNotFound
 from werkzeug.exceptions import HTTPException
+
+from .exceptions import AppError
 
 logger = logging.getLogger(__name__)
 
 
 def register_error_handlers(app):
+
+    # === APP ERROR ===
+    @app.errorhandler(AppError)
+    def handle_app_error(error):
+        logger.warning(
+            "Application error occurred | message=%s",
+            str(error),
+        )
+
+        flash(str(error), "danger")
+
+        return redirect(url_for("students.home"))
 
     # === CSRF ===
     @app.errorhandler(CSRFError)

@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
+<!-- IMPORTS -->
+{% from "macros/buttons.html" import edit_button, delete_button %}
+
 {% block title %}Alumnos{% endblock %}
 
 {% block main %}
@@ -7,7 +10,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Alumnos</h1>
 
-        <a href="{{ url_for('students.register_student_form') }}"
+        <a href="{{ url_for('students.register_form') }}"
             class="btn btn-primary d-inline-flex align-items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
                 viewBox="0 0 16 16">
@@ -36,8 +39,8 @@
 
     <!-- RESULTADOS -->
     <div id="studentSearchResults" class="mt-3"
-        data-edit-url-base="{{ url_for('students.edit_student_form', student_id=0) }}"
-        data-delete-url-base="{{url_for('students.delete_student', student_id=0)}}">
+        data-edit-url-base="{{ url_for('students.edit_form', student_id=0) }}"
+        data-delete-url-base="{{url_for('students.delete', student_id=0)}}">
     </div>
 
     <!-- TEMPLATE: ITEM ALUMNO -->
@@ -52,32 +55,9 @@
 
             <!-- ACTIONS -->
             <div class="d-flex align-items-center gap-2">
+                {{edit_button(link_class="student-edit-btn")}}
 
-                <a class="btn btn-sm btn-light border
-                      d-inline-flex align-items-center justify-content-center gap-1
-                      student-edit-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen"
-                        viewBox="0 0 16 16">
-                        <path
-                            d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z" />
-                    </svg>
-                    Editar
-                </a>
-
-                <form method="post" class="m-0 student-delete-form">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                    <button type="submit" class="btn btn-sm btn-outline-danger
-                               d-inline-flex align-items-center justify-content-center gap-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-trash3-fill" viewBox="0 0 16 16">
-                            <path
-                                d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
-                        </svg>
-                        Eliminar
-                    </button>
-                </form>
-
+                {{delete_button(form_class="student-delete-form") }}
             </div>
         </div>
     </template>
