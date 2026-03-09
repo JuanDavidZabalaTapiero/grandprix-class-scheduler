@@ -11,7 +11,7 @@ from app.core.crud.routes.create import CreateRoute
 CreateRoute(
     blueprint=instructors_bp,
     form_class=RegisterInstructorForm,
-    template="instructors/register.html",
+    template="instructors/form.html",
     service=create_instructor,
     input_class=CreateInstructorInput,
     success_message="Instructor registrado correctamente",

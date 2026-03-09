@@ -12,7 +12,7 @@ from app.core.crud.routes.update import UpdateRoute
 UpdateRoute(
     blueprint=instructors_bp,
     form_class=EditInstructorForm,
-    template="instructors/edit.html",
+    template="instructors/form.html",
     service=update_instructor,
     input_class=UpdateInstructorInput,
     get_object=get_instructor_by_id,

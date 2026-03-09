@@ -5,7 +5,6 @@ from app.extensions import db
 
 
 # === CREATE ===
-@handle_db_exceptions
 def create_model(model, data: dict):
     obj = model(**data)
 
@@ -38,7 +37,6 @@ def get_all(model):
 
 
 # === UPDATE ===
-@handle_db_exceptions
 def update_model(obj, data: dict):
     for field, value in data.items():
         setattr(obj, field, value)

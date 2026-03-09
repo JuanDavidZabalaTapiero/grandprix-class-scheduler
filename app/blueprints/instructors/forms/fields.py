@@ -21,7 +21,7 @@ def contract_field():
     return StringField(
         "Tipo de contrato",
         validators=[
-            DataRequired(message="El tipo de contrato es obligatorio"),
+            DataRequired(message="El Tipo de contrato es obligatorio"),
             Length(
                 max=50,
                 message="El contrato no puede tener más de %(max)d caracteres",
@@ -32,4 +32,4 @@ def contract_field():
 
 
 def enabled_field():
-    return BooleanField("Instructor activo")
+    return BooleanField("Activo")

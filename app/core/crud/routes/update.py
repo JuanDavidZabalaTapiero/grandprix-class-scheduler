@@ -1,10 +1,14 @@
-from flask import redirect, render_template, url_for
+from flask import redirect, url_for
 
 from app.core.exceptions import AppError
 from app.core.transactions import run_service
 
+from .base import BaseFormRoute
 
-class UpdateRoute:
+
+class UpdateRoute(BaseFormRoute):
+
+    action_label = "Actualizar"
 
     def __init__(
         self,
@@ -42,7 +46,7 @@ class UpdateRoute:
             # FORM
             form = self.form_class(obj=obj)
 
-            return render_template(self.template, form=form)
+            return self._render_form(form)
 
         @self.bp.post(f"/<int:{self.url_param}>/edit")
         def edit(**kwargs):
@@ -54,7 +58,7 @@ class UpdateRoute:
             form = self.form_class()
 
             if not form.validate_on_submit():
-                return render_template(self.template, form=form)
+                return self._render_form(form)
 
             # DATA
             input_data = self.input_class(obj, **form.to_dict())
@@ -66,4 +70,4 @@ class UpdateRoute:
                 return redirect(url_for(self.redirect_endpoint))
 
             except AppError:
-                return render_template(self.template, form=form)
+                return self._render_form(form)

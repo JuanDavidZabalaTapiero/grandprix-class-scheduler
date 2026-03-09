@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from app.core.crud.services import update_model
+from app.db.decorators import handle_db_exceptions
 from app.db.models import Instructor
 
 # =========================
@@ -22,6 +23,7 @@ class UpdateInstructorInput:
 # =========================
 
 
+@handle_db_exceptions
 def update_instructor(data: UpdateInstructorInput) -> Instructor:
     instructor = update_model(
         data.instructor,

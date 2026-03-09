@@ -9,7 +9,7 @@ from app.core.crud.routes.create import CreateRoute
 CreateRoute(
     blueprint=students_bp,
     form_class=RegisterStudentForm,
-    template="students/register.html",
+    template="students/form.html",
     service=create_student,
     input_class=CreateStudentInput,
     success_message="Alumno registrado correctamente",

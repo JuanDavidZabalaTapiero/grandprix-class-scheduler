@@ -1,0 +1,33 @@
+{% extends "layouts/form_page.html" %}
+
+{% block title %}{{ action_label }} | {{ entity_plural }}{% endblock %}
+
+{% set title = action_label ~ " " ~ entity_name %}
+
+{% block form_content %}
+<form id="entity-form" method="post" novalidate>
+
+    {% include form_template %}
+
+    <div class="d-grid">
+        <button type="submit" id="entity-submit" class="btn btn-primary">
+            <span id="entity-submit-text">{{ action_label }}</span>
+            <span id="entity-submit-spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status"
+                aria-hidden="true"></span>
+        </button>
+    </div>
+
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script type="module">
+    import { attachLoadingOnSubmit } from "{{ url_for('static', filename='js/forms/attachLoadingOnSubmit.js') }}";
+
+    attachLoadingOnSubmit("entity-form", {
+        buttonId: "entity-submit",
+        spinnerId: "entity-submit-spinner",
+        textId: "entity-submit-text",
+    });
+</script>
+{% endblock %}

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from app.core.crud.services import create_model
+from app.db.decorators import handle_db_exceptions
 from app.db.models import Instructor
 
 # =========================
@@ -21,6 +22,7 @@ class CreateInstructorInput:
 # =========================
 
 
+@handle_db_exceptions
 def create_instructor(data: CreateInstructorInput) -> Instructor:
     instructor = create_model(
         Instructor,

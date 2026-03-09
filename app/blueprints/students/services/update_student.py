@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.blueprints.students.db_utils import handle_student_integrity_error
 from app.core.crud.services import update_model
+from app.db.decorators import handle_db_exceptions
 from app.db.models import Student
 
 # =========================
@@ -24,6 +25,7 @@ class UpdateStudentInput:
 # =========================
 
 
+@handle_db_exceptions
 def update_student(data: UpdateStudentInput) -> Student:
     try:
         student = update_model(

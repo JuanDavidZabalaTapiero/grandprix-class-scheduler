@@ -1,10 +1,14 @@
-from flask import redirect, render_template, url_for
+from flask import redirect, url_for
 
 from app.core.exceptions import AppError
 from app.core.transactions import run_service
 
+from .base import BaseFormRoute
 
-class CreateRoute:
+
+class CreateRoute(BaseFormRoute):
+
+    action_label = "Registrar"
 
     def __init__(
         self,
@@ -34,7 +38,7 @@ class CreateRoute:
             # GENERAR FORMULARIO
             form = self.form_class()
 
-            return render_template(self.template, form=form)
+            return self._render_form(form)
 
         @self.bp.post("/register")
         def register():
@@ -43,7 +47,7 @@ class CreateRoute:
             form = self.form_class()
 
             if not form.validate_on_submit():
-                return render_template(self.template, form=form)
+                return self._render_form(form)
 
             # DATA
             input_data = self.input_class(**form.to_dict())
@@ -55,4 +59,4 @@ class CreateRoute:
                 return redirect(url_for(self.redirect_endpoint))
 
             except AppError:
-                return render_template(self.template, form=form)
+                return self._render_form(form)
