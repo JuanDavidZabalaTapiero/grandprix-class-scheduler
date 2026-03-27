@@ -1,1 +1,1 @@
-from . import home, create, edit, delete  # noqa
+from . import home, crud  # noqa
