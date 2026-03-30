@@ -8,14 +8,14 @@ class DeleteRoute:
     def __init__(
         self,
         blueprint,
-        service,
+        services,
         url_param,
         success_message,
         redirect_endpoint,
     ):
 
         self.bp = blueprint
-        self.service = service
+        self.services = services
         self.url_param = url_param
         self.success_message = success_message
         self.redirect_endpoint = redirect_endpoint
@@ -30,7 +30,7 @@ class DeleteRoute:
             obj_id = kwargs[self.url_param]
 
             run_service(
-                lambda: self.service(obj_id),
+                lambda: self.services.delete(obj_id),
                 self.success_message,
             )
 

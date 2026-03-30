@@ -15,9 +15,8 @@ class UpdateRoute(BaseFormRoute):
         blueprint,
         form_class,
         template,
-        service,
-        input_class,
-        get_object,
+        services,
+        schema,
         url_param,
         success_message,
         redirect_endpoint,
@@ -26,9 +25,8 @@ class UpdateRoute(BaseFormRoute):
         self.bp = blueprint
         self.form_class = form_class
         self.template = template
-        self.service = service
-        self.input_class = input_class
-        self.get_object = get_object
+        self.services = services
+        self.schema = schema
         self.url_param = url_param
         self.success_message = success_message
         self.redirect_endpoint = redirect_endpoint
@@ -41,7 +39,7 @@ class UpdateRoute(BaseFormRoute):
         def edit_form(**kwargs):
 
             # OBJETO
-            obj = self.get_object(kwargs[self.url_param])
+            obj = self.services.get_by_id(kwargs[self.url_param])
 
             # FORM
             form = self.form_class(obj=obj)
@@ -52,7 +50,7 @@ class UpdateRoute(BaseFormRoute):
         def edit(**kwargs):
 
             # OBJETO
-            obj = self.get_object(kwargs[self.url_param])
+            obj = self.services.get_by_id(kwargs[self.url_param])
 
             # FORM
             form = self.form_class()
@@ -61,11 +59,13 @@ class UpdateRoute(BaseFormRoute):
                 return self._render_form(form)
 
             # DATA
-            input_data = self.input_class(obj, **form.to_dict())
+            data = self.schema.load(form.to_dict())
 
             # SERVICE
             try:
-                run_service(lambda: self.service(input_data), self.success_message)
+                run_service(
+                    lambda: self.services.update(obj, data), self.success_message
+                )
 
                 return redirect(url_for(self.redirect_endpoint))
 
