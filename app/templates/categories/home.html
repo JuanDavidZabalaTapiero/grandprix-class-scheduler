@@ -1,0 +1,14 @@
+{% extends "layouts/home_page.html" %}
+
+{% set title = "Categorías" %}
+{% set entity_name = "categoría" %}
+{% set columns = [
+{"label": "Nombre", "field": "name"}
+] %}
+
+{% set create_endpoint = "categories.register_form" %}
+{% set edit_endpoint = "categories.edit_form" %}
+{% set delete_endpoint = "categories.delete" %}
+{% set id_name = "category_id" %}
+
+{% set empty_label = "No hay categorías registradas" %}

@@ -1,5 +1,5 @@
-class StudentSchema:
-    fields = ["document_id", "name", "phone"]
+class BaseSchema:
+    fields = []
 
     @classmethod
     def load(cls, data: dict) -> dict:

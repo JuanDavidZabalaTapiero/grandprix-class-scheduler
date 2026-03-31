@@ -1,6 +1,0 @@
-class InstructorSchema:
-    fields = ["name", "phone", "contract", "enabled"]
-
-    @classmethod
-    def load(cls, data: dict) -> dict:
-        return {field: data.get(field) for field in cls.fields}

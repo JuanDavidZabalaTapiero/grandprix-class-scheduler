@@ -13,7 +13,7 @@ class CreateRoute(BaseFormRoute):
     def __init__(
         self,
         blueprint,
-        form_class,
+        form,
         template,
         services,
         schema,
@@ -21,7 +21,7 @@ class CreateRoute(BaseFormRoute):
         redirect_endpoint,
     ):
         self.bp = blueprint
-        self.form_class = form_class
+        self.form = form
         self.template = template
         self.services = services
         self.schema = schema
@@ -36,7 +36,7 @@ class CreateRoute(BaseFormRoute):
         def register_form():
 
             # GENERAR FORMULARIO
-            form = self.form_class()
+            form = self.form()
 
             return self._render_form(form)
 
@@ -44,7 +44,7 @@ class CreateRoute(BaseFormRoute):
         def register():
 
             # FORM
-            form = self.form_class()
+            form = self.form()
 
             if not form.validate_on_submit():
                 return self._render_form(form)
