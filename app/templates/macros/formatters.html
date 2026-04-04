@@ -1,0 +1,11 @@
+{% macro render_value(col, value) %}
+{% if col.type == "boolean" %}
+{% if value %}
+<span class="badge bg-success">Sí</span>
+{% else %}
+<span class="badge bg-danger">No</span>
+{% endif %}
+{% else %}
+{{ value }}
+{% endif %}
+{% endmacro %}

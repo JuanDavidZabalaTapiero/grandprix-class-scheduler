@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% from "macros/buttons.html" import edit_button, delete_button %}
+{% from "macros/formatters.html" import render_value %}
 
 {% block title %}{{title}}{% endblock %}
 
@@ -45,8 +46,8 @@
                 <tr>
 
                     {% for col in columns %}
-                    <td class="fw-semibold">
-                        {{ item | attr(col.field) }}
+                    <td>
+                        {{ render_value(col, item | attr(col.field)) }}
                     </td>
                     {% endfor %}
 

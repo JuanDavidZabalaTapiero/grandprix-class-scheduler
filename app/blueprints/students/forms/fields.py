@@ -1,70 +1,25 @@
-from wtforms import StringField
-from wtforms.validators import DataRequired, Length, Regexp
+from wtforms.validators import Regexp
 
-from app.forms.normalizers import normalize_name, normalize_phone
-
-# =========================
-# NORMALIZADORES
-# =========================
-
-
-def normalize_document(value: str) -> str:
-    if value:
-        return value.strip().upper()
-    return value
-
-
-# =========================
-# CAMPOS REUTILIZABLES
-# =========================
+from app.forms.fields import text_field
 
 
 def name_field():
-    return StringField(
-        "Nombre completo",
-        validators=[
-            DataRequired(message="El nombre es obligatorio"),
-            Length(
-                min=3,
-                max=255,
-                message="El nombre debe tener entre %(min)d y %(max)d caracteres",
-            ),
-        ],
-        filters=[normalize_name],
-    )
+    return text_field("Nombre completo", max_length=255)
 
 
 def phone_field():
-    return StringField(
+    return text_field(
         "Teléfono",
-        validators=[
-            DataRequired(message="El teléfono es obligatorio"),
-            Length(
-                min=7,
-                max=20,
-                message="El teléfono debe tener entre %(min)d y %(max)d caracteres",
-            ),
+        min_length=7,
+        max_length=20,
+        extra_validators=[
             Regexp(
                 r"^[0-9\+\-\s]+$",
                 message="El teléfono solo puede contener números, espacios, + o -",
-            ),
+            )
         ],
-        filters=[normalize_phone],
     )
 
 
 def document_field():
-    return StringField(
-        "Nº de documento",
-        validators=[
-            DataRequired(message="El documento es obligatorio"),
-            Length(
-                max=50, message="El documento no puede tener más de %(max)d caracteres"
-            ),
-            Regexp(
-                r"^[0-9A-Za-z\-\.]+$",
-                message="El documento solo puede contener letras, números, guiones o puntos",
-            ),
-        ],
-        filters=[normalize_document],
-    )
+    return text_field("Nº de documento", max_length=50)

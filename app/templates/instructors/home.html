@@ -3,7 +3,10 @@
 {% set title = "Instructores" %}
 {% set entity_name = "instructor" %}
 {% set columns = [
-{"label": "Nombre", "field": "name"}
+{"label": "Nombre", "field": "name"},
+{"label": "Teléfono", "field": "phone"},
+{"label": "Contrato", "field": "contract"},
+{"label": "Activo", "field": "enabled", "type": "boolean"}
 ] %}
 
 {% set create_endpoint = "instructors.register_form" %}

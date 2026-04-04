@@ -1,0 +1,18 @@
+{% extends "layouts/home_page.html" %}
+
+{% set title = "Vehículos" %}
+{% set entity_name = "vehículo" %}
+{% set columns = [
+{"label": "Placa", "field": "license_plate"},
+{"label": "Modelo", "field": "model"},
+{"label": "Marca", "field": "brand"},
+{"label": "Tipo", "field": "type"},
+{"label": "Activo", "field": "enabled", "type": "boolean"}
+] %}
+
+{% set create_endpoint = "vehicles.register_form" %}
+{% set edit_endpoint = "vehicles.edit_form" %}
+{% set delete_endpoint = "vehicles.delete" %}
+{% set id_name = "vehicle_id" %}
+
+{% set empty_label = "No hay vehículos registrados" %}
