@@ -13,3 +13,5 @@ class Student(db.Model):
     created_at = db.Column(
         db.DateTime, server_default=func.current_timestamp(), nullable=False
     )
+
+    enrollments = db.relationship("Enrollment", back_populates="student")

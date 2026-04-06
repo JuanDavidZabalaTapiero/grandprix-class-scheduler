@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% from "macros/buttons.html" import delete_button %}
+
+{% block title %}Matrícula{% endblock %}
+
+{% block main %}
+<div class="container">
+
+    <!-- CARD -->
+    <div class="border rounded-3 p-3 bg-white shadow-sm">
+
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center">
+
+            <!-- TÍTULO -->
+            <h1 class="h5 m-0">
+                {{ enrollment.student.name }}
+                <span class="text-muted">|</span>
+                {{ enrollment.category.name }}
+            </h1>
+
+            <!-- DELETE -->
+            {{ delete_button(url_for("enrollments.delete", enrollment_id=enrollment.id),
+            form_class="enrollment-delete-form") }}
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="module">
+    import { attachDeleteConfirmation } from "{{ url_for('static', filename='js/ui/confirmDelete.js') }}";
+
+    attachDeleteConfirmation(document, "enrollment-delete-form", "matrícula");
+</script>
+{% endblock %}

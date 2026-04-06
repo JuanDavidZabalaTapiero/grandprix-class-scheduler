@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify, request
 
 from app.blueprints.students.services.search_students import search_students
 from app.core.exceptions import AppError
+from app.core.transactions import run_query
 
 logger = logging.getLogger(__name__)
 
@@ -15,9 +16,18 @@ def get_students():
     term = request.args.get("search", "")
 
     try:
-        students = search_students(term)
+        students = run_query(lambda: search_students(term))
         data = [
-            {"id": s.id, "document_id": s.document_id, "name": s.name} for s in students
+            {
+                "id": student.id,
+                "document_id": student.document_id,
+                "name": student.name,
+                "enrollments": [
+                    {"id": e.id, "category": e.category.name}
+                    for e in student.enrollments
+                ],
+            }
+            for student in students
         ]
         return jsonify({"data": data}), 200
 

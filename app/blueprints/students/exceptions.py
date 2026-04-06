@@ -15,3 +15,9 @@ class StudentNotFound(StudentError):
 class StudentDocumentAlreadyExists(StudentError):
     default_message = "Ya existe un alumno con este número de documento"
     status_code = 409
+
+
+# === DELETE ===
+class StudentHasEnrollments(AppError):
+    default_message = "No se puede eliminar al alumno porque tiene matrículas asociadas"
+    status_code = 409

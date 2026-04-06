@@ -1,6 +1,5 @@
 from sqlalchemy import select
 
-from app.db.decorators import handle_db_exceptions
 from app.extensions import db
 
 
@@ -18,7 +17,6 @@ def create_model(model, data: dict):
 
 
 # ID
-@handle_db_exceptions
 def get_by_id(model, id, not_found_exception):
     obj = db.session.get(model, id)
 
@@ -29,7 +27,6 @@ def get_by_id(model, id, not_found_exception):
 
 
 # ALL
-@handle_db_exceptions
 def get_all(model):
     data = db.session.scalars(select(model)).all()
 
@@ -47,6 +44,5 @@ def update_model(obj, data: dict):
 
 
 # === DELETE ===
-@handle_db_exceptions
 def delete_model(obj):
     db.session.delete(obj)

@@ -1,5 +1,7 @@
 from flask import render_template
 
+from app.core.transactions import run_query
+
 
 class ListRoute:
     def __init__(
@@ -20,6 +22,5 @@ class ListRoute:
 
         @self.bp.get("/")
         def home():
-            items = self.services.get_all()
-
+            items = run_query(lambda: self.services.get_all())
             return render_template(self.template, items=items)

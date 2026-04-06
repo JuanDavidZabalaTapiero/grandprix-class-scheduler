@@ -1,4 +1,4 @@
-from flask import redirect, url_for
+from flask import flash, redirect, url_for
 
 from app.core.exceptions import AppError
 from app.core.transactions import run_service
@@ -30,13 +30,22 @@ class CreateRoute(BaseFormRoute):
 
         self.register_routes()
 
+    # HOOK
+    def get_form(self):
+        form = self.form()
+
+        if hasattr(self, "setup_form"):
+            self.setup_form(form)
+
+        return form
+
     def register_routes(self):
 
         @self.bp.get("/register")
         def register_form():
 
             # GENERAR FORMULARIO
-            form = self.form()
+            form = self.get_form()
 
             return self._render_form(form)
 
@@ -44,7 +53,7 @@ class CreateRoute(BaseFormRoute):
         def register():
 
             # FORM
-            form = self.form()
+            form = self.get_form()
 
             if not form.validate_on_submit():
                 return self._render_form(form)
@@ -54,9 +63,13 @@ class CreateRoute(BaseFormRoute):
 
             # SERVICIO
             try:
-                run_service(lambda: self.services.create(data), self.success_message)
-
+                run_service(
+                    lambda: self.services.create(data),
+                    self.success_message,
+                    unique_fields=self.services.unique_fields,
+                )
                 return redirect(url_for(self.redirect_endpoint))
 
-            except AppError:
+            except AppError as e:
+                flash(str(e), "danger")
                 return self._render_form(form)

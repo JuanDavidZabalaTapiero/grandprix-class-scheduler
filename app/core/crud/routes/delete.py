@@ -1,5 +1,6 @@
-from flask import redirect, url_for
+from flask import flash, redirect, url_for
 
+from app.core.exceptions import AppError
 from app.core.transactions import run_service
 
 
@@ -29,9 +30,15 @@ class DeleteRoute:
 
             obj_id = kwargs[self.url_param]
 
-            run_service(
-                lambda: self.services.delete(obj_id),
-                self.success_message,
-            )
+            # SERVICE
+            try:
+                run_service(
+                    lambda: self.services.delete(obj_id),
+                    self.success_message,
+                    fk_fields=self.services.fk_fields,
+                )
+                return redirect(url_for(self.redirect_endpoint))
 
-            return redirect(url_for(self.redirect_endpoint))
+            except AppError as e:
+                flash(str(e), "danger")
+                return redirect(url_for(self.redirect_endpoint))

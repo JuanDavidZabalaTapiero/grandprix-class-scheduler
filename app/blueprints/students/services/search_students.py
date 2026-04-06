@@ -2,8 +2,8 @@ import logging
 from typing import List
 
 from sqlalchemy import or_, select
+from sqlalchemy.orm import selectinload
 
-from app.db.decorators import handle_db_exceptions
 from app.db.models import Student
 from app.extensions import db
 
@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 # =========================
 
 
-@handle_db_exceptions
 def search_students(term: str) -> List[Student]:
     students = db.session.scalars(
         select(Student)
+        .options(selectinload(Student.enrollments))
         .where(
             or_(
                 Student.document_id.ilike(f"%{term}%"),

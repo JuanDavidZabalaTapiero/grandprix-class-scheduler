@@ -1,4 +1,4 @@
-from flask import redirect, url_for
+from flask import flash, redirect, url_for
 
 from app.core.exceptions import AppError
 from app.core.transactions import run_service
@@ -64,10 +64,12 @@ class UpdateRoute(BaseFormRoute):
             # SERVICE
             try:
                 run_service(
-                    lambda: self.services.update(obj, data), self.success_message
+                    lambda: self.services.update(obj, data),
+                    self.success_message,
+                    unique_fields=self.services.unique_fields,
                 )
-
                 return redirect(url_for(self.redirect_endpoint))
 
-            except AppError:
+            except AppError as e:
+                flash(str(e), "danger")
                 return self._render_form(form)
