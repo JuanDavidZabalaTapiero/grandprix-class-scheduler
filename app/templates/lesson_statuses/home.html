@@ -1,0 +1,12 @@
+{% extends "layouts/home_page.html" %}
+
+{% set title = "Estados de clase" %}
+{% set entity_name = "estado de clase" %}
+{% set columns = [
+{"label": "Nombre", "field": "name"}
+] %}
+{% set create_endpoint = "lesson_statuses.register_form" %}
+{% set edit_endpoint = "lesson_statuses.edit_form" %}
+{% set delete_endpoint = "lesson_statuses.delete" %}
+{% set id_name = "lesson_status_id" %}
+{% set empty_label = "No hay estados de clase registrados" %}

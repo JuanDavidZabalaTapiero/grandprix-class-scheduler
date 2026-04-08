@@ -1,0 +1,12 @@
+{% extends "layouts/home_page.html" %}
+
+{% set title = "Tipos de clase" %}
+{% set entity_name = "tipo de clase" %}
+{% set columns = [
+{"label": "Nombre", "field": "name"}
+] %}
+{% set create_endpoint = "lesson_types.register_form" %}
+{% set edit_endpoint = "lesson_types.edit_form" %}
+{% set delete_endpoint = "lesson_types.delete" %}
+{% set id_name = "lesson_type_id" %}
+{% set empty_label = "No hay tipos de clase registrados" %}

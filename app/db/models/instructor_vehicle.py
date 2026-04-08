@@ -4,7 +4,7 @@ from app.extensions import db
 
 
 class InstructorVehicle(db.Model):
-    __tablename__ = "instructor_vehicle"
+    __tablename__ = "instructor_vehicles"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     instructor_id = db.Column(
