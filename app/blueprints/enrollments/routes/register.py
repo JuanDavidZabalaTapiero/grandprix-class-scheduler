@@ -14,7 +14,12 @@ class EnrollmentCreateRoute(CreateRoute):
 
     def setup_form(self, form):
         categories = category_services.get_all()
-        form.category_id.choices = [(c.id, c.name) for c in categories]
+
+        if not categories:
+            form.category_id.choices = [(0, "No hay categorías registradas")]
+            form.category_id.render_kw = {"disabled": True}
+        else:
+            form.category_id.choices = [(c.id, c.name) for c in categories]
 
 
 # =========================

@@ -1,7 +1,9 @@
-from wtforms import StringField
+from wtforms import SelectField, StringField
 from wtforms.validators import DataRequired, Length, Optional
 
 from app.forms.normalizers import normalize_text
+
+# === STRINGS ===
 
 
 def text_field(
@@ -16,13 +18,13 @@ def text_field(
     validators = []
     filters = [normalize_text]
 
-    # === DATA REQUIRED ===
+    # DATA REQUIRED
     if required:
         validators.append(DataRequired(message="Este campo es obligatorio"))
     else:
         validators.append(Optional())
 
-    # === LENGTH ===
+    # LENGTH
     if max_length is not None:
         validators.append(
             Length(
@@ -32,8 +34,23 @@ def text_field(
             )
         )
 
-    # === EXTRA VALIDATORS ===
+    # EXTRA VALIDATORS
     if extra_validators:
         validators.extend(extra_validators)
 
     return StringField(label, validators=validators, filters=filters)
+
+
+# === SELECT ===
+
+
+def select_field(label, *, required=True, coerce=int):
+    validators = []
+
+    # DATA REQUIRED
+    if required:
+        validators.append(DataRequired(message="Este campo es obligatorio"))
+    else:
+        validators.append(Optional())
+
+    return SelectField(label, coerce=coerce, validators=validators)

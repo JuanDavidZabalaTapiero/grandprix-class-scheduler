@@ -18,7 +18,7 @@ class CategoryAlreadyExists(CategoryError):
 
 
 # === DELETE ===
-class CategoryHasEnrollments(AppError):
+class CategoryHasEnrollments(CategoryError):
     default_message = (
         "No se puede eliminar la categoría porque tiene matrículas asociadas"
     )

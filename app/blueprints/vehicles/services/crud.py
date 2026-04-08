@@ -1,4 +1,5 @@
 from app.blueprints.vehicles.exceptions import (
+    VehicleHasInstructors,
     VehicleLicensePlateAlreadyExists,
     VehicleNotFound,
 )
@@ -9,4 +10,5 @@ vehicle_services = CRUDServices(
     Vehicle,
     VehicleNotFound,
     unique_fields={"license_plate": VehicleLicensePlateAlreadyExists},
+    fk_fields={"instructor_vehicles": VehicleHasInstructors},
 )

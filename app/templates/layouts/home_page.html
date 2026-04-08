@@ -8,10 +8,12 @@
 {% block main %}
 <div class="container">
 
+    {% block header_main %}
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>{{title}}</h1>
+        <h1>{{ title }}</h1>
 
+        {% block header_actions %}
         <a href="{{ url_for(create_endpoint) }}" class="btn btn-primary d-inline-flex align-items-center gap-2">
 
             <!-- ICON: PLUS -->
@@ -23,10 +25,15 @@
 
             Registrar
         </a>
+        {% endblock %}
     </div>
 
-    {% if items %}
+    {% block header_extra %}{% endblock %}
 
+    {% endblock %}
+
+    {% block content %}
+    {% if items %}
     <!-- TABLE -->
     <div class="table-responsive">
         <table class="table table-striped table-bordered align-middle">
@@ -73,10 +80,10 @@
     <div class="alert alert-info">
         {{empty_label}}
     </div>
+    {% endif %}
+    {% endblock %}
 
 </div>
-{% endif %}
-
 {% endblock %}
 
 {% block scripts %}

@@ -41,7 +41,7 @@ export function renderStudents(container, students) {
                 enrollmentContainer.appendChild(btn);
             });
         } else {
-            enrollmentContainer.innerHTML = "<div class='alert alert-info mb-0'>No tiene matriculas registradas</div>"
+            enrollmentContainer.innerHTML = "<div class='alert alert-info mb-0'>No tiene matrículas registradas</div>"
         }
 
         container.appendChild(clone);

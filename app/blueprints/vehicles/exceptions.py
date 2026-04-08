@@ -15,3 +15,11 @@ class VehicleNotFound(VehicleError):
 class VehicleLicensePlateAlreadyExists(VehicleError):
     default_message = "Ya existe un vehículo con esta placa"
     status_code = 409
+
+
+# === DELETE ===
+class VehicleHasInstructors(VehicleError):
+    default_message = (
+        "No se puede eliminar el vehículo porque tiene instructores asociados"
+    )
+    status_code = 409

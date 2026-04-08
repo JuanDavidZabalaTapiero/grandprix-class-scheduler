@@ -15,7 +15,7 @@ def register_error_handlers(app):
     # === APP ERROR ===
     @app.errorhandler(AppError)
     def handle_app_error(error):
-        logger.warning(
+        logger.exception(
             "Application error occurred | message=%s",
             str(error),
         )

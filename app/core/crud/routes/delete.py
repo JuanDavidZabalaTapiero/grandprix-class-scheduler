@@ -28,6 +28,7 @@ class DeleteRoute:
         @self.bp.post(f"/<int:{self.url_param}>/delete")
         def delete(**kwargs):
 
+            # OBJETO
             obj_id = kwargs[self.url_param]
 
             # SERVICE

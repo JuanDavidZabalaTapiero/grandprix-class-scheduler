@@ -13,5 +13,6 @@ class Enrollment(db.Model):
         db.DateTime, server_default=func.current_timestamp(), nullable=False
     )
 
+    # RELATIONSHIPS
     student = db.relationship("Student", back_populates="enrollments")
     category = db.relationship("Category", back_populates="enrollments")

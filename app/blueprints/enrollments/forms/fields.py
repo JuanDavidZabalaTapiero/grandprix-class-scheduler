@@ -1,7 +1,4 @@
-from wtforms import SelectField
-from wtforms.validators import DataRequired
-
-from app.forms.fields import text_field
+from app.forms.fields import select_field, text_field
 
 
 def student_id_field():
@@ -9,8 +6,4 @@ def student_id_field():
 
 
 def category_id_field():
-    return SelectField(
-        "Categoría",
-        coerce=int,
-        validators=[DataRequired(message="Este campo es obligatorio")],
-    )
+    return select_field("Categoría")

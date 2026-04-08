@@ -15,3 +15,5 @@ class Vehicle(db.Model):
     created_at = db.Column(
         db.DateTime, server_default=func.current_timestamp(), nullable=False
     )
+
+    instructor_vehicles = db.relationship("InstructorVehicle", back_populates="vehicle")

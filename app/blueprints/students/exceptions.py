@@ -18,6 +18,6 @@ class StudentDocumentAlreadyExists(StudentError):
 
 
 # === DELETE ===
-class StudentHasEnrollments(AppError):
-    default_message = "No se puede eliminar al alumno porque tiene matrículas asociadas"
+class StudentHasEnrollments(StudentError):
+    default_message = "No se puede eliminar el alumno porque tiene matrículas asociadas"
     status_code = 409

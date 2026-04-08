@@ -44,7 +44,7 @@ class CreateRoute(BaseFormRoute):
         @self.bp.get("/register")
         def register_form():
 
-            # GENERAR FORMULARIO
+            # FORM
             form = self.get_form()
 
             return self._render_form(form)
