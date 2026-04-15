@@ -1,0 +1,1 @@
+import{fetchJSON}from"../core/api.js";export async function getSchedule(e){return(await fetchJSON(`/api/lessons?date=${encodeURIComponent(e)}`)).data}export async function createLessons(e){return await fetchJSON("/api/lessons",{method:"POST",body:JSON.stringify(e)})}

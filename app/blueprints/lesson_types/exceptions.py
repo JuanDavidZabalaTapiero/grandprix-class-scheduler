@@ -15,3 +15,9 @@ class LessonTypeNotFound(LessonTypeError):
 class LessonTypeAlreadyExists(LessonTypeError):
     default_message = "Ya existe un tipo de clase con ese nombre"
     status_code = 409
+
+
+# === DELETE ===
+class LessonTypeHasLessons(LessonTypeError):
+    default_message = "No se puede eliminar el tipo de clase porque está en uso"
+    status_code = 409

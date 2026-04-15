@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- TÍTULO -->
     <title>{% block title %}{% endblock %} | Prix</title>
     <!-- FAVICON -->
@@ -11,7 +12,9 @@
     <!-- BOOTSTRAP (CSS) -->
     <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.css')}}">
     <!-- SWEETALERT2 (CSS) -->
-     <link rel="stylesheet" href="{{url_for('static', filename='css/sweetalert2.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/sweetalert2.css')}}">
+    <!-- CSS EXTRA -->
+    {% block css %}{% endblock %}
 </head>
 
 <body>
@@ -20,7 +23,7 @@
     {% include "components/header.html" %}
     {% endblock %}
 
-    <!-- FLASH MESSAGES -->
+    <!-- FLASH NORMAL -->
     <div id="flash-container" class="container mt-3">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -34,6 +37,10 @@
         {% endwith %}
     </div>
 
+    <!-- FLASH FIXED -->
+    <div id="flash-container-fixed" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
+    </div>
+
     <main class="py-4">
         {% block main %}
         {% endblock %}
@@ -43,7 +50,7 @@
     <script src="{{url_for('static', filename='js/vendor/bootstrap.bundle.min.js')}}"></script>
     <!-- SWEETALERT2 (JS) -->
     <script src="{{ url_for('static', filename='js/vendor/sweetalert2.min.js') }}"></script>
-    <!-- JS PROPIO -->
+    <!-- JS EXTRA -->
     {% block scripts %}
     {% endblock %}
 </body>

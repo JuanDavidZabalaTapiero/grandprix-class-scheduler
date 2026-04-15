@@ -16,7 +16,12 @@ from .exceptions import AppError
 
 
 def run_service(
-    service_func, success_message=None, *, unique_fields=None, fk_fields=None
+    service_func,
+    success_message=None,
+    *,
+    show_flash=True,
+    unique_fields=None,
+    fk_fields=None,
 ):
     try:
         result = service_func()
@@ -25,7 +30,8 @@ def run_service(
         db.session.commit()
 
         # MENSAJE
-        flash(success_message, "success")
+        if show_flash:
+            flash(success_message, "success")
 
         return result
 

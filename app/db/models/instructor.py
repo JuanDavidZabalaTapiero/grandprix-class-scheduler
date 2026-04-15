@@ -15,6 +15,7 @@ class Instructor(db.Model):
         db.DateTime, server_default=func.current_timestamp(), nullable=False
     )
 
+    # RELATIONSHIPS
     instructor_vehicles = db.relationship(
         "InstructorVehicle", back_populates="instructor"
     )

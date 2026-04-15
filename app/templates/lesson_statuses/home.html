@@ -3,7 +3,9 @@
 {% set title = "Estados de clase" %}
 {% set entity_name = "estado de clase" %}
 {% set columns = [
-{"label": "Nombre", "field": "name"}
+{"label": "Nombre", "field": "name"},
+{"label": "Agendamiento", "field": "show_in_schedule", "type": "boolean"},
+{"label": "Default", "field": "is_default", "type": "boolean"}
 ] %}
 {% set create_endpoint = "lesson_statuses.register_form" %}
 {% set edit_endpoint = "lesson_statuses.edit_form" %}

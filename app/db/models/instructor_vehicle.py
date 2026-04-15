@@ -18,3 +18,4 @@ class InstructorVehicle(db.Model):
     # RELATIONSHIPS
     instructor = db.relationship("Instructor", back_populates="instructor_vehicles")
     vehicle = db.relationship("Vehicle", back_populates="instructor_vehicles")
+    lessons = db.relationship("Lesson", back_populates="instructor_vehicle")

@@ -1,0 +1,8 @@
+#lessons-body {
+    td {
+        &.selected {
+            background-color: #d1e7dd;
+            border: 1px solid #badbcc;
+        }
+    }
+}

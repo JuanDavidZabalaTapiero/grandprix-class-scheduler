@@ -15,3 +15,9 @@ class EnrollmentNotFound(EnrollmentError):
 class EnrollmentAlreadyExists(EnrollmentError):
     default_message = "El alumno ya está matriculado en esta categoría"
     status_code = 409
+
+
+# === DELETE ===
+class EnrollmentHasLessons(EnrollmentError):
+    default_message = "No se puede eliminar la matrícula porque tiene clases asociadas"
+    status_code = 409

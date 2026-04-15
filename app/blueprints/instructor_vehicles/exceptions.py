@@ -15,3 +15,11 @@ class InstructorVehicleNotFound(InstructorVehicleError):
 class InstructorVehicleAlreadyExists(InstructorVehicleError):
     default_message = "El instructor ya tiene asignado este vehículo"
     status_code = 409
+
+
+# === DELETE ===
+class InstructorVehicleHasLessons(InstructorVehicleError):
+    default_message = (
+        "No se puede eliminar el vehículo del instructor porque tiene clases asociadas"
+    )
+    status_code = 409

@@ -5,6 +5,7 @@ from .instructor_vehicles import instructor_vehicles_bp
 from .instructors import instructors_bp
 from .lesson_statuses import lesson_statuses_bp
 from .lesson_types import lesson_types_bp
+from .lessons.api import api_bp as lessons_api
 from .students import students_bp
 from .students.api import api_bp as students_api
 from .vehicles import vehicles_bp
@@ -21,5 +22,6 @@ def register_blueprints(app):
     app.register_blueprint(lesson_types_bp)
     app.register_blueprint(lesson_statuses_bp)
 
-    # APIS
+    # APIs
     app.register_blueprint(students_api)
+    app.register_blueprint(lessons_api)

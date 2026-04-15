@@ -7,6 +7,8 @@ import { renderSpinner } from "../ui/loading.js";
 import { attachDeleteConfirmation } from "../ui/confirmDelete.js";
 
 export function initStudentSearch({ formId, inputId, resultsId }) {
+
+    // === ELEMENTOS ===
     const form = document.getElementById(formId);
     const input = document.getElementById(inputId);
     const results = document.getElementById(resultsId);
@@ -36,15 +38,17 @@ export function initStudentSearch({ formId, inputId, resultsId }) {
             return;
         }
 
-        // === RESULTADOS ===
+        // === FETCH ===
 
         // SPINNER
         renderSpinner(results)
 
-        // RENDERIZAR
         try {
             const students = await searchStudents(normalized);
+
+            // RENDERIZAR
             renderStudents(results, students);
+
         } catch (err) {
             results.innerHTML = "";
             showFlash("danger", err.message);

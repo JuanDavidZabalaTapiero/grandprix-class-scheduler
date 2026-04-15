@@ -3,7 +3,8 @@
 {% set title = "Tipos de clase" %}
 {% set entity_name = "tipo de clase" %}
 {% set columns = [
-{"label": "Nombre", "field": "name"}
+{"label": "Nombre", "field": "name"},
+{"label": "Default", "field": "is_default", "type": "boolean"}
 ] %}
 {% set create_endpoint = "lesson_types.register_form" %}
 {% set edit_endpoint = "lesson_types.edit_form" %}

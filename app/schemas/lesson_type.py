@@ -2,4 +2,4 @@ from .base import BaseSchema
 
 
 class LessonTypeSchema(BaseSchema):
-    fields = ["name"]
+    fields = ["name", "is_default"]

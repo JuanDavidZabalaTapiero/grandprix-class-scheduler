@@ -2,6 +2,7 @@ from sqlalchemy import select
 
 from app.blueprints.enrollments.exceptions import (
     EnrollmentAlreadyExists,
+    EnrollmentHasLessons,
     EnrollmentNotFound,
 )
 from app.blueprints.students.services.crud import student_services
@@ -47,5 +48,5 @@ class EnrollmentService(CRUDServices):
 # =========================
 
 enrollment_services = EnrollmentService(
-    Enrollment, not_found_exception=EnrollmentNotFound
+    Enrollment, EnrollmentNotFound, fk_fields={"lessons": EnrollmentHasLessons}
 )

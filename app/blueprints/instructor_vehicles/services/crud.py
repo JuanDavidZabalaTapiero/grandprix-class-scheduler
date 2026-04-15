@@ -2,6 +2,7 @@ from sqlalchemy import select
 
 from app.blueprints.instructor_vehicles.exceptions import (
     InstructorVehicleAlreadyExists,
+    InstructorVehicleHasLessons,
     InstructorVehicleNotFound,
 )
 from app.core.crud.services.crud import CRUDServices
@@ -43,5 +44,7 @@ class InstructorVehicleService(CRUDServices):
 # =========================
 
 instructor_vehicle_services = InstructorVehicleService(
-    InstructorVehicle, InstructorVehicleNotFound
+    InstructorVehicle,
+    InstructorVehicleNotFound,
+    fk_fields={"lessons": InstructorVehicleHasLessons},
 )

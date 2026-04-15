@@ -16,3 +16,4 @@ class Enrollment(db.Model):
     # RELATIONSHIPS
     student = db.relationship("Student", back_populates="enrollments")
     category = db.relationship("Category", back_populates="enrollments")
+    lessons = db.relationship("Lesson", back_populates="enrollment")

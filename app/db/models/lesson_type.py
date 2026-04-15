@@ -6,3 +6,4 @@ class LessonType(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     name = db.Column(db.String(20), unique=True, nullable=False)
+    is_default = db.Column(db.Boolean, default=False)

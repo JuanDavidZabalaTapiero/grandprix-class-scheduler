@@ -1,0 +1,1 @@
+export async function fetchJSON(e,t={}){const o=document.querySelector('meta[name="csrf-token"]')?.content,n={"Content-Type":"application/json"};t.method&&"GET"!==t.method&&(n["X-CSRFToken"]=o);const r=await fetch(e,{...t,headers:n});let a;try{a=await r.json()}catch{throw new Error("Respuesta inválida del servidor")}if(!r.ok)throw new Error(a.message);return a}

@@ -2,6 +2,7 @@ from .category import Category
 from .enrollment import Enrollment
 from .instructor import Instructor
 from .instructor_vehicle import InstructorVehicle
+from .lesson import Lesson
 from .lesson_status import LessonStatus
 from .lesson_type import LessonType
 from .student import Student
@@ -16,4 +17,5 @@ __all__ = [
     "InstructorVehicle",
     "LessonType",
     "LessonStatus",
+    "Lesson",
 ]
