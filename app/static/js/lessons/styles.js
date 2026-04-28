@@ -1,0 +1,1 @@
+export function applyLessonStyles(s,e){s.className="","EXAMEN"!==e.type?"REFUERZO"!==e.category?s.classList.add("lesson-default"):s.classList.add("lesson-refuerzo"):s.classList.add("lesson-examen")}

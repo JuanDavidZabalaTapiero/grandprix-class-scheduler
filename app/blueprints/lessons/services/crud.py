@@ -31,6 +31,13 @@ class LessonService(CRUDServices):
     def get_default_status(self):
         return db.session.scalar(select(LessonStatus).where(LessonStatus.is_default))
 
+    def get_lessons(self, enrollment_id):
+        return db.session.scalars(
+            select(Lesson)
+            .where(Lesson.enrollment_id == enrollment_id)
+            .order_by(Lesson.date.asc(), Lesson.start_time.asc())
+        ).all()
+
     # === CREATE ===
     def bulk_create(self, data):
 
@@ -53,6 +60,30 @@ class LessonService(CRUDServices):
             }
 
             super().create(lesson_data)
+
+    # === UPDATE ===
+    def organize_lesson_number(self, enrollment_id):
+
+        # QUERY
+        lessons = db.session.scalars(
+            select(Lesson)
+            .join(LessonStatus)
+            .where(
+                Lesson.enrollment_id == enrollment_id,
+                LessonStatus.show_in_schedule,
+            )
+            .order_by(Lesson.date.asc(), Lesson.start_time.asc())
+        ).all()
+
+        # ASIGNAR NÚMEROS
+        for idx, lesson in enumerate(lessons, start=1):
+            lesson.lesson_number = idx
+
+        return lessons
+
+    # === DELETE ===
+    def bulk_delete(self, lessons):
+        Lesson.query.filter(Lesson.id.in_(lessons)).delete(synchronize_session=False)
 
 
 # =========================

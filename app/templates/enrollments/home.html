@@ -5,7 +5,7 @@
 {% block title %}Matrícula{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{{url_for('static', filename='css/lessons/schedule.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/lessons/main.css')}}">
 {% endblock %}
 
 {% block main %}
@@ -32,30 +32,129 @@
 
     </div>
 
-    <!-- AGENDAMIENTO -->
+    <!-- CLASES REGISTRADAS -->
+    {% if lessons %}
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+
+            <thead class="table-light text-center">
+                <tr>
+                    <th><input type="checkbox" data-id="all"
+                            class="lesson-checkbox form-check-input border border-primary"></th>
+                    <th>#</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Instructor</th>
+                    <th>Vehículo</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Paga</th>
+                </tr>
+            </thead>
+
+            <tbody class="text-center">
+                {% for lesson in lessons %}
+                <tr>
+                    <!-- CHECKBOX DELETE -->
+                    <td><input type="checkbox" class="lesson-checkbox form-check-input border border-primary"
+                            data-id="{{ lesson.id }}"></td>
+
+                    <td class="fw-semibold">{{ lesson.lesson_number }}</td>
+                    <td>{{ lesson.date }}</td>
+                    <td>{{ lesson.start_time }}</td>
+                    <td>{{ lesson.instructor_vehicle.instructor.name }}</td>
+                    <td>{{ lesson.instructor_vehicle.vehicle.type }}</td>
+
+                    <!-- TYPE -->
+                    <td>
+                        <select class="form-select form-select-sm lesson-input" data-id="{{lesson.id}}"
+                            data-field="lesson_type_id">
+                            {% for type in lesson_types %}
+                            <option value="{{type.id}}" {% if type.id==lesson.lesson_type.id %}selected{% endif %}>
+                                {{type.name}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+
+                    <!-- STATUS -->
+                    <td>
+                        <select class="form-select form-select-sm lesson-input" data-id="{{lesson.id}}"
+                            data-field="lesson_status_id">
+                            {% for status in lesson_statuses %}
+                            <option value="{{status.id}}" {% if status.id==lesson.lesson_status.id %}selected{% endif
+                                %}>
+                                {{status.name}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+
+                    <!-- CHECKBOX IS PAID -->
+                    <td>
+                        <input type="checkbox" class="form-check-input lesson-input" data-id="{{lesson.id}}"
+                            data-field="is_paid" {% if lesson.is_paid %}checked{% endif %}>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+
+    <!-- FOOTER -->
+    <div class="card-footer d-flex justify-content-end gap-2">
+        <button id="delete-lessons" class="btn btn-outline-danger" data-enrollment-id="{{enrollment.id}}">
+            Eliminar
+        </button>
+
+        <button id="edit-lessons" class="btn btn-outline-primary" data-enrollment-id="{{ enrollment.id }}">
+            Guardar cambios
+        </button>
+    </div>
+
+    {% else %}
+    <div class="alert alert-info mt-3">
+        Sin clases registradas
+    </div>
+    {% endif %}
+
+    <hr class="my-4 border-2 border-primary opacity-50">
+
+    <!-- === AGENDAMIENTO === -->
     {% if instructors %}
 
     <!-- FECHA -->
-    <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
-        <button id="previous-date" class="btn btn-outline-secondary">
-            <!-- ICON -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left"
-                viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-            </svg>
-        </button>
+    <div class="d-flex justify-content-center mb-3">
+        <div class="input-group w-auto">
+            <button id="previous-date"
+                class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+                <!-- ICON -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                </svg>
+            </button>
 
-        <input type="date" id="date-input" class="form-control w-auto text-center" value="{{today}}">
+            <input type="date" id="date-input" class="form-control w-auto text-center" value="{{today}}">
 
-        <button id="next-date" class="btn btn-outline-secondary">
-            <!-- ICON -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right"
-                viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-            </svg>
-        </button>
+            <button id="next-date" class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
+                <!-- ICON -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 mb-3">
+        <button id="change-mode" class="btn btn-warning">Activar cambio</button>
+        <button id="save-change" class="btn btn-primary">Guardar cambio</button>
+        <button id="register-changes" class="btn btn-success">Registrar cambios</button>
     </div>
 
     <!-- CLASES -->
@@ -101,12 +200,34 @@
     import { attachDeleteConfirmation } from "{{ url_for('static', filename='js/ui/confirmDelete.js') }}";
     import { initSchedule } from "{{ url_for('static', filename='js/lessons/schedule.js') }}";
     import { initDateNavigator } from "{{ url_for('static', filename='js/ui/date_navigator.js') }}";
-    import { initSaveLessons } from "{{ url_for('static', filename='js/lessons/events.js') }}";
+    import { initLessonTableEvents } from "{{ url_for('static', filename='js/lessons/events/tableEvents.js') }}";
+    import { initSaveLessons, initUpdateLessons, initBulkDeleteLessons, initSaveChanges } from "{{ url_for('static', filename='js/lessons/events/actionEvents.js') }}";
+    import { initToggleChangeMode, saveChange } from "{{ url_for('static', filename='js/lessons/events/changeModeEvents.js') }}";
 
-    // === MATRÍCULA ===
+    // =========================
+    // MATRÍCULA
+    // =========================
+
     attachDeleteConfirmation(document, "enrollment-delete-form", "matrícula");
 
-    // === AGENDAMIENTO ===
+
+    // =========================
+    // CLASES
+    // =========================
+
+    // EVENTOS
+    initLessonTableEvents();
+
+    // ACTUALIZAR CLASES
+    initUpdateLessons({ buttonId: "edit-lessons" });
+
+    // ELIMINAR CLASES
+    initBulkDeleteLessons({ buttonId: "delete-lessons" });
+
+
+    // =========================
+    // AGENDAMIENTO
+    // =========================
 
     // FECHA
     initDateNavigator({
@@ -122,9 +243,21 @@
     });
 
     // REGISTRAR CLASES
-    initSaveLessons({
-        buttonId: "save-lessons",
-    });
+    initSaveLessons({ buttonId: "save-lessons" });
+
+
+    // =========================
+    // CAMBIAR CLASES
+    // =========================
+
+    // MODO CAMBIO
+    initToggleChangeMode({ buttonId: "change-mode" });
+
+    // GUARDAR CAMBIO
+    saveChange({ buttonId: "save-change" });
+
+    // REGISTRAR CAMBIOS
+    initSaveChanges({ buttonId: "register-changes" });
 
 </script>
 {% endblock %}

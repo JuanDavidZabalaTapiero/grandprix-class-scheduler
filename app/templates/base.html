@@ -24,7 +24,7 @@
     {% endblock %}
 
     <!-- FLASH NORMAL -->
-    <div id="flash-container" class="container mt-3">
+    <div id="flash-container" class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         {% for category, message in messages %}
@@ -41,7 +41,7 @@
     <div id="flash-container-fixed" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
     </div>
 
-    <main class="py-4">
+    <main class="py-3">
         {% block main %}
         {% endblock %}
     </main>

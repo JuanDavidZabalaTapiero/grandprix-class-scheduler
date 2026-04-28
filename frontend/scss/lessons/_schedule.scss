@@ -1,0 +1,59 @@
+// === SELECTED ===
+#lessons-body {
+    td {
+        &.selected {
+            background-color: #1d4ed8;
+        }
+    }
+}
+
+// === LESSON ===
+
+// BASE
+td[class*="lesson-"] {
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+// DEFAULT
+.lesson-default {
+    --bs-table-bg: #28a745;
+    --bs-table-color: #fff;
+}
+
+// REFUERZO
+.lesson-refuerzo {
+    --bs-table-bg: #ffc107;
+    --bs-table-color: #212529;
+}
+
+// EXAMEN
+.lesson-examen {
+    --bs-table-bg: #0d6efd;
+    --bs-table-color: #fff;
+}
+
+// === CHANGE ===
+
+td.change-origin,
+td.change-target,
+td.change-chosen {
+    position: relative;
+}
+
+td.change-origin::after,
+td.change-target::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 165, 0, 0.7);
+    z-index: 1;
+}
+
+td.change-chosen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(13, 27, 42, 0.7);
+    z-index: 1;
+}

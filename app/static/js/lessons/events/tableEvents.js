@@ -1,0 +1,1 @@
+import{toggleLessonsToDelete,changeLesson}from"../state.js";export function initLessonTableEvents(){document.addEventListener("change",e=>{const s=e.target;s.matches(".lesson-checkbox")?toggleLessonsToDelete(s):s.matches(".lesson-input")&&changeLesson(s)})}

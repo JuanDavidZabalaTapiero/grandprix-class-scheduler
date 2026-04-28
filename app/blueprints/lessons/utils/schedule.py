@@ -1,11 +1,15 @@
+from .time import format_time
+
+
 def build_schedule(hours, instructors, lessons):
 
-    # MAP
+    # === MAP ===
     lesson_map = {
         (lesson.start_time, lesson.instructor_vehicle.instructor_id): {
             "id": lesson.id,
             "student": lesson.enrollment.student.name,
             "category": lesson.enrollment.category.name,
+            "type": lesson.lesson_type.name,
             "vehicle_id": lesson.instructor_vehicle.vehicle.id,
             "vehicle_license": lesson.instructor_vehicle.vehicle.license_plate,
             "vehicle_type": lesson.instructor_vehicle.vehicle.type,
@@ -13,7 +17,7 @@ def build_schedule(hours, instructors, lessons):
         for lesson in lessons
     }
 
-    # ARRAY VEHICLES ID
+    # === ARRAY VEHICLES ID ===
     vehicles_by_hour = {}
 
     for lesson in lessons:
@@ -23,10 +27,11 @@ def build_schedule(hours, instructors, lessons):
 
     vehicles_by_hour = {str(hour): list(v) for hour, v in vehicles_by_hour.items()}
 
-    # DICT
+    # === DICT ===
     return [
         {
             "hour": str(hour),
+            "hour_formatted": format_time(hour),
             "vehicles_ids": vehicles_by_hour.get(str(hour), []),
             "instructors": [
                 {"id": i.id, "lesson": lesson_map.get((hour, i.id))}

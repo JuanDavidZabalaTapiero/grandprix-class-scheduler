@@ -29,6 +29,7 @@ class Lesson(db.Model):
     )
 
     # RELATIONSHIPS
+    lesson_type = db.relationship("LessonType", back_populates="lessons")
     lesson_status = db.relationship("LessonStatus", back_populates="lessons")
     enrollment = db.relationship("Enrollment", back_populates="lessons")
     instructor_vehicle = db.relationship("InstructorVehicle", back_populates="lessons")

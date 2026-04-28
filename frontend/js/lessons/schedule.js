@@ -1,6 +1,8 @@
 import { getSchedule } from "./api.js";
 import { showFlash } from "../ui/flash.js";
 import { renderSchedule } from "./ui.js";
+import { getScheduleRefs, setScheduleRefs } from "./scheduleRefs.js";
+
 
 // =========================
 // CARGAR CLASES
@@ -16,6 +18,19 @@ export async function loadSchedule(dateInput, container) {
     }
 }
 
+
+// =========================
+// RE-RENDER
+// =========================
+
+export function rerenderSchedule() {
+    const { dateInput, container } = getScheduleRefs();
+    if (!dateInput || !container) return;
+
+    loadSchedule(dateInput, container);
+}
+
+
 // =========================
 // INICIALIZACIÓN
 // =========================
@@ -27,6 +42,9 @@ export function initSchedule({ dateId, containerId }) {
     const container = document.getElementById(containerId);
 
     if (!date || !container) return;
+
+    // === GUARDAR REFS ===
+    setScheduleRefs({ dateInput: date, container: container });
 
     // === CARGA INICIAL ===
     loadSchedule(date, container);
