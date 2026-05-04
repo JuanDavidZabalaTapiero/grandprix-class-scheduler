@@ -1,3 +1,5 @@
+from collections import Counter
+
 from sqlalchemy import select
 
 from app.blueprints.lessons.exceptions import LessonNotFound
@@ -16,14 +18,23 @@ class LessonService(CRUDServices):
     def get_schedule(self, date, instructors):
         instructors_ids = [i.id for i in instructors]
 
-        return db.session.scalars(
+        lessons = db.session.scalars(
             select(Lesson)
             .join(InstructorVehicle)
             .join(LessonStatus)
             .where(Lesson.date == date)
             .where(InstructorVehicle.instructor_id.in_(instructors_ids))
-            .where(LessonStatus.show_in_schedule)
+            .where(LessonStatus.show_in_scheduling)
         ).all()
+
+        # === TOTAL POR INSTRUCTOR ===
+        totals = Counter()
+
+        for lesson in lessons:
+            instructor_id = lesson.instructor_vehicle.instructor_id
+            totals[instructor_id] += 1
+
+        return lessons, totals
 
     def get_default_type(self):
         return db.session.scalar(select(LessonType).where(LessonType.is_default))
@@ -70,7 +81,7 @@ class LessonService(CRUDServices):
             .join(LessonStatus)
             .where(
                 Lesson.enrollment_id == enrollment_id,
-                LessonStatus.show_in_schedule,
+                LessonStatus.show_in_scheduling,
             )
             .order_by(Lesson.date.asc(), Lesson.start_time.asc())
         ).all()

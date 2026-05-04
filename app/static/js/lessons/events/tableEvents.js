@@ -1,1 +1,1 @@
-import{toggleLessonsToDelete,changeLesson}from"../state.js";export function initLessonTableEvents(){document.addEventListener("change",e=>{const s=e.target;s.matches(".lesson-checkbox")?toggleLessonsToDelete(s):s.matches(".lesson-input")&&changeLesson(s)})}
+import{toggleLessonsToDelete as e,changeLesson as t}from"../state.js";export function initLessonTableEvents(){document.addEventListener("change",function(n){var s=n.target;s.matches(".lesson-checkbox")?e(s):s.matches(".lesson-input")&&t(s)})}

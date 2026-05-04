@@ -1,1 +1,1 @@
-export function applyLessonStyles(s,e){s.className="","EXAMEN"!==e.type?"REFUERZO"!==e.category?s.classList.add("lesson-default"):s.classList.add("lesson-refuerzo"):s.classList.add("lesson-examen")}
+export function applyLessonStyles(s,e){s.className="","EXAMEN"!==e.type?"REFUERZO"!==e.category?"T-PRÁCTICO"!==e.category?"M-DEFENSIVO"!==e.category?s.classList.add("lesson-default"):s.classList.add("lesson-m-defensivo"):s.classList.add("lesson-t-practico"):s.classList.add("lesson-refuerzo"):s.classList.add("lesson-examen")}

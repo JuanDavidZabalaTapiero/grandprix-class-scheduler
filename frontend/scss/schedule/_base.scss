@@ -1,0 +1,22 @@
+@use "variables";
+
+#table-schedule {
+
+    td,
+    th {
+        vertical-align: middle;
+        text-align: center;
+        border: 2px solid variables.$color-secundario;
+    }
+
+    th {
+        background-color: variables.$color-principal;
+        color: white;
+    }
+}
+
+.tr-even {
+    td {
+        background-color: #dbdbdb;
+    }
+}

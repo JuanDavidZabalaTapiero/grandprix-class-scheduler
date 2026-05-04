@@ -2,7 +2,7 @@ import { fetchJSON } from "../core/api.js";
 
 export async function getSchedule(date) {
     const json = await fetchJSON(`/api/lessons?date=${encodeURIComponent(date)}`);
-    return json.data;
+    return json;
 }
 
 export async function createLessons(data) {

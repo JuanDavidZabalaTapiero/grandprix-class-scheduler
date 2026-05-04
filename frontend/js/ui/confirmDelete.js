@@ -1,8 +1,10 @@
+import { confirmAction } from "./alert.js";
+
 export function attachDeleteConfirmation(container, formClass = "delete-form", entityName = "registro") {
     if (!container) return;
 
-    container.addEventListener("submit", function (e) {
-        
+    container.addEventListener("submit", async function (e) {
+
         // FORM
         const form = e.target;
         if (!form.classList.contains(formClass)) return;
@@ -11,18 +13,13 @@ export function attachDeleteConfirmation(container, formClass = "delete-form", e
         e.preventDefault();
 
         // ALERTA
-        Swal.fire({
+        const confirmed = await confirmAction({
             title: `¿Eliminar ${entityName}?`,
-            text: "Esta acción no se puede deshacer",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sí, eliminar",
-            cancelButtonText: "Cancelar",
-            reverseButtons: true,
-        }).then(result => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
+            confirmText: "Sí, eliminar"
         });
+
+        if (confirmed) {
+            form.submit();
+        }
     })
 }

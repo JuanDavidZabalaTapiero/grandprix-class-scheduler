@@ -7,7 +7,7 @@ from app.core.exceptions import AppError
 from app.core.transactions import run_query, run_service
 
 from .services.crud import lesson_services
-from .utils.schedule import build_schedule
+from .utils.scheduling import build_scheduling
 
 api_bp = Blueprint("lessons_api", __name__, url_prefix="/api/lessons")
 
@@ -22,13 +22,15 @@ def get_schedule():
         hours = [time(h, 0, 0) for h in range(6, 22)]
 
         # === QUERY ===
-        lessons = run_query(lambda: lesson_services.get_schedule(date, instructors))
+        lessons, totals = run_query(
+            lambda: lesson_services.get_schedule(date, instructors)
+        )
 
         # === BUILD ===
-        lessons_dict = build_schedule(hours, instructors, lessons)
+        lessons_dict = build_scheduling(hours, instructors, lessons)
 
         # === RESPONSE ===
-        return jsonify({"data": lessons_dict})
+        return jsonify({"lessons": lessons_dict, "totals": totals})
 
     except AppError as e:
         return jsonify({"message": str(e)}), e.status_code

@@ -34,6 +34,7 @@ Permite administrar entidades como alumnos e instructores, incluyendo operacione
 - gulp-sass → compilar SCSS
 - gulp-clean-css → minificar CSS
 - gulp-terser → minificar JavaScript
+- gulp-babel → transpila JavaScript moderno (ES6+) a versiones compatibles con más navegadores
 
 ## 🧹 Calidad de código
 

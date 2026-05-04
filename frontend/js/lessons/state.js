@@ -16,7 +16,7 @@ export const changeMode = {
     active: false,
     selection: {
         origin: null,
-        target: null // id | {object}
+        target: null
     }
 };
 
@@ -79,7 +79,7 @@ export function toggleLesson(lesson, occupiedVehicles = []) {
         return false;
     }
 
-    // === VEHÍCULO OCUPADO ===
+    // VEHÍCULO OCUPADO
     const result = validateSlot(lesson, occupiedVehicles);
 
     if (result !== true) {

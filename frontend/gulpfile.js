@@ -1,6 +1,7 @@
 const { src, dest, watch, series, parallel } = require("gulp");
 const sass = require("gulp-sass")(require("sass"));
 const cleanCSS = require("gulp-clean-css");
+const babel = require("gulp-babel");
 const terser = require("gulp-terser");
 
 // RUTAS
@@ -23,7 +24,8 @@ function styles() {
 // MINIFICAR JS
 function scripts() {
     return src(paths.jsAll, { base: "js" })
-        .pipe(terser())
+        .pipe(babel({ presets: [['@babel/preset-env', { modules: false }]] }))
+        .pipe(terser({ module: true }))
         .pipe(dest(paths.jsOutput))
 }
 

@@ -1,0 +1,24 @@
+{% extends "layouts/schedule_page.html" %}
+
+{% block title %}Cronograma{% endblock %}
+
+{% block colspan %}4{% endblock %}
+
+{% block student_data %}
+<tr>
+    <th rowspan="4">DATOS DEL ALUMNO</th>
+</tr>
+<tr>
+    <th>ID</th>
+    <td colspan="3" class="text-start">{{enrollment.student.document_id}}</td>
+</tr>
+<tr>
+    <th>NOMBRE</th>
+    <td colspan="3" class="text-start">{{enrollment.student.name}}</td>
+</tr>
+<tr>
+    <th>TELÉFONO</th>
+    <td colspan="2" class="text-start">{{enrollment.student.phone}}</td>
+    <td>CATEGORÍA: {{enrollment.category.name}}</td>
+</tr>
+{% endblock %}

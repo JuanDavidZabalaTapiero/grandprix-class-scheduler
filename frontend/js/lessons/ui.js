@@ -2,7 +2,7 @@ import { selectedLessons, changeMode, lessonsToChange } from "./state.js";
 import { handleLessonClick, handleRegisteredClick } from "./events/cellEvents.js";
 import { applyLessonStyles } from "./styles.js";
 
-export function renderSchedule(container, lessons, date) {
+export function renderSchedule(container, lessons, date, totals = {}) {
     if (!container) return;
 
     // LIMPIAR CONTENEDOR
@@ -110,4 +110,26 @@ export function renderSchedule(container, lessons, date) {
 
         container.appendChild(tr);
     })
+
+    // =========================
+    // FILA TOTAL
+    // =========================
+
+    const totalTr = document.createElement("tr");
+
+    const totalLabelTd = document.createElement("td");
+    totalLabelTd.textContent = "Total";
+    totalLabelTd.classList.add("fw-bold");
+    totalTr.appendChild(totalLabelTd);
+
+    if (lessons.length > 0) {
+        lessons[0].instructors.forEach(item => {
+            const td = document.createElement("td");
+            td.textContent = totals[item.id] || 0;
+            td.classList.add("fw-bold");
+            totalTr.appendChild(td);
+        });
+    }
+
+    container.appendChild(totalTr);
 }

@@ -7,7 +7,7 @@ def name_field():
     return text_field("Nombre", max_length=20)
 
 
-def show_in_schedule_field():
+def show_in_scheduling_field():
     return BooleanField("Agendamiento")
 
 

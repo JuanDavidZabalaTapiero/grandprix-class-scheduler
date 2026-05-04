@@ -1,0 +1,41 @@
+{% extends "layouts/schedule_page.html" %}
+
+{% block title %}Cronograma Completo{% endblock %}
+
+{% block colspan %}5{% endblock %}
+
+{% block student_data %}
+<tr>
+    <th rowspan="4">DATOS DEL ALUMNO</th>
+</tr>
+<tr>
+    <th>ID</th>
+    <td colspan="4" class="text-start">{{student.document_id}}</td>
+</tr>
+<tr>
+    <th>NOMBRE</th>
+    <td colspan="4" class="text-start">{{student.name}}</td>
+</tr>
+<tr>
+    <th>TELÉFONO</th>
+    <td colspan="2" class="text-start">{{student.phone}}</td>
+    <td colspan="2">
+        CATEGORÍAS:
+        {% for enrollment in student.enrollments %}
+        {{ enrollment.category.name }}{% if not loop.last %} / {% endif %}
+        {% endfor %}
+    </td>
+</tr>
+{% endblock %}
+
+{% block extra_headers %}
+<th>VEHÍCULO</th>
+{% endblock %}
+
+{% block extra_columns scoped %}
+<td>
+    {% for vehicle in day_block.vehicles %}
+    {{vehicle.type}}{% if not loop.last %} / {% endif %}
+    {% endfor %}
+</td>
+{% endblock %}

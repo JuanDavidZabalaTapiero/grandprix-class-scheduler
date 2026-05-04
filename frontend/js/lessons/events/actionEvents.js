@@ -1,4 +1,5 @@
 import { showFlashFixed } from "../../ui/flash.js";
+import { confirmAction } from "../../ui/alert.js";
 import { getLessons, getEditedLessons, getLessonsToDelete, getLessonsToChange } from "../state.js";
 import { createLessons, updateLessons, deleteLessons, saveChanges } from "../api.js";
 
@@ -88,6 +89,13 @@ export function initBulkDeleteLessons({ buttonId }) {
             showFlashFixed("warning", "Selecciona al menos una clase");
             return;
         }
+
+        const confirmed = await confirmAction({
+            title: "¿Eliminar clases?",
+            confirmText: "Sí, eliminar"
+        });
+
+        if (!confirmed) return;
 
         const enrollmentId = btn.dataset.enrollmentId;
 

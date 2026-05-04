@@ -1,0 +1,5 @@
+LESSON_DURATION = 45
+EXAM_EXTRA = 20
+EXAM_TYPE_ID = 2
+PENDING_STATUS_ID = 1
+MEETING_POINTS = ["Academia: Av Caracas #54-43", "Teusaquillo: Carrera 15 # 53-52"]

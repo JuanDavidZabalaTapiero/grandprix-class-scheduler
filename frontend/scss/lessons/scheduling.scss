@@ -1,4 +1,5 @@
 // === SELECTED ===
+
 #lessons-body {
     td {
         &.selected {
@@ -25,6 +26,18 @@ td[class*="lesson-"] {
 .lesson-refuerzo {
     --bs-table-bg: #ffc107;
     --bs-table-color: #212529;
+}
+
+// T-PRÁCTICO
+.lesson-t-practico {
+    --bs-table-bg: #795548;
+    --bs-table-color: #fff;
+}
+
+// M-DEFENSIVO
+.lesson-m-defensivo {
+    --bs-table-bg: #6f42c1;
+    --bs-table-color: #fff;
 }
 
 // EXAMEN

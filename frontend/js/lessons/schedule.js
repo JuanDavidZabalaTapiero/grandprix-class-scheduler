@@ -11,7 +11,7 @@ import { getScheduleRefs, setScheduleRefs } from "./scheduleRefs.js";
 export async function loadSchedule(dateInput, container) {
     try {
         const data = await getSchedule(dateInput.value);
-        renderSchedule(container, data, dateInput.value);
+        renderSchedule(container, data.lessons, dateInput.value, data.totals);
     } catch (err) {
         container.innerHTML = "";
         showFlash("danger", err.message);

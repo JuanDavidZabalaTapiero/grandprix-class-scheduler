@@ -15,6 +15,18 @@ export function applyLessonStyles(lessonTd, lesson) {
         return;
     }
 
+    // T-PRÁCTICO
+    if (lesson.category === "T-PRÁCTICO") {
+        lessonTd.classList.add("lesson-t-practico");
+        return;
+    }
+
+    // M-DEFENSIVO
+    if (lesson.category === "M-DEFENSIVO") {
+        lessonTd.classList.add("lesson-m-defensivo");
+        return;
+    }
+
     // DEFAULT
     lessonTd.classList.add("lesson-default");
 }
