@@ -1,12 +1,14 @@
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
 from app.blueprints.students.exceptions import (
     StudentDocumentAlreadyExists,
     StudentHasEnrollments,
     StudentNotFound,
 )
+from app.core.constants import ABSENCE_STATUS_ID
 from app.core.crud.services.crud import CRUDServices
-from app.db.models.student import Student
+from app.db.models import Enrollment, Lesson, Student
 from app.extensions import db
 
 # =========================
@@ -23,6 +25,25 @@ class StudentService(CRUDServices):
         if not student:
             raise StudentNotFound()
         return student
+
+    def get_students_with_absences(self):
+        students = (
+            Student.query.join(Student.enrollments)
+            .join(Enrollment.lessons)
+            .filter(Lesson.lesson_status_id == ABSENCE_STATUS_ID)
+            .options(
+                joinedload(Student.enrollments)
+                .joinedload(Enrollment.lessons)
+                .joinedload(Lesson.instructor_vehicle),
+                joinedload(Student.enrollments)
+                .joinedload(Enrollment.lessons)
+                .joinedload(Lesson.lesson_status),
+                joinedload(Student.enrollments).joinedload(Enrollment.category),
+            )
+            .distinct()
+            .all()
+        )
+        return students
 
 
 # =========================

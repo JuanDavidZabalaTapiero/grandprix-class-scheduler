@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Inasistencias{% endblock %}
+
+{% block main %}
+<div class="container">
+    <h1 class="mb-3 text-center text-warning">Inasistencias</h1>
+    <p class="text-center text-muted fst-italic mb-5">Listado de estudiantes con clases marcadas como “Inasistencia”.
+    </p>
+
+    {% if students %}
+    {% for student in students %}
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+
+            <p class="fs-4 text-center mb-2">{{ student.name }}</>
+
+            <div class="table-responsive">
+                <table class="table table-bordered text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora de inicio</th>
+                            <th>Instructor</th>
+                            <th>Vehículo</th>
+                            <th>Categoría</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lesson in student.lessons_with_absence %}
+                        <tr>
+                            <td>{{ lesson.formatted_date }}</td>
+                            <td>{{ lesson.formatted_start_time }}</td>
+                            <td>{{ lesson.instructor_vehicle.instructor.name }}</td>
+                            <td>{{ lesson.instructor_vehicle.vehicle.type }}</td>
+                            <td>{{ lesson.enrollment.category.name }}</td>
+                            <td>
+                                <span class="badge bg-danger">
+                                    {{ lesson.lesson_status.name }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-center">
+                <h5>Total a pagar:
+                    <span class="text-success">${{ "{:,.0f}".format(student.absence_total).replace(",", ".") }}</span>
+                </h5>
+            </div>
+
+        </div>
+    </div>
+
+    {% endfor %}
+
+    {% else %}
+    <div class="alert alert-info">
+        No hay alumnos con inasistencias
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

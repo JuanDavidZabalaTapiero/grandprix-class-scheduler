@@ -1,5 +1,8 @@
+from operator import attrgetter
+
 from sqlalchemy import func
 
+from app.core.constants import ABSENCE_PRICE, ABSENCE_STATUS_ID
 from app.extensions import db
 
 
@@ -16,3 +19,23 @@ class Student(db.Model):
 
     # RELATIONSHIPS
     enrollments = db.relationship("Enrollment", back_populates="student")
+
+    # ABSENCE
+    @property
+    def lessons_with_absence(self):
+        lessons = [
+            lesson
+            for enrollment in self.enrollments
+            for lesson in enrollment.lessons
+            if lesson.lesson_status_id == ABSENCE_STATUS_ID
+        ]
+
+        return sorted(lessons, key=attrgetter("date", "start_time"))
+
+    @property
+    def absence_count(self):
+        return len(self.lessons_with_absence)
+
+    @property
+    def absence_total(self):
+        return self.absence_count * ABSENCE_PRICE

@@ -1,3 +1,4 @@
+from app.core.utils.time import format_date_spanish, format_time
 from app.extensions import db
 
 
@@ -33,3 +34,11 @@ class Lesson(db.Model):
     lesson_status = db.relationship("LessonStatus", back_populates="lessons")
     enrollment = db.relationship("Enrollment", back_populates="lessons")
     instructor_vehicle = db.relationship("InstructorVehicle", back_populates="lessons")
+
+    @property
+    def formatted_date(self):
+        return format_date_spanish(self.date)
+
+    @property
+    def formatted_start_time(self):
+        return format_time(self.start_time)
