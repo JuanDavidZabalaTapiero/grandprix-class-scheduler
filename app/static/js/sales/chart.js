@@ -1,0 +1,1 @@
+export function createBarChart(a){return new Chart(a,{type:"bar",data:{labels:arguments.length>1&&void 0!==arguments[1]?arguments[1]:[],datasets:[{label:"Ventas",data:arguments.length>2&&void 0!==arguments[2]?arguments[2]:[]}]}})}

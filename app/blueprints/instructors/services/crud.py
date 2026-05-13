@@ -17,7 +17,9 @@ from app.extensions import db
 class InstructorService(CRUDServices):
 
     def get_all_active_instructors(self):
-        return db.session.scalars(select(Instructor).where(Instructor.enabled))
+        return db.session.scalars(
+            select(Instructor).where(Instructor.enabled).order_by(Instructor.name)
+        ).all()
 
     def get_available_instructors(self):
         return db.session.scalars(

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.css')}}">
     <!-- SWEETALERT2 (CSS) -->
     <link rel="stylesheet" href="{{url_for('static', filename='css/sweetalert2.css')}}">
-    <!-- CSS EXTRA -->
+    <!-- === CSS PROPIO === -->
     {% block css %}{% endblock %}
 </head>
 
@@ -50,7 +50,7 @@
     <script src="{{url_for('static', filename='js/vendor/bootstrap.bundle.min.js')}}"></script>
     <!-- SWEETALERT2 (JS) -->
     <script src="{{ url_for('static', filename='js/vendor/sweetalert2.min.js') }}"></script>
-    <!-- JS EXTRA -->
+    <!-- === JS PROPIO === -->
     {% block scripts %}
     {% endblock %}
 </body>

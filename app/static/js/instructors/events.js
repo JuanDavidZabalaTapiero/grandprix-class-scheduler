@@ -1,0 +1,1 @@
+import{showLessonsModal as o}from"./ui.js";export function initShowLessonsModal(){document.querySelectorAll(".show-modal").forEach(function(n){n.addEventListener("click",function(){o(n)})})}

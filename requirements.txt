@@ -21,3 +21,6 @@ Flask-Migrate==4.1.0
 # === FORMULARIOS ===
 Flask-WTF==1.2.2 # INPUT + VALIDACIÓN + NORMALIZACIÓN
 
+# === LOGS ===
+concurrent-log-handler==0.9.29
+

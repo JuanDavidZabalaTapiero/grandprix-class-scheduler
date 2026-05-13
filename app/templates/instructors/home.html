@@ -21,14 +21,26 @@
 {% block header_extra %}
 <div class="action-bar d-flex flex-wrap gap-2 mb-4">
 
-    <a href="{{url_for('instructors.schedule_list')}}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2">
+    <a href="{{url_for('instructors.schedule_list')}}"
+        class="btn btn-outline-primary d-inline-flex align-items-center gap-2">
         <!-- ICON -->
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar"
             viewBox="0 0 16 16">
             <path
                 d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
         </svg>
-        Cronogramas
+        Cronograma
+    </a>
+
+    <a href="{{url_for('instructors.payroll')}}" class="btn btn-outline-primary d-inline-flex align-items-center gap-2">
+        <!-- ICON -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash"
+            viewBox="0 0 16 16">
+            <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+            <path
+                d="M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2z" />
+        </svg>
+        Nómina
     </a>
 
     <a href="{{url_for('instructor_vehicles.register_form')}}"

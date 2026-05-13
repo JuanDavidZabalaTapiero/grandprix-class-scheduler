@@ -1,1 +1,1 @@
-from . import crud, schedule  # noqa
+from . import crud, schedule, payroll  # noqa

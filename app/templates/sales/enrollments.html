@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Ventas{% endblock %}
+
+{% block main %}
+<div class="container">
+    <!-- TITLE -->
+    <div class="mb-4">
+        <h1 class="text-center fw-bold">
+            Ventas
+        </h1>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+
+            <div class="row g-3 align-items-end">
+
+                <!-- START DATE -->
+                <div class="col-12 col-md-4">
+                    <label for="startDate" class="form-label fw-semibold">
+                        Fecha inicial
+                    </label>
+
+                    <input type="date" id="startDate" class="form-control" value="{{ today }}">
+                </div>
+
+                <!-- END DATE -->
+                <div class="col-12 col-md-4">
+                    <label for="endDate" class="form-label fw-semibold">
+                        Fecha final
+                    </label>
+
+                    <input type="date" id="endDate" class="form-control" value="{{ today }}">
+                </div>
+
+                <!-- BUTTON -->
+                <div class="col-12 col-md-4 d-grid">
+                    <button id="loadChartBtn" class="btn btn-primary">
+                        Generar gráfica
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- CHART.JS -->
+<script src="{{ url_for('static', filename='js/vendor/chart.umd.min.js') }}"></script>
+
+<script type="module">
+    import { initGenerateChart } from "{{ url_for('static', filename='js/sales/events.js') }}";
+
+    initGenerateChart({
+        buttonId: "loadChartBtn",
+        startDateId: "startDate",
+        endDateId: "endDate",
+        canvasId: "salesChart"
+    });
+
+</script>
+{% endblock %}

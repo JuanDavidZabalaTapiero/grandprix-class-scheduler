@@ -35,9 +35,9 @@
     <!-- CLASES REGISTRADAS -->
     {% if lessons %}
     <div class="table-responsive">
-        <table class="table table-bordered align-middle">
+        <table class="table table-bordered align-middle text-center">
 
-            <thead class="table-light text-center">
+            <thead class="table-light">
                 <tr>
                     <th><input type="checkbox" data-id="all"
                             class="lesson-checkbox form-check-input border border-primary"></th>
@@ -52,7 +52,7 @@
                 </tr>
             </thead>
 
-            <tbody class="text-center">
+            <tbody>
                 {% for lesson in lessons %}
                 <tr>
                     <!-- CHECKBOX DELETE -->

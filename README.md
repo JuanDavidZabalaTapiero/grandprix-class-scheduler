@@ -26,6 +26,7 @@ Permite administrar entidades como alumnos e instructores, incluyendo operacione
 - Bootstrap (CSS / JS)
 - Bootstrap Icons
 - SweetAlert2
+- Chart.js
 - Sass
 - Gulp
 
