@@ -1,1 +1,1 @@
-from . import schedule  # noqa
+from . import schedule, edit  # noqa

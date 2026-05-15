@@ -4,8 +4,11 @@
 <link rel="stylesheet" href="{{url_for('static', filename='css/schedule/student.css')}}">
 {% endblock %}
 
+{% block header %}
+{% endblock %}
+
 {% block main %}
-<div class="container table-responsive">
+<div class="px-4 table-responsive">
     <table class="table table-bordered text-center align-middle" id="table-schedule">
         <thead>
             <tr>
@@ -73,7 +76,7 @@
         </tbody>
     </table>
 
-    <div class="note fs-6">Nota: Tenga en cuenta que la fecha estimada del examen práctico puede cambiar si, durante la
+    <div class="note fs-6">Tenga en cuenta que la fecha estimada del examen práctico puede cambiar si, durante la
         formación, se presentan cancelaciones, inasistencias o reagendamientos. Las clases canceladas, inasistidas o
         reagendadas no se pueden dar por vistas y, por lo tanto, deben reprogramarse para completar el esquema práctico.
     </div>

@@ -55,8 +55,8 @@ def build_schedule(enrollment_id=None, student_id=None):
     lessons.sort(
         key=lambda lesson: (
             lesson.date,
-            lesson.instructor_vehicle.instructor_id,
             lesson.start_time,
+            lesson.instructor_vehicle.instructor_id,
         )
     )
 

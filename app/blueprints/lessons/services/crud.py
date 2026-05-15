@@ -1,8 +1,10 @@
 from collections import Counter
+from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 
 from app.blueprints.lessons.exceptions import LessonNotFound
+from app.core.constants import COMPLETED_STATUS_ID, PENDING_STATUS_ID
 from app.core.crud.services.crud import CRUDServices
 from app.db.models import InstructorVehicle, Lesson, LessonStatus, LessonType
 from app.extensions import db
@@ -91,6 +93,36 @@ class LessonService(CRUDServices):
             lesson.lesson_number = idx
 
         return lessons
+
+    def update_lesson_status(self, enrollment_id):
+        today = date.today()
+
+        stmt = (
+            update(Lesson)
+            .where(
+                Lesson.enrollment_id == enrollment_id,
+                Lesson.lesson_status_id == PENDING_STATUS_ID,
+                Lesson.date < today,
+            )
+            .values(lesson_status_id=COMPLETED_STATUS_ID)
+        )
+
+        db.session.execute(stmt)
+
+    def update_all_lessons_status(self):
+
+        today = date.today()
+
+        stmt = (
+            update(Lesson)
+            .where(
+                Lesson.lesson_status_id == PENDING_STATUS_ID,
+                Lesson.date < today,
+            )
+            .values(lesson_status_id=COMPLETED_STATUS_ID)
+        )
+
+        db.session.execute(stmt)
 
     # === DELETE ===
     def bulk_delete(self, lessons):

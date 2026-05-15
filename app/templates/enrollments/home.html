@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
-{% from "macros/buttons.html" import delete_button %}
+{% from "macros/buttons.html" import delete_button, edit_button %}
 
 {% block title %}Matrícula{% endblock %}
 
 {% block css %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/lessons/registered.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='css/lessons/scheduling.css')}}">
 {% endblock %}
 
@@ -12,7 +13,7 @@
 <div class="container">
 
     <!-- CARD -->
-    <div class="border rounded-3 p-3 mb-3 bg-white shadow-sm">
+    <div class="border rounded-3 p-3 mb-4 bg-white shadow-sm">
 
         <!-- HEADER -->
         <div class="d-flex justify-content-between align-items-center">
@@ -34,6 +35,23 @@
 
     <!-- CLASES REGISTRADAS -->
     {% if lessons %}
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fs-3">Clases</h2>
+        <a href="{{url_for('lessons.update_status', enrollment_id=enrollment.id)}}"
+            class="btn btn-outline-primary d-inline-flex align-items-center gap-2">
+            <!-- ICON: LOOP -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                <path
+                    d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
+                <path fill-rule="evenodd"
+                    d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
+            </svg>
+            Actualizar
+        </a>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-bordered align-middle text-center">
 
@@ -49,12 +67,13 @@
                     <th>Tipo</th>
                     <th>Estado</th>
                     <th>Paga</th>
+                    <th>Editar</th>
                 </tr>
             </thead>
 
             <tbody>
                 {% for lesson in lessons %}
-                <tr>
+                <tr class="status-{{lesson.lesson_status_id}}">
                     <!-- CHECKBOX DELETE -->
                     <td><input type="checkbox" class="lesson-checkbox form-check-input border border-primary"
                             data-id="{{ lesson.id }}"></td>
@@ -95,6 +114,10 @@
                         <input type="checkbox" class="form-check-input lesson-input" data-id="{{lesson.id}}"
                             data-field="is_paid" {% if lesson.is_paid %}checked{% endif %}>
                     </td>
+
+                    <td>
+                        {{edit_button(url_for("lessons.edit_lesson_form", lesson_id=lesson.id), show_text=false)}}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -104,23 +127,26 @@
 
 
     <!-- FOOTER -->
-    <div class="card-footer d-flex justify-content-between align-items-center">
+    <div class="card-footer d-flex flex-column flex-lg-row justify-content-between gap-3">
 
         <!-- Cronogramas -->
-        <div class="d-flex gap-2">
-            <a href="{{url_for('lessons.schedule', enrollment_id=enrollment.id)}}"
-                class="btn btn-outline-primary d-inline-flex align-items-center gap-2">
+        <div class="d-flex flex-column flex-sm-row flex-wrap gap-2">
+            <a href="{{ url_for('lessons.schedule', enrollment_id=enrollment.id) }}"
+                class="btn btn-outline-primary d-inline-flex align-items-center justify-content-center gap-2">
+
                 <!-- ICON -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-calendar" viewBox="0 0 16 16">
                     <path
                         d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
                 </svg>
+
                 Cronograma
             </a>
 
-            <a href="{{url_for('lessons.complete_schedule', student_id=enrollment.student.id)}}"
-                class="btn btn-outline-primary d-inline-flex align-items-center gap-2">
+            <a href="{{ url_for('lessons.complete_schedule', student_id=enrollment.student.id) }}"
+                class="btn btn-outline-primary d-inline-flex align-items-center justify-content-center gap-2">
+
                 <!-- ICON -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-calendar-check" viewBox="0 0 16 16">
@@ -129,13 +155,14 @@
                     <path
                         d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
                 </svg>
+
                 Cronograma completo
             </a>
         </div>
 
         <!-- Acciones -->
-        <div class="d-flex gap-2">
-            <button id="delete-lessons" class="btn btn-outline-danger" data-enrollment-id="{{enrollment.id}}">
+        <div class="d-flex flex-column flex-sm-row gap-2">
+            <button id="delete-lessons" class="btn btn-outline-danger" data-enrollment-id="{{ enrollment.id }}">
                 Eliminar
             </button>
 
@@ -184,8 +211,9 @@
     </div>
 
     <div class="d-flex gap-2 mb-3">
-        <button id="change-mode" class="btn btn-warning d-inline-flex align-items-center justify-content-center gap-2">
-            <!-- ICON -->
+        <button id="change-mode"
+            class="btn btn-outline-warning d-inline-flex align-items-center justify-content-center gap-2">
+            <!-- ICON: LOOP -->
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-arrow-repeat" viewBox="0 0 16 16">
                 <path
@@ -195,8 +223,8 @@
             </svg>
             Modo cambio
         </button>
-        <button id="save-change" class="btn btn-primary">Guardar cambio</button>
-        <button id="register-changes" class="btn btn-success">Registrar cambios</button>
+        <button id="save-change" class="btn btn-outline-primary">Guardar cambio</button>
+        <button id="register-changes" class="btn btn-outline-success">Registrar cambios</button>
     </div>
 
     <!-- CLASES -->
