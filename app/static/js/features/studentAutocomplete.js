@@ -1,0 +1,1 @@
+import{onInputChange as t}from"../students/events.js";import{handleStudentsAutocomplete as o}from"../students/controller.js";export function initStudentAutocomplete(n,e){t(n,function(t){o(t,e,n)})}

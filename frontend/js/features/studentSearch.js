@@ -6,12 +6,13 @@ import { showFlash } from "../ui/flash.js";
 import { renderSpinner } from "../ui/loading.js";
 import { attachDeleteConfirmation } from "../ui/confirmDelete.js";
 
-export function initStudentSearch({ formId, inputId, resultsId }) {
+export function initStudentSearch({ formId, inputId, resultsId, containerAutocompleteID }) {
 
     // === ELEMENTOS ===
     const form = document.getElementById(formId);
     const input = document.getElementById(inputId);
     const results = document.getElementById(resultsId);
+    const containerAutocomplete = document.getElementById(containerAutocompleteID);
 
     if (!form || !input || !results) return;
 
@@ -22,6 +23,9 @@ export function initStudentSearch({ formId, inputId, resultsId }) {
 
         // === FORM ===
         e.preventDefault();
+
+        // VACIAR AUTOCOMPLETE
+        containerAutocomplete.innerHTML = "";
 
         // TÉRMINO
         const term = input.value;

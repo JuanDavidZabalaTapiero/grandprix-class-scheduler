@@ -33,3 +33,19 @@ def get_students():
 
     except AppError as e:
         return jsonify({"message": str(e)}), e.status_code
+
+
+@api_bp.get("/autocomplete")
+def autocomplete_students():
+    term = request.args.get("search", "")
+
+    try:
+        students = run_query(lambda: search_students(term))
+        data = [
+            {"document_id": student.document_id, "name": student.name}
+            for student in students
+        ]
+        return jsonify({"data": data})
+
+    except AppError as e:
+        return jsonify({"message": str(e)}), e.status_code

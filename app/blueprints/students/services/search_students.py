@@ -25,7 +25,7 @@ def search_students(term: str) -> List[Student]:
                 Student.name.ilike(f"%{term}%"),
             )
         )
-        .order_by(Student.name.asc())
+        .order_by(Student.created_at.desc())
         .limit(20)
     ).all()
 

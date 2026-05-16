@@ -1,3 +1,33 @@
+export function renderStudentsAutocomplete(container, students, input) {
+    if (!container) return;
+
+    // LIMPIAR CONTENEDOR
+    container.innerHTML = "";
+
+    // MOSTRAR DATOS
+    students.forEach(student => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "list-group-item list-group-item-action d-flex align-items-center gap-2";
+
+        button.innerHTML = `
+            <div class="fw-semibold">${student.name}</div>
+            <small class="text-muted">
+                ${student.document_id}
+            </small>
+        `;
+
+        // EVENTO CLICK
+        button.addEventListener("click", () => {
+            input.value = student.name;
+            container.innerHTML = "";
+        });
+
+        container.appendChild(button);
+    })
+}
+
+
 export function renderStudents(container, students) {
     if (!container) return;
 

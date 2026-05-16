@@ -45,7 +45,7 @@ def build_schedule(enrollment_id=None, student_id=None):
     lessons = query.all()
 
     if not lessons:
-        return []
+        return [], 0
 
     total_lessons = len(lessons)
 

@@ -1,25 +1,25 @@
 @use "base";
 
-.tr-exam {
-    --bs-table-bg: #6df3ff !important;
-}
-
-.tr-3 {
-    td {
-        background-color: #795548 !important;
-        color: white !important;
-    }
+.tr-exam td {
+    background-color: #6df3ff !important;
 }
 
 .tr-4 {
+    td {
+        background-color: yellow !important;
+    }
+}
+
+.tr-6 {
     td {
         background-color: #6f42c1 !important;
         color: white !important;
     }
 }
 
-.tr-6 {
+.tr-7 {
     td {
-        background-color: yellow !important;
+        background-color: #795548 !important;
+        color: white !important;
     }
 }

@@ -66,12 +66,12 @@
 
         <table class="table table-bordered table-hover align-middle text-center mb-0">
 
-            <thead class="table-dark">
+            <thead class="table-dark align-middle">
                 <tr>
                     <th class="text-nowrap">Fecha</th>
 
                     {% for instructor in instructors %}
-                    <th class="text-nowrap">
+                    <th>
                         {{ instructor.name }}
                     </th>
                     {% endfor %}
@@ -100,10 +100,8 @@
                         {% else %}
 
                         <button type="button" class="btn btn-sm btn-outline-primary show-modal" data-bs-toggle="modal"
-                            data-bs-target="#lessonsModal" 
-                            data-instructor="{{ instructor.name }}"
-                            data-date="{{ day.date }}" 
-                            data-lessons='{{ instructor.lessons | tojson }}'>
+                            data-bs-target="#lessonsModal" data-instructor="{{ instructor.name }}"
+                            data-date="{{ day.date }}" data-lessons='{{ instructor.lessons | tojson }}'>
                             {{ instructor.total_paid_lessons }}
                         </button>
 
@@ -116,7 +114,6 @@
 
                 <!-- NIGHT HOURS -->
                 <tr>
-
                     <th class="bg-dark text-white">
                         Horas nocturnas
                     </th>

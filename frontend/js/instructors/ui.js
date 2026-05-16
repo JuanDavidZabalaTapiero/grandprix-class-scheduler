@@ -28,6 +28,7 @@ export function showLessonsModal(button) {
                 <th>Alumno</th>
                 <th>Categoría</th>
                 <th>Estado</th>
+                <th>$</th>
             </tr>
         </thead>
     <tbody>
@@ -41,6 +42,9 @@ export function showLessonsModal(button) {
             <td>${lesson.student}</td>
             <td>${lesson.category}</td>
             <td>${lesson.lesson_status}</td>
+            <td>
+                <span class="badge text-bg-success">Pagada</span>
+            </td>
         </tr>
         `
     }

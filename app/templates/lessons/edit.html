@@ -60,7 +60,7 @@
                                 {% for instructor_vehicle in active_instructor_vehicles %}
                                 <option value="{{ instructor_vehicle.id }}" {% if
                                     instructor_vehicle.id==lesson.instructor_vehicle_id %}selected{% endif %}>
-                                    {{ instructor_vehicle.vehicle.license_plate }}
+                                    {{ instructor_vehicle.vehicle.license_plate }} ({{instructor_vehicle.vehicle.type}})
                                 </option>
                                 {% endfor %}
                             </select>

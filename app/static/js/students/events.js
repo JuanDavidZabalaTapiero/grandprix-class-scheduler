@@ -1,0 +1,1 @@
+export function onInputChange(n,t){n&&n.addEventListener("input",function(n){t(n.target.value)})}
