@@ -228,16 +228,21 @@
     </div>
 
     <!-- CLASES -->
-    <table class="table table-bordered text-center align-middle">
-        <thead class="table-dark">
-            <tr>
-                <td class="fw-semibold align-middle">Hora</td>
-
-                {% for instructor in instructors %}
-                <td>
-                    <div class="d-flex flex-column align-items-center">
-                        <span>{{ instructor.name }}</span>
-
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-dark align-middle">
+                <tr>
+                    <td></td>
+                    {% for instructor in instructors %}
+                    <td>
+                        <span class="multiline-truncate">{{ instructor.name}}</span>
+                    </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="fw-semibold">Hora</td>
+                    {% for instructor in instructors %}
+                    <td>
                         <select id="select-{{instructor.id}}" class="form-select mt-2">
                             {% for relation in instructor.instructor_vehicles %}
                             <option value="{{relation.id}}" data-vehicle-id="{{relation.vehicle.id}}">
@@ -245,13 +250,13 @@
                             </option>
                             {% endfor %}
                         </select>
-                    </div>
-                </td>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody id="lessons-body"></tbody>
-    </table>
+                    </td>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody id="lessons-body"></tbody>
+        </table>
+    </div>
 
     <button id="save-lessons" class="btn btn-dark w-100" data-enrollment-id="{{ enrollment.id }}">
         Agendar
