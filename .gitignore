@@ -13,7 +13,7 @@
 __pycache__/
 
 # ruff
-.ruff_cache
+.ruff_cache/
 
 # logging
 instance/logs/
