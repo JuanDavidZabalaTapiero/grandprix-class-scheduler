@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import extract, select
 from sqlalchemy.orm import joinedload
 
 from app.blueprints.students.exceptions import (
@@ -17,7 +17,6 @@ from app.extensions import db
 
 
 class StudentService(CRUDServices):
-
     def get_student_by_document_id(self, document_id):
         student = db.session.scalar(
             select(Student).where(Student.document_id == document_id)
@@ -26,11 +25,14 @@ class StudentService(CRUDServices):
             raise StudentNotFound()
         return student
 
-    def get_students_with_absences(self):
+    def get_students_with_absences(self, year):
         students = (
             Student.query.join(Student.enrollments)
             .join(Enrollment.lessons)
-            .filter(Lesson.lesson_status_id == ABSENCE_STATUS_ID)
+            .filter(
+                Lesson.lesson_status_id == ABSENCE_STATUS_ID,
+                extract("year", Lesson.date) == year,
+            )
             .options(
                 joinedload(Student.enrollments)
                 .joinedload(Enrollment.lessons)

@@ -1,7 +1,7 @@
 export function renderSpinner(container) {
-    if (!container) return;
+  if (!container) return;
 
-    container.innerHTML = `
+  container.innerHTML = `
         <div class="text-center p-3">
             <div class="spinner-border text-primary"></div>
         </div>

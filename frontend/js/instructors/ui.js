@@ -1,25 +1,24 @@
 export function showLessonsModal(button) {
+  const instructor = button.dataset.instructor;
 
-    const instructor = button.dataset.instructor
+  const date = button.dataset.date;
 
-    const date = button.dataset.date
+  const lessons = JSON.parse(button.dataset.lessons);
 
-    const lessons = JSON.parse(button.dataset.lessons)
+  // =========================================
+  // TITLE
+  // =========================================
 
-    // =========================================
-    // TITLE
-    // =========================================
+  const title = document.getElementById("lessonsModalTitle");
+  title.innerText = `${instructor} | ${date}`;
 
-    const title = document.getElementById("lessonsModalTitle")
-    title.innerText = `${instructor} | ${date}`
+  // =========================================
+  // CONTENT
+  // =========================================
 
-    // =========================================
-    // CONTENT
-    // =========================================
+  const content = document.getElementById("lessonsModalContent");
 
-    const content = document.getElementById("lessonsModalContent")
-
-    let html = `
+  let html = `
     <div class="table-responsive">
     <table class="table table-bordered align-middle text-center">
         <thead class="table-light">
@@ -32,11 +31,10 @@ export function showLessonsModal(button) {
             </tr>
         </thead>
     <tbody>
-    `
+    `;
 
-    for (const lesson of lessons) {
-
-        html += `
+  for (const lesson of lessons) {
+    html += `
         <tr>
             <td>${lesson.start_time}</td>
             <td>${lesson.student}</td>
@@ -46,15 +44,14 @@ export function showLessonsModal(button) {
                 <span class="badge text-bg-success">Pagada</span>
             </td>
         </tr>
-        `
-    }
+        `;
+  }
 
-    html += `
+  html += `
     </tbody>
     </table>
     </div>
-    `
+    `;
 
-    content.innerHTML = html
-
+  content.innerHTML = html;
 }

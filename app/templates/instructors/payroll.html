@@ -1,175 +1,155 @@
-{% extends "base.html" %}
-
-{% block title %}Nómina{% endblock %}
-
-{% block main %}
+{% extends "base.html" %} {% block title %}Nómina{% endblock %} {% block main %}
 <!-- MODAL -->
 <div class="modal fade" id="lessonsModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="lessonsModalTitle">Clases</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="lessonsModalContent"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="lessonsModalTitle">Clases</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div id="lessonsModalContent"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- CONTENT -->
 <div class="container">
+  <h1 class="text-center mb-4">Nómina</h1>
 
-    <h1 class="text-center mb-4">Nómina</h1>
+  <!-- FORM -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <form method="post" class="row g-3 align-items-end">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-    <!-- FORM -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
+        <div class="col-12 col-md-4">
+          <label class="form-label fw-semibold"> Fecha inicial </label>
 
-            <form method="post" class="row g-3 align-items-end">
-
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold">
-                        Fecha inicial
-                    </label>
-
-                    <input type="date" name="start_date" class="form-control" value="{{ start_date }}">
-                </div>
-
-                <div class="col-12 col-md-4">
-                    <label class="form-label fw-semibold">
-                        Fecha final
-                    </label>
-
-                    <input type="date" name="end_date" class="form-control" value="{{ end_date }}">
-                </div>
-
-                <div class="col-12 col-md-4 d-grid">
-                    <button type="submit" class="btn btn-primary">
-                        Consultar
-                    </button>
-                </div>
-
-            </form>
-
+          <input
+            type="date"
+            name="start_date"
+            class="form-control"
+            value="{{ start_date }}"
+          />
         </div>
+
+        <div class="col-12 col-md-4">
+          <label class="form-label fw-semibold"> Fecha final </label>
+
+          <input
+            type="date"
+            name="end_date"
+            class="form-control"
+            value="{{ end_date }}"
+          />
+        </div>
+
+        <div class="col-12 col-md-4 d-grid">
+          <button type="submit" class="btn btn-primary">Consultar</button>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <!-- TABLE -->
-    <div class="table-responsive">
+  <!-- TABLE -->
+  <div class="table-responsive">
+    <table
+      class="table table-bordered table-hover align-middle text-center mb-0"
+    >
+      <thead class="table-dark align-middle">
+        <tr>
+          <th class="text-nowrap">Fecha</th>
 
-        <table class="table table-bordered table-hover align-middle text-center mb-0">
+          {% for instructor in instructors %}
+          <th>{{ instructor.name }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
 
-            <thead class="table-dark align-middle">
-                <tr>
-                    <th class="text-nowrap">Fecha</th>
+      <tbody>
+        {% if lessons_per_day %} {% for day in lessons_per_day %}
+        <tr>
+          <td class="fw-semibold">{{ day.date }}</td>
 
-                    {% for instructor in instructors %}
-                    <th>
-                        {{ instructor.name }}
-                    </th>
-                    {% endfor %}
-                </tr>
-            </thead>
+          {% for instructor in day.instructors %}
+          <td>
+            {% if instructor.total_paid_lessons == 0 %}
 
-            <tbody>
+            <span class="text-muted"> 0 </span>
 
-                {% if lessons_per_day %}
+            {% else %}
 
-                {% for day in lessons_per_day %}
-                <tr>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-primary show-modal"
+              data-bs-toggle="modal"
+              data-bs-target="#lessonsModal"
+              data-instructor="{{ instructor.name }}"
+              data-date="{{ day.date }}"
+              data-lessons="{{ instructor.lessons | tojson | forceescape }}"
+            >
+              {{ instructor.total_paid_lessons }}
+            </button>
 
-                    <td class="fw-semibold">
-                        {{ day.date }}
-                    </td>
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
 
-                    {% for instructor in day.instructors %}
-                    <td>
-                        {% if instructor.total_paid_lessons == 0 %}
+        <!-- NIGHT HOURS -->
+        <tr>
+          <th class="bg-dark text-white">Horas nocturnas</th>
 
-                        <span class="text-muted">
-                            0
-                        </span>
+          {% for instructor in night_hours %}
+          <td class="fw-bold">{{ instructor.night_hours }}</td>
+          {% endfor %}
+        </tr>
 
-                        {% else %}
+        <!-- TOTAL -->
+        <tr>
+          <th class="bg-dark text-white">Total</th>
 
-                        <button type="button" class="btn btn-sm btn-outline-primary show-modal" data-bs-toggle="modal"
-                            data-bs-target="#lessonsModal" data-instructor="{{ instructor.name }}"
-                            data-date="{{ day.date }}" data-lessons='{{ instructor.lessons | tojson }}'>
-                            {{ instructor.total_paid_lessons }}
-                        </button>
+          {% for instructor in total_paid_lessons %}
+          <td class="fw-bold">{{ instructor.total_lessons }}</td>
+          {% endfor %}
+        </tr>
 
-                        {% endif %}
-                    </td>
-                    {% endfor %}
+        {% else %}
 
-                </tr>
-                {% endfor %}
+        <tr>
+          <td colspan="{{ instructors|length + 1 }}" class="py-4 text-muted">
+            No hay información para mostrar
+          </td>
+        </tr>
 
-                <!-- NIGHT HOURS -->
-                <tr>
-                    <th class="bg-dark text-white">
-                        Horas nocturnas
-                    </th>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
 
-                    {% for instructor in night_hours %}
-                    <td class="fw-bold">
-                        {{ instructor.night_hours }}
-                    </td>
-                    {% endfor %}
-
-                </tr>
-
-                <!-- TOTAL -->
-                <tr>
-
-                    <th class="bg-dark text-white">
-                        Total
-                    </th>
-
-                    {% for instructor in total_paid_lessons %}
-                    <td class="fw-bold">
-                        {{ instructor.total_lessons }}
-                    </td>
-                    {% endfor %}
-
-                </tr>
-
-                {% else %}
-
-                <tr>
-                    <td colspan="{{ instructors|length + 1 }}" class="py-4 text-muted">
-                        No hay información para mostrar
-                    </td>
-                </tr>
-
-                {% endif %}
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    <!-- INFO -->
-    <div class="alert alert-info mt-4 shadow-sm" role="alert">
-        <strong>Horas nocturnas:</strong>
-        corresponden a clases dictadas a las 9:00 p. m. y solo se contabilizan
-        cuando el instructor acumula 8 o más horas de trabajo durante ese mismo día.
-    </div>
-
+  <!-- INFO -->
+  <div class="alert alert-info mt-4 shadow-sm" role="alert">
+    <strong>Horas nocturnas:</strong>
+    corresponden a clases dictadas a las 9:00 p. m. y solo se contabilizan
+    cuando el instructor acumula 8 o más horas de trabajo durante ese mismo día.
+  </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script type="module">
-    import { initShowLessonsModal } from "{{ url_for('static', filename='js/instructors/events.js') }}";
-    initShowLessonsModal()
+  import { initShowLessonsModal } from "{{ url_for('static', filename='js/instructors/events.js') }}";
+  initShowLessonsModal();
 </script>
 {% endblock %}

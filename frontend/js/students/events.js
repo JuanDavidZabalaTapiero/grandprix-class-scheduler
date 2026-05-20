@@ -1,7 +1,7 @@
 export function onInputChange(input, callback) {
-    if (!input) return;
+  if (!input) return;
 
-    input.addEventListener("input", (event) => {
-        callback(event.target.value);
-    });
+  input.addEventListener("input", (event) => {
+    callback(event.target.value);
+  });
 }
