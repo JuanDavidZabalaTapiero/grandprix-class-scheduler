@@ -3,21 +3,22 @@
 {% block title %}{{ code }}{% endblock %}
 
 {% block main %}
-<div class="container d-flex align-items-center justify-content-center" style="min-height: 80vh;">
-    <div class="text-center">
-        <h1 class="display-1 fw-bold {{ color }}">{{ code }}</h1>
+<div
+  class="container d-flex align-items-center justify-content-center"
+  style="min-height: 80vh"
+>
+  <div class="text-center">
+    <h1 class="display-1 fw-bold {{ color }}">{{ code }}</h1>
 
-        {% if title %}
-        <h2 class="mb-3">{{ title }}</h2>
-        {% endif %}
+    {% if title %}
+    <h2 class="mb-3">{{ title }}</h2>
+    {% endif %}
 
-        <p class="text-muted mb-4">
-            {{ message }}
-        </p>
+    <p class="text-muted mb-4">{{ message }}</p>
 
-        <a href="{{ url_for('students.home') }}" class="btn btn-primary px-4">
-            Volver al inicio
-        </a>
-    </div>
+    <a href="{{ url_for('students.home') }}" class="btn btn-primary px-4">
+      Volver al inicio
+    </a>
+  </div>
 </div>
 {% endblock %}

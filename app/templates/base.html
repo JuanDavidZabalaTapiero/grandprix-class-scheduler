@@ -1,58 +1,68 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- CSRF -->
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- TÍTULO -->
     <title>{% block title %}{% endblock %} | Prix</title>
     <!-- FAVICON -->
-    <link rel="shortcut icon" href="{{url_for('static', filename='favicon.png')}}" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="{{url_for('static', filename='favicon.png')}}"
+      type="image/x-icon"
+    />
     <!-- BOOTSTRAP (CSS) -->
-    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.css')}}">
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='css/bootstrap.css')}}"
+    />
     <!-- SWEETALERT2 (CSS) -->
-    <link rel="stylesheet" href="{{url_for('static', filename='css/sweetalert2.css')}}">
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='css/sweetalert2.css')}}"
+    />
     <!-- === CSS PROPIO === -->
     {% block css %}{% endblock %}
-</head>
+  </head>
 
-<body>
+  <body>
     <!-- HEADER -->
-    {% block header %}
-    {% include "components/header.html" %}
-    {% endblock %}
+    {% block header %} {% include "components/header.html" %} {% endblock %}
 
     <!-- FLASH NORMAL -->
     <div id="flash-container" class="container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ category }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
     </div>
 
     <!-- FLASH FIXED -->
-    <div id="flash-container-fixed" class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1080;">
-    </div>
+    <div
+      id="flash-container-fixed"
+      class="position-fixed top-0 start-50 translate-middle-x p-3"
+      style="z-index: 1080"
+    ></div>
 
-    <main class="py-3">
-        {% block main %}
-        {% endblock %}
-    </main>
+    <main class="py-3">{% block main %} {% endblock %}</main>
 
     <!-- BOOTSTRAP (JS) -->
     <script src="{{url_for('static', filename='js/vendor/bootstrap.bundle.min.js')}}"></script>
     <!-- SWEETALERT2 (JS) -->
     <script src="{{ url_for('static', filename='js/vendor/sweetalert2.min.js') }}"></script>
     <!-- === JS PROPIO === -->
-    {% block scripts %}
-    {% endblock %}
-</body>
-
+    {% block scripts %} {% endblock %}
+  </body>
 </html>

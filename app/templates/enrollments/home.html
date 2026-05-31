@@ -1,338 +1,441 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 
-{% from "macros/buttons.html" import delete_button, edit_button %}
+{% from "macros/buttons.html" import delete_button, edit_button %} 
 
-{% block title %}Matrícula{% endblock %}
+{% block title %}Matrícula{% endblock %} 
 
 {% block css %}
-<link rel="stylesheet" href="{{url_for('static', filename='css/lessons/registered.css')}}">
-<link rel="stylesheet" href="{{url_for('static', filename='css/lessons/scheduling.css')}}">
-{% endblock %}
+<link
+  rel="stylesheet"
+  href="{{url_for('static', filename='css/lessons/registered.css')}}"
+/>
+<link
+  rel="stylesheet"
+  href="{{url_for('static', filename='css/lessons/scheduling.css')}}"
+/>
+{% endblock %} 
 
 {% block main %}
 <div class="container">
+  <!-- CARD -->
+  <div class="border rounded-3 p-3 mb-4 bg-white shadow-sm">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center">
+      <!-- TÍTULO -->
+      <h1 class="h5 m-0">
+        {{ enrollment.student.name }}
+        <span class="text-muted">|</span>
+        {{ enrollment.category.name }}
+      </h1>
 
-    <!-- CARD -->
-    <div class="border rounded-3 p-3 mb-4 bg-white shadow-sm">
+      <!-- DELETE -->
+      {{ delete_button(url_for("enrollments.delete",
+      enrollment_id=enrollment.id), form_class="enrollment-delete-form") }}
+    </div>
+  </div>
 
-        <!-- HEADER -->
-        <div class="d-flex justify-content-between align-items-center">
+  <!-- CLASES REGISTRADAS -->
+  {% if lessons %}
 
-            <!-- TÍTULO -->
-            <h1 class="h5 m-0">
-                {{ enrollment.student.name }}
-                <span class="text-muted">|</span>
-                {{ enrollment.category.name }}
-            </h1>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fs-3">Clases</h2>
+    <a
+      href="{{url_for('lessons.update_status', enrollment_id=enrollment.id)}}"
+      class="btn btn-outline-primary d-inline-flex align-items-center gap-2"
+    >
+      <!-- ICON: LOOP -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-arrow-repeat"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"
+        />
+        <path
+          fill-rule="evenodd"
+          d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"
+        />
+      </svg>
+      Actualizar
+    </a>
+  </div>
 
-            <!-- DELETE -->
-            {{ delete_button(url_for("enrollments.delete", enrollment_id=enrollment.id),
-            form_class="enrollment-delete-form") }}
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle text-center">
+      <thead class="table-light">
+        <tr>
+          <th>
+            <input
+              type="checkbox"
+              data-id="all"
+              class="lesson-checkbox form-check-input border border-primary"
+            />
+          </th>
+          <th>#</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Instructor</th>
+          <th>Vehículo</th>
+          <th>Tipo</th>
+          <th>Estado</th>
+          <th>Paga</th>
+          <th>Editar</th>
+        </tr>
+      </thead>
 
-        </div>
+      <tbody>
+        {% for lesson in lessons %}
+        <tr class="status-{{lesson.lesson_status_id}}">
+          <!-- CHECKBOX DELETE -->
+          <td>
+            <input
+              type="checkbox"
+              class="lesson-checkbox form-check-input border border-primary"
+              data-id="{{ lesson.id }}"
+            />
+          </td>
 
+          <td class="fw-semibold">{{ lesson.lesson_number }}</td>
+          <td>{{ lesson.date }}</td>
+          <td>{{ lesson.start_time }}</td>
+          <td>{{ lesson.instructor_vehicle.instructor.name }}</td>
+          <td>{{ lesson.instructor_vehicle.vehicle.type }}</td>
+
+          <!-- TYPE -->
+          <td>
+            <select
+              class="form-select form-select-sm lesson-input"
+              name="lesson-type-select"
+              data-id="{{lesson.id}}"
+              data-field="lesson_type_id"
+            >
+              {% for type in lesson_types %}
+              <option value="{{type.id}}" {% if type.id == lesson.lesson_type.id %}selected{% endif %}>
+                {{type.name}}
+              </option>
+              {% endfor %}
+            </select>
+          </td>
+
+          <!-- STATUS -->
+          <td>
+            <select
+              class="form-select form-select-sm lesson-input"
+              data-id="{{lesson.id}}"
+              data-field="lesson_status_id"
+            >
+              {% for status in lesson_statuses %}
+              <option value="{{status.id}}" {% if status.id == lesson.lesson_status.id %}selected{% endif %}>
+                {{status.name}}
+              </option>
+              {% endfor %}
+            </select>
+          </td>
+
+          <!-- CHECKBOX IS PAID -->
+          <td>
+            <input
+              type="checkbox"
+              class="form-check-input lesson-input"
+              data-id="{{lesson.id}}"
+              data-field="is_paid" {% if lesson.is_paid %}checked{% endif %}
+            />
+          </td>
+
+          <td>
+            {{edit_button(url_for("lessons.edit_lesson_form",
+            lesson_id=lesson.id), show_text=false)}}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FOOTER -->
+  <div
+    class="card-footer d-flex flex-column flex-lg-row justify-content-between gap-3"
+  >
+    <!-- Cronogramas -->
+    <div class="d-flex flex-column flex-sm-row flex-wrap gap-2">
+      <a
+        href="{{ url_for('lessons.schedule', enrollment_id=enrollment.id) }}"
+        class="btn btn-outline-primary d-inline-flex align-items-center justify-content-center gap-2"
+      >
+        <!-- ICON -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-calendar"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"
+          />
+        </svg>
+
+        Cronograma
+      </a>
+
+      <a
+        href="{{ url_for('lessons.complete_schedule', student_id=enrollment.student.id) }}"
+        class="btn btn-outline-primary d-inline-flex align-items-center justify-content-center gap-2"
+      >
+        <!-- ICON -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-calendar-check"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"
+          />
+          <path
+            d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"
+          />
+        </svg>
+
+        Cronograma completo
+      </a>
     </div>
 
-    <!-- CLASES REGISTRADAS -->
-    {% if lessons %}
+    <!-- Acciones -->
+    <div class="d-flex flex-column flex-sm-row gap-2">
+      <button
+        id="delete-lessons"
+        class="btn btn-outline-danger"
+        data-enrollment-id="{{ enrollment.id }}"
+      >
+        Eliminar
+      </button>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="fs-3">Clases</h2>
-        <a href="{{url_for('lessons.update_status', enrollment_id=enrollment.id)}}"
-            class="btn btn-outline-primary d-inline-flex align-items-center gap-2">
-            <!-- ICON: LOOP -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-                <path
-                    d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
-                <path fill-rule="evenodd"
-                    d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
-            </svg>
-            Actualizar
-        </a>
+      <button
+        id="edit-lessons"
+        class="btn btn-outline-primary"
+        data-enrollment-id="{{ enrollment.id }}"
+      >
+        Guardar cambios
+      </button>
     </div>
+  </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered align-middle text-center">
+  {% else %}
+  <div class="alert alert-info mt-3">Sin clases registradas</div>
+  {% endif %}
 
-            <thead class="table-light">
-                <tr>
-                    <th><input type="checkbox" data-id="all"
-                            class="lesson-checkbox form-check-input border border-primary"></th>
-                    <th>#</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Instructor</th>
-                    <th>Vehículo</th>
-                    <th>Tipo</th>
-                    <th>Estado</th>
-                    <th>Paga</th>
-                    <th>Editar</th>
-                </tr>
-            </thead>
+  <hr class="my-4 border-2 border-primary opacity-50" />
 
-            <tbody>
-                {% for lesson in lessons %}
-                <tr class="status-{{lesson.lesson_status_id}}">
-                    <!-- CHECKBOX DELETE -->
-                    <td><input type="checkbox" class="lesson-checkbox form-check-input border border-primary"
-                            data-id="{{ lesson.id }}"></td>
+  <!-- === AGENDAMIENTO === -->
+  {% if instructors %}
 
-                    <td class="fw-semibold">{{ lesson.lesson_number }}</td>
-                    <td>{{ lesson.date }}</td>
-                    <td>{{ lesson.start_time }}</td>
-                    <td>{{ lesson.instructor_vehicle.instructor.name }}</td>
-                    <td>{{ lesson.instructor_vehicle.vehicle.type }}</td>
+  <!-- FECHA -->
+  <div class="d-flex justify-content-center mb-3">
+    <div class="input-group w-auto">
+      <button
+        id="previous-date"
+        class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+      >
+        <!-- ICON -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-left"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+          />
+        </svg>
+      </button>
 
-                    <!-- TYPE -->
-                    <td>
-                        <select class="form-select form-select-sm lesson-input" data-id="{{lesson.id}}"
-                            data-field="lesson_type_id">
-                            {% for type in lesson_types %}
-                            <option value="{{type.id}}" {% if type.id==lesson.lesson_type.id %}selected{% endif %}>
-                                {{type.name}}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </td>
+      <input
+        type="date"
+        id="date-input"
+        class="form-control w-auto text-center"
+        value="{{today}}"
+      />
 
-                    <!-- STATUS -->
-                    <td>
-                        <select class="form-select form-select-sm lesson-input" data-id="{{lesson.id}}"
-                            data-field="lesson_status_id">
-                            {% for status in lesson_statuses %}
-                            <option value="{{status.id}}" {% if status.id==lesson.lesson_status.id %}selected{% endif
-                                %}>
-                                {{status.name}}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </td>
-
-                    <!-- CHECKBOX IS PAID -->
-                    <td>
-                        <input type="checkbox" class="form-check-input lesson-input" data-id="{{lesson.id}}"
-                            data-field="is_paid" {% if lesson.is_paid %}checked{% endif %}>
-                    </td>
-
-                    <td>
-                        {{edit_button(url_for("lessons.edit_lesson_form", lesson_id=lesson.id), show_text=false)}}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-
-        </table>
+      <button
+        id="next-date"
+        class="btn btn-outline-secondary d-flex align-items-center justify-content-center"
+      >
+        <!-- ICON -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-right"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+          />
+        </svg>
+      </button>
     </div>
+  </div>
 
-
-    <!-- FOOTER -->
-    <div class="card-footer d-flex flex-column flex-lg-row justify-content-between gap-3">
-
-        <!-- Cronogramas -->
-        <div class="d-flex flex-column flex-sm-row flex-wrap gap-2">
-            <a href="{{ url_for('lessons.schedule', enrollment_id=enrollment.id) }}"
-                class="btn btn-outline-primary d-inline-flex align-items-center justify-content-center gap-2">
-
-                <!-- ICON -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-calendar" viewBox="0 0 16 16">
-                    <path
-                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
-                </svg>
-
-                Cronograma
-            </a>
-
-            <a href="{{ url_for('lessons.complete_schedule', student_id=enrollment.student.id) }}"
-                class="btn btn-outline-primary d-inline-flex align-items-center justify-content-center gap-2">
-
-                <!-- ICON -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-calendar-check" viewBox="0 0 16 16">
-                    <path
-                        d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0" />
-                    <path
-                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z" />
-                </svg>
-
-                Cronograma completo
-            </a>
-        </div>
-
-        <!-- Acciones -->
-        <div class="d-flex flex-column flex-sm-row gap-2">
-            <button id="delete-lessons" class="btn btn-outline-danger" data-enrollment-id="{{ enrollment.id }}">
-                Eliminar
-            </button>
-
-            <button id="edit-lessons" class="btn btn-outline-primary" data-enrollment-id="{{ enrollment.id }}">
-                Guardar cambios
-            </button>
-        </div>
-
-    </div>
-
-    {% else %}
-    <div class="alert alert-info mt-3">
-        Sin clases registradas
-    </div>
-    {% endif %}
-
-    <hr class="my-4 border-2 border-primary opacity-50">
-
-    <!-- === AGENDAMIENTO === -->
-    {% if instructors %}
-
-    <!-- FECHA -->
-    <div class="d-flex justify-content-center mb-3">
-        <div class="input-group w-auto">
-            <button id="previous-date"
-                class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
-                <!-- ICON -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-left" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-                </svg>
-            </button>
-
-            <input type="date" id="date-input" class="form-control w-auto text-center" value="{{today}}">
-
-            <button id="next-date" class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
-                <!-- ICON -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                </svg>
-            </button>
-        </div>
-    </div>
-
-    <div class="d-flex gap-2 mb-3">
-        <button id="change-mode"
-            class="btn btn-outline-warning d-inline-flex align-items-center justify-content-center gap-2">
-            <!-- ICON: LOOP -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-                <path
-                    d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9" />
-                <path fill-rule="evenodd"
-                    d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" />
-            </svg>
-            Modo cambio
-        </button>
-        <button id="save-change" class="btn btn-outline-primary">Guardar cambio</button>
-        <button id="register-changes" class="btn btn-outline-success">Registrar cambios</button>
-    </div>
-
-    <!-- CLASES -->
-    <div class="table-responsive">
-        <table class="table table-bordered text-center align-middle">
-            <thead class="table-dark align-middle">
-                <tr>
-                    <td></td>
-                    {% for instructor in instructors %}
-                    <td>
-                        <span class="multiline-truncate">{{ instructor.name}}</span>
-                    </td>
-                    {% endfor %}
-                </tr>
-                <tr>
-                    <td class="fw-semibold">Hora</td>
-                    {% for instructor in instructors %}
-                    <td>
-                        <select id="select-{{instructor.id}}" class="form-select mt-2">
-                            {% for relation in instructor.instructor_vehicles %}
-                            <option value="{{relation.id}}" data-vehicle-id="{{relation.vehicle.id}}">
-                                {{relation.vehicle.license_plate}} | {{relation.vehicle.type}}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody id="lessons-body"></tbody>
-        </table>
-    </div>
-
-    <button id="save-lessons" class="btn btn-dark w-100" data-enrollment-id="{{ enrollment.id }}">
-        Agendar
+  <div class="d-flex gap-2 mb-3">
+    <button
+      id="change-mode"
+      class="btn btn-outline-warning d-inline-flex align-items-center justify-content-center gap-2"
+    >
+      <!-- ICON: LOOP -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-arrow-repeat"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"
+        />
+        <path
+          fill-rule="evenodd"
+          d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"
+        />
+      </svg>
+      Modo cambio
     </button>
+    <button id="save-change" class="btn btn-outline-primary">
+      Guardar cambio
+    </button>
+    <button id="register-changes" class="btn btn-outline-success">
+      Registrar cambios
+    </button>
+  </div>
 
-    {% else %}
-    <div class="alert alert-info">No hay instructores activos con vehículos disponibles en este momento</div>
-    {% endif %}
+  <!-- CLASES -->
+  <div class="table-responsive">
+    <table class="table table-bordered text-center align-middle">
+      <thead class="table-dark align-middle">
+        <tr>
+          <td></td>
+          {% for instructor in instructors %}
+          <td>
+            <span class="multiline-truncate">{{ instructor.name}}</span>
+          </td>
+          {% endfor %}
+        </tr>
+        <tr>
+          <td class="fw-semibold">Hora</td>
+          {% for instructor in instructors %}
+          <td>
+            <select id="select-{{instructor.id}}" class="form-select mt-2">
+              {% for relation in instructor.instructor_vehicles %}
+              <option
+                value="{{relation.id}}"
+                data-vehicle-id="{{relation.vehicle.id}}"
+              >
+                {{relation.vehicle.license_plate}} | {{relation.vehicle.type}}
+              </option>
+              {% endfor %}
+            </select>
+          </td>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody id="lessons-body"></tbody>
+    </table>
+  </div>
 
+  <button
+    id="save-lessons"
+    class="btn btn-dark w-100"
+    data-enrollment-id="{{ enrollment.id }}"
+  >
+    Agendar
+  </button>
 
+  {% else %}
+  <div class="alert alert-info">
+    No hay instructores activos con vehículos disponibles en este momento
+  </div>
+  {% endif %}
 </div>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script type="module">
-    import { attachDeleteConfirmation } from "{{ url_for('static', filename='js/ui/confirmDelete.js') }}";
-    import { initSchedule } from "{{ url_for('static', filename='js/lessons/schedule.js') }}";
-    import { initDateNavigator } from "{{ url_for('static', filename='js/ui/date_navigator.js') }}";
-    import { initLessonTableEvents } from "{{ url_for('static', filename='js/lessons/events/tableEvents.js') }}";
-    import { initSaveLessons, initUpdateLessons, initBulkDeleteLessons, initSaveChanges } from "{{ url_for('static', filename='js/lessons/events/actionEvents.js') }}";
-    import { initToggleChangeMode, saveChange } from "{{ url_for('static', filename='js/lessons/events/changeModeEvents.js') }}";
+  import { attachDeleteConfirmation } from "{{ url_for('static', filename='js/ui/confirmDelete.js') }}";
+  import { initSchedule } from "{{ url_for('static', filename='js/lessons/schedule.js') }}";
+  import { initDateNavigator } from "{{ url_for('static', filename='js/ui/date_navigator.js') }}";
+  import { initLessonTableEvents } from "{{ url_for('static', filename='js/lessons/events/tableEvents.js') }}";
+  import {
+    initSaveLessons,
+    initUpdateLessons,
+    initBulkDeleteLessons,
+    initSaveChanges,
+  } from "{{ url_for('static', filename='js/lessons/events/actionEvents.js') }}";
+  import {
+    initToggleChangeMode,
+    saveChange,
+  } from "{{ url_for('static', filename='js/lessons/events/changeModeEvents.js') }}";
 
-    // =========================
-    // MATRÍCULA
-    // =========================
+  // =========================
+  // MATRÍCULA
+  // =========================
 
-    attachDeleteConfirmation(document, "enrollment-delete-form", "matrícula");
+  attachDeleteConfirmation(document, "enrollment-delete-form", "matrícula");
 
+  // =========================
+  // CLASES
+  // =========================
 
-    // =========================
-    // CLASES
-    // =========================
+  // EVENTOS
+  initLessonTableEvents();
 
-    // EVENTOS
-    initLessonTableEvents();
+  // ACTUALIZAR CLASES
+  initUpdateLessons({ buttonId: "edit-lessons" });
 
-    // ACTUALIZAR CLASES
-    initUpdateLessons({ buttonId: "edit-lessons" });
+  // ELIMINAR CLASES
+  initBulkDeleteLessons({ buttonId: "delete-lessons" });
 
-    // ELIMINAR CLASES
-    initBulkDeleteLessons({ buttonId: "delete-lessons" });
+  // =========================
+  // AGENDAMIENTO
+  // =========================
 
+  // FECHA
+  initDateNavigator({
+    inputId: "date-input",
+    prevId: "previous-date",
+    nextId: "next-date",
+  });
 
-    // =========================
-    // AGENDAMIENTO
-    // =========================
+  // RENDER
+  initSchedule({
+    dateId: "date-input",
+    containerId: "lessons-body",
+  });
 
-    // FECHA
-    initDateNavigator({
-        inputId: "date-input",
-        prevId: "previous-date",
-        nextId: "next-date"
-    });
+  // REGISTRAR CLASES
+  initSaveLessons({ buttonId: "save-lessons" });
 
-    // RENDER
-    initSchedule({
-        dateId: "date-input",
-        containerId: "lessons-body"
-    });
+  // =========================
+  // CAMBIAR CLASES
+  // =========================
 
-    // REGISTRAR CLASES
-    initSaveLessons({ buttonId: "save-lessons" });
+  // MODO CAMBIO
+  initToggleChangeMode({ buttonId: "change-mode" });
 
+  // GUARDAR CAMBIO
+  saveChange({ buttonId: "save-change" });
 
-    // =========================
-    // CAMBIAR CLASES
-    // =========================
-
-    // MODO CAMBIO
-    initToggleChangeMode({ buttonId: "change-mode" });
-
-    // GUARDAR CAMBIO
-    saveChange({ buttonId: "save-change" });
-
-    // REGISTRAR CAMBIOS
-    initSaveChanges({ buttonId: "register-changes" });
-
+  // REGISTRAR CAMBIOS
+  initSaveChanges({ buttonId: "register-changes" });
 </script>
 {% endblock %}

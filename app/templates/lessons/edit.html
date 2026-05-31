@@ -3,89 +3,104 @@
 {% block title %}Editar | Clase{% endblock %}
 
 {% block main %}
-
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12 col-sm-10 col-md-6 col-lg-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-6 col-lg-5">
+      <!-- BTN: VOLVER -->
+      <div class="mb-3">
+        <a
+          href="{{ url_for('enrollments.home', enrollment_id=lesson.enrollment_id) }}"
+          class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center"
+        >
+          <!-- ICON: ARROW LEFT -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-left me-1"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+            />
+          </svg>
 
-            <!-- BTN: VOLVER -->
+          Volver
+        </a>
+      </div>
+
+      <!-- CARD -->
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h1 class="h4 mb-4 text-center">Editar Clase</h1>
+
+          <!-- FORM -->
+          <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
             <div class="mb-3">
-                <a href="{{ url_for('enrollments.home', enrollment_id=lesson.enrollment_id) }}"
-                    class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center">
-
-                    <!-- ICON: ARROW LEFT -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-arrow-left me-1" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-                    </svg>
-
-                    Volver
-                </a>
+              <label class="form-label">Fecha</label>
+              <input
+                type="date"
+                value="{{ lesson.date }}"
+                disabled
+                class="form-control"
+              />
             </div>
 
-            <!-- CARD -->
-            <div class="card shadow-sm">
-                <div class="card-body">
-
-                    <h1 class="h4 mb-4 text-center">
-                        Editar Clase
-                    </h1>
-
-                    <!-- FORM -->
-                    <form method="post">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                        <div class="mb-3">
-                            <label class="form-label">Fecha</label>
-                            <input type="date" value="{{ lesson.date }}" disabled
-                                class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Hora de inicio</label>
-                            <input type="time" value="{{ lesson.start_time }}" disabled
-                                class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Instructor</label>
-                            <input type="text" value="{{ lesson.instructor_vehicle.instructor.name }}" disabled
-                                class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Vehículo</label>
-                            <select name="instructor_vehicle_id" class="form-control">
-                                {% for instructor_vehicle in active_instructor_vehicles %}
-                                <option value="{{ instructor_vehicle.id }}" {% if
-                                    instructor_vehicle.id==lesson.instructor_vehicle_id %}selected{% endif %}>
-                                    {{ instructor_vehicle.vehicle.license_plate }} ({{instructor_vehicle.vehicle.type}})
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label for="notes" class="form-label">Nota</label>
-                            <textarea name="notes" placeholder="Escribe una nota opcional..."
-                                class="form-control">{{ lesson.notes or '' }}</textarea>
-                        </div>
-
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">
-                                Editar
-                            </button>
-                        </div>
-                    </form>
-
-                </div>
+            <div class="mb-3">
+              <label class="form-label">Hora de inicio</label>
+              <input
+                type="time"
+                value="{{ lesson.start_time }}"
+                disabled
+                class="form-control"
+              />
             </div>
 
+            <div class="mb-3">
+              <label class="form-label">Instructor</label>
+              <input
+                type="text"
+                value="{{ lesson.instructor_vehicle.instructor.name }}"
+                disabled
+                class="form-control"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Vehículo</label>
+              <select name="instructor_vehicle_id" class="form-control">
+                {% for instructor_vehicle in active_instructor_vehicles %}
+                <option
+                  value="{{ instructor_vehicle.id }}"
+                  {% if instructor_vehicle.id == "lesson.instructor_vehicle_id" %}selected{% endif %}
+                >
+                  {{ instructor_vehicle.vehicle.license_plate }}
+                  ({{instructor_vehicle.vehicle.type}})
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="notes" class="form-label">Nota</label>
+              <textarea
+                name="notes"
+                placeholder="Escribe una nota opcional..."
+                class="form-control">{{ lesson.notes or '' }}</textarea>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Editar</button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 {% endblock %}

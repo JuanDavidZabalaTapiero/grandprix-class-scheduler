@@ -9,6 +9,7 @@ Permite administrar entidades como alumnos e instructores, incluyendo operacione
 # 🛠️ Tecnologías
 
 ## 🗄️ Base de datos
+
 - MySQL
 
 ## ⚙️ Backend
@@ -68,6 +69,54 @@ frontend/
 run.py
 requirements.txt
 ```
+
+---
+
+# 💻 Interfaces
+
+## Estudiantes
+
+![Estudiantes](docs/images/students.png)
+
+## Instructores
+
+![Instructores](docs/images/instructors.png)
+
+## Categorías
+
+![Categorías](docs/images/categories.png)
+
+## Vehículos
+
+![Vehículos](docs/images/vehicles.png)
+
+## Tipos de Clase
+
+![Tipos de Clase](docs/images/lesson-types.png)
+
+## Estados de Clase
+
+![Estados de Clase](docs/images/lesson-statuses.png)
+
+## Programación de Clases
+
+![Programación de Clases](docs/images/lessons-scheduling.png)
+
+## Horario del Estudiante
+
+![Horario del Estudiante](docs/images/student-schedule.png)
+
+## Horario del Instructor
+
+![Horario del Instructor](docs/images/instructor-schedule.png)
+
+## Nómina
+
+![Nómina](docs/images/payroll.png)
+
+## Ventas
+
+![Ventas](docs/images/sales.png)
 
 ---
 
