@@ -1,1 +1,1 @@
-import{onInputChange as t}from"../students/events.js";import{handleStudentsAutocomplete as o}from"../students/controller.js";export function initStudentAutocomplete(n,e){t(n,function(t){o(t,e,n)})}
+import{onInputChange as t}from"../students/events.js";import{handleStudentsAutocomplete as e}from"../students/controller.js";export function initStudentAutocomplete(o,n){t(o,function(t){e(t,n,o)}),o.addEventListener("keydown",function(t){if("ArrowDown"===t.key){var e=n.querySelector(".list-group-item");e&&(t.preventDefault(),e.focus())}})}

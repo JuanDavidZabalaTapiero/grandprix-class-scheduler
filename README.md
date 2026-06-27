@@ -118,6 +118,10 @@ requirements.txt
 
 ![Ventas](docs/images/sales.png)
 
+## Días Bloqueados
+
+![Días Bloqueados](docs/images/blocked-days.png)
+
 ---
 
 # 📚 Documentación

@@ -1,11 +1,13 @@
 {% extends "layouts/home_page.html" %}
 
-{# === CONFIGURACIÓN === #}
+<!-- === CONFIGURACIÓN === -->
 {% set title = "Alumnos" %}
+<!--  -->
 {% set entity_name = "alumno" %}
+<!--  -->
 {% set create_endpoint = "students.register_form" %}
 
-{# === HEADER EXTRA === #}
+<!-- === HEADER EXTRA === -->
 {% block header_extra %}
 <div class="action-bar d-flex flex-wrap gap-2 mb-4">
   <a
@@ -77,9 +79,9 @@
     Actualizar Clases
   </a>
 </div>
-{% endblock %} 
+{% endblock %}
 
-{# === CONTENIDO PERSONALIZADO === #} 
+<!-- === CONTENIDO PERSONALIZADO === -->
 {% block content %}
 <!-- FORM: BUSCAR ALUMNOS -->
 <form id="studentSearchForm" class="mb-4">
@@ -150,8 +152,8 @@
     <div class="student-enrollments d-grid gap-2"></div>
   </div>
 </template>
-{% endblock %} 
-
+{% endblock %}
+<!--  -->
 {% block scripts %}
 <script type="module">
   import { initStudentAutocomplete } from "{{url_for('static', filename='js/features/studentAutocomplete.js')}}";

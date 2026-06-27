@@ -24,6 +24,23 @@ export function renderStudentsAutocomplete(container, students, input) {
       container.innerHTML = "";
     });
 
+    // EVENTO FLECHAS
+    button.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        const nextButton = button.nextElementSibling;
+        if (nextButton) nextButton.focus();
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        const prevButton = button.previousElementSibling;
+        if (prevButton) {
+          prevButton.focus();
+        } else {
+          input.focus();
+        }
+      }
+    });
+
     container.appendChild(button);
   });
 }
