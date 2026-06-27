@@ -1,23 +1,25 @@
 {% extends "layouts/home_page.html" %}
 
-
-{# === CONFIGURACIÓN === #}
+<!-- === CONFIG === -->
 {% set title = "Instructores" %}
+<!--  -->
 {% set entity_name = "instructor" %}
-{% set columns = [
-{"label": "Nombre", "field": "name"},
-{"label": "Teléfono", "field": "phone"},
-{"label": "Contrato", "field": "contract"},
-{"label": "Activo", "field": "enabled", "type": "boolean"}
-] %}
+<!--  -->
+{% set columns = [ {"label": "Nombre", "field": "name"}, {"label": "Teléfono",
+"field": "phone"}, {"label": "Contrato", "field": "contract"}, {"label":
+"Activo", "field": "enabled", "type": "boolean"}] %}
+<!--  -->
 {% set create_endpoint = "instructors.register_form" %}
+<!--  -->
 {% set edit_endpoint = "instructors.edit_form" %}
+<!--  -->
 {% set delete_endpoint = "instructors.delete" %}
+<!--  -->
 {% set id_name = "instructor_id" %}
+<!--  -->
 {% set empty_label = "No hay instructores registrados" %}
 
-
-{# === HEADER EXTRA === #}
+<!-- === HEADER EXTRA === -->
 {% block header_extra %}
 <div class="action-bar d-flex flex-wrap gap-2 mb-4">
   <a
@@ -79,6 +81,26 @@
       />
     </svg>
     Asignar vehículo
+  </a>
+
+  <a
+    href="{{url_for('instructors.block_day_home')}}"
+    class="btn btn-outline-secondary d-inline-flex align-items-center gap-2"
+  >
+    <!-- ICON: BAN -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-ban"
+      viewBox="0 0 16 16"
+    >
+      <path
+        d="M15 8a6.97 6.97 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0"
+      />
+    </svg>
+    Días bloqueados
   </a>
 </div>
 {% endblock %}

@@ -81,3 +81,9 @@ td.change-chosen::after {
   background: rgba(13, 27, 42, 0.7);
   z-index: 1;
 }
+
+// === DÍA BLOQUEADO ===
+.cell-blocked {
+  background-color: #842029 !important;
+  cursor: not-allowed;
+}

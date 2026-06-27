@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+<!--  -->
+{% block title %}Días bloqueados{% endblock %}
+<!--  -->
+{% block main %}
+<div class="container">
+  <div class="mb-5">
+    <h1 class="fw-bold text-dark mb-1">Días Bloqueados</h1>
+    <p class="text-muted">
+      Gestiona las fechas en las que los instructores no estarán disponibles
+      para la asignación de clases.
+    </p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-4">
+      <div class="card border-0 shadow-sm p-4 bg-light">
+        <h5 class="fw-semibold text-secondary mb-3">Inhabilitar Fecha</h5>
+
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+          <div class="mb-3">
+            <label for="date" class="form-label small fw-medium text-muted"
+              >Fecha del bloqueo</label
+            >
+            <input
+              type="date"
+              id="date"
+              name="date"
+              class="form-control"
+              required
+            />
+          </div>
+
+          {% if instructors %}
+          <div class="mb-4">
+            <label
+              for="instructor_id"
+              class="form-label small fw-medium text-muted"
+              >Instructor asignado</label
+            >
+            <select
+              id="instructor_id"
+              name="instructor_id"
+              class="form-select"
+              required
+            >
+              {% for instructor in instructors %}
+              <option value="{{instructor.id}}">{{instructor.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-dark btn-sm py-2 fw-medium">
+              Registrar Bloqueo
+            </button>
+          </div>
+
+          {% else %}
+          <div class="alert alert-warning border-0 small mb-0" role="alert">
+            No se encontraron instructores activos. Es necesario tener al menos
+            un instructor para restringir fechas.
+          </div>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-8">
+      <div class="card border-0 shadow-sm p-4">
+        <div class="mb-3">
+          <h5 class="fw-semibold text-secondary mb-1">
+            Próximas Fechas Reservadas
+          </h5>
+          <p class="text-muted small mb-0">
+            Listado de inhabilitaciones programadas a partir de hoy en adelante.
+          </p>
+        </div>
+
+        {% if blocked_days %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-muted small">
+              <tr>
+                <th class="fw-medium border-0 py-3">Fecha</th>
+                <th class="fw-medium border-0 py-3">Instructor</th>
+                <th class="fw-medium border-0 py-3 text-end">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="small text-secondary">
+              {% for day in blocked_days %}
+              <tr>
+                <td class="fw-semibold text-dark py-3">{{day.date}}</td>
+                <td class="py-3">{{day.instructor.name}}</td>
+                <td class="py-3 text-end">
+                  <form
+                    class="delete-form d-inline"
+                    action="{{url_for('instructors.delete_blocked_day_route', blocked_day_id=day.id)}}"
+                    method="post"
+                  >
+                    <input
+                      type="hidden"
+                      name="csrf_token"
+                      value="{{ csrf_token() }}"
+                    />
+
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-link text-danger p-0 text-decoration-none d-inline-flex align-items-center gap-1"
+                      title="Eliminar bloqueo"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        fill="currentColor"
+                        class="bi bi-trash3-fill"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
+                        />
+                      </svg>
+                      <span>Remover</span>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        {% else %}
+        <div
+          class="alert alert-light border border-dashed text-center py-4 text-muted small mb-0"
+          role="alert"
+        >
+          No existen registros de fechas inhabilitadas activas para los próximos
+          días.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!--  -->
+{% block scripts %}
+<script type="module">
+  import { attachDeleteConfirmation } from "{{ url_for('static', filename='js/ui/confirmDelete.js') }}";
+
+  attachDeleteConfirmation(document, "delete-form", "día bloqueado");
+</script>
+{% endblock %}

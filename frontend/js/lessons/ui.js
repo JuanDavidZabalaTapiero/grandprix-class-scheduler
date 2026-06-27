@@ -24,7 +24,10 @@ export function renderSchedule(container, lessons, date, totals = {}) {
     row.instructors.forEach((item) => {
       const lessonTd = document.createElement("td");
 
-      if (item.lesson) {
+      if (item.is_blocked) {
+        // === DÍA BLOQUEADO ===
+        lessonTd.classList.add("cell-blocked");
+      } else if (item.lesson) {
         // === CLASE OCUPADA ===
 
         // CONTENIDO

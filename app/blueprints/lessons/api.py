@@ -2,6 +2,7 @@ from datetime import time
 
 from flask import Blueprint, flash, jsonify, request
 
+from app.blueprints.blocked_days.services import get_blocked_days_by_date
 from app.blueprints.instructors.services.crud import instructor_services
 from app.core.exceptions import AppError
 from app.core.transactions import run_query, run_service
@@ -26,8 +27,10 @@ def get_schedule():
             lambda: lesson_services.get_schedule(date, instructors)
         )
 
+        blocked_days = run_query(lambda: get_blocked_days_by_date(date))
+
         # === BUILD ===
-        lessons_dict = build_scheduling(hours, instructors, lessons)
+        lessons_dict = build_scheduling(hours, instructors, lessons, blocked_days)
 
         # === RESPONSE ===
         return jsonify({"lessons": lessons_dict, "totals": totals})
@@ -64,7 +67,6 @@ def update_lessons():
     data = request.get_json()
 
     try:
-
         # UPDATE
         for lesson_data in data["lessons"]:
             lesson = lesson_services.get_by_id(lesson_data["id"])
@@ -120,7 +122,6 @@ def change_lessons():
         def service():
 
             for selection in data:
-
                 origin_id = selection["originId"]
                 target = selection["target"]
 
@@ -130,7 +131,6 @@ def change_lessons():
                 # CAMBIO ENTRE CLASES
                 # =========================
                 if isinstance(target, int):
-
                     lesson_target = lesson_services.get_by_id(target)
 
                     # GUARDAR TEMP
@@ -157,7 +157,6 @@ def change_lessons():
                 # MOVER A SLOT VACÍO
                 # =========================
                 elif isinstance(target, dict):
-
                     lesson_origin.date = target["date"]
                     lesson_origin.start_time = target["hour"]
                     lesson_origin.instructor_vehicle_id = target[

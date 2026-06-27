@@ -1,9 +1,13 @@
 from app.core.utils.time import format_time
 
 
-def build_scheduling(hours, instructors, lessons):
+def build_scheduling(hours, instructors, lessons, blocked_days=None):
 
-    # === MAP ===
+    # === DATOS DE EJEMPLO ===
+    if blocked_days is None:
+        blocked_days = []
+
+    # === MAP LESSONS ===
     lesson_map = {
         (lesson.start_time, lesson.instructor_vehicle.instructor_id): {
             "id": lesson.id,
@@ -16,6 +20,9 @@ def build_scheduling(hours, instructors, lessons):
         }
         for lesson in lessons
     }
+
+    # === MAP BLOCKED DAYS ===
+    blocked_instructor_ids = {block.instructor_id for block in blocked_days}
 
     # === ARRAY VEHICLES ID ===
     vehicles_by_hour = {}
@@ -34,7 +41,11 @@ def build_scheduling(hours, instructors, lessons):
             "hour_formatted": format_time(hour),
             "vehicles_ids": vehicles_by_hour.get(str(hour), []),
             "instructors": [
-                {"id": i.id, "lesson": lesson_map.get((hour, i.id))}
+                {
+                    "id": i.id,
+                    "is_blocked": i.id in blocked_instructor_ids,
+                    "lesson": lesson_map.get((hour, i.id)),
+                }
                 for i in instructors
             ],
         }

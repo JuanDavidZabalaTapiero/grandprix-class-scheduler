@@ -1,3 +1,4 @@
+from .blocked_days import BlockedDay
 from .category import Category
 from .enrollment import Enrollment
 from .instructor import Instructor
@@ -18,4 +19,5 @@ __all__ = [
     "LessonType",
     "LessonStatus",
     "Lesson",
+    "BlockedDay",
 ]

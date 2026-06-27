@@ -19,3 +19,4 @@ class Instructor(db.Model):
     instructor_vehicles = db.relationship(
         "InstructorVehicle", back_populates="instructor"
     )
+    blocked_days = db.relationship("BlockedDay", back_populates="instructor")
