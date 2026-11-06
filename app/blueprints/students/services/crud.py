@@ -1,5 +1,4 @@
-from sqlalchemy import extract, select
-from sqlalchemy.orm import joinedload
+from sqlalchemy import extract, func, select
 
 from app.blueprints.students.exceptions import (
     StudentDocumentAlreadyExists,
@@ -26,26 +25,27 @@ class StudentService(CRUDServices):
         return student
 
     def get_students_with_absences(self, year):
-        students = (
-            Student.query.join(Student.enrollments)
-            .join(Enrollment.lessons)
-            .filter(
+        latest_absence = (
+            select(
+                Enrollment.student_id.label("student_id"),
+                func.max(Lesson.date).label("latest_absence_date"),
+            )
+            .join(Lesson, Lesson.enrollment_id == Enrollment.id)
+            .where(
                 Lesson.lesson_status_id == ABSENCE_STATUS_ID,
                 extract("year", Lesson.date) == year,
             )
-            .options(
-                joinedload(Student.enrollments)
-                .joinedload(Enrollment.lessons)
-                .joinedload(Lesson.instructor_vehicle),
-                joinedload(Student.enrollments)
-                .joinedload(Enrollment.lessons)
-                .joinedload(Lesson.lesson_status),
-                joinedload(Student.enrollments).joinedload(Enrollment.category),
+            .group_by(Enrollment.student_id)
+            .subquery()
+        )
+
+        return (
+            Student.query.join(
+                latest_absence, latest_absence.c.student_id == Student.id
             )
-            .distinct()
+            .order_by(latest_absence.c.latest_absence_date.desc(), Student.name.asc())
             .all()
         )
-        return students
 
 
 # =========================

@@ -12,6 +12,18 @@ class Enrollment(db.Model):
     created_at = db.Column(
         db.DateTime, server_default=func.current_timestamp(), nullable=False
     )
+    schedule_completed = db.Column(
+        db.Boolean,
+        default=False,
+        server_default=db.false(),
+        nullable=False,
+    )
+    wants_automatic = db.Column(
+        db.Boolean,
+        default=False,
+        server_default=db.false(),
+        nullable=False,
+    )
 
     # RELATIONSHIPS
     student = db.relationship("Student", back_populates="enrollments")

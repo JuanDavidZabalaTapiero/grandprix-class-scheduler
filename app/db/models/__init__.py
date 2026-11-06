@@ -1,3 +1,4 @@
+from .availability_block import AvailabilityBlock
 from .blocked_days import BlockedDay
 from .category import Category
 from .enrollment import Enrollment
@@ -7,6 +8,8 @@ from .lesson import Lesson
 from .lesson_status import LessonStatus
 from .lesson_type import LessonType
 from .student import Student
+from .student_availability import StudentAvailability
+from .student_note import StudentNote
 from .vehicle import Vehicle
 
 __all__ = [
@@ -20,4 +23,7 @@ __all__ = [
     "LessonStatus",
     "Lesson",
     "BlockedDay",
+    "AvailabilityBlock",
+    "StudentAvailability",
+    "StudentNote",
 ]
