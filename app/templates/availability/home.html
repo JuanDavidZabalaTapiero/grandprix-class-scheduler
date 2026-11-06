@@ -1,5 +1,8 @@
-{% extends "base.html" %} {% block title %}Horarios disponibles{% endblock %} {%
-block main %}
+{% extends "base.html" %}
+
+{% block title %}Horarios disponibles{% endblock %} 
+
+{% block main %}
 <div class="container">
   <h1>Horarios disponibles de alumnos pendientes</h1>
 
@@ -21,7 +24,7 @@ block main %}
         {% for weekday, day_name in grids.weekdays_grid.weekdays %}
         <td>
           {% for student_name in row.students_by_weekday[weekday] %}
-          <div>{{ student_name }}</div>
+          <div class="border border-primary">{{ student_name }}</div>
           {% endfor %}
         </td>
         {% endfor %}
@@ -48,7 +51,7 @@ block main %}
         <th>{{ row.time_label }}</th>
         <td>
           {% for student_name in row.students_by_weekday[5] %}
-          <div>{{ student_name }}</div>
+          <div class="border border-primary">{{ student_name }}</div>
           {% endfor %}
         </td>
       </tr>

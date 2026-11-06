@@ -5,6 +5,7 @@ from app.db.models import (
     StudentAvailability,
 )
 from app.extensions import db
+from sqlalchemy import select
 
 WEEKDAYS = [
     (0, "Lunes"),
@@ -108,3 +109,43 @@ def get_availability_grids():
             students_by_block,
         ),
     }
+
+
+def get_enabled_availability_blocks():
+    return db.session.scalars(
+        select(AvailabilityBlock)
+        .where(AvailabilityBlock.enabled.is_(True))
+        .order_by(
+            AvailabilityBlock.weekday,
+            AvailabilityBlock.start_time,
+        )
+    ).all()
+
+
+def build_weekday_rows(blocks):
+    # Una fila por cada combinación única de hora de inicio y fin.
+    slots = sorted(
+        {(block.start_time, block.end_time) for block in blocks if block.weekday < 5}
+    )
+
+    rows = []
+
+    for start_time, end_time in slots:
+        blocks_by_weekday = {
+            block.weekday: block
+            for block in blocks
+            if block.weekday < 5
+            and block.start_time == start_time
+            and block.end_time == end_time
+        }
+
+        rows.append(
+            {
+                "time_label": (
+                    f"{start_time.strftime('%H:%M')}–{end_time.strftime('%H:%M')}"
+                ),
+                "blocks_by_weekday": blocks_by_weekday,
+            }
+        )
+
+    return rows
