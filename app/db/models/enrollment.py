@@ -18,12 +18,6 @@ class Enrollment(db.Model):
         server_default=db.false(),
         nullable=False,
     )
-    wants_automatic = db.Column(
-        db.Boolean,
-        default=False,
-        server_default=db.false(),
-        nullable=False,
-    )
 
     # RELATIONSHIPS
     student = db.relationship("Student", back_populates="enrollments")

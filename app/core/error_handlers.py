@@ -1,7 +1,6 @@
 import logging
 
 from flask import flash, redirect, render_template, url_for
-from flask_wtf.csrf import CSRFError
 from jinja2 import TemplateNotFound
 from werkzeug.exceptions import HTTPException
 
@@ -23,16 +22,6 @@ def register_error_handlers(app):
         flash(str(error), "danger")
 
         return redirect(url_for("students.home"))
-
-    # === CSRF ===
-    @app.errorhandler(CSRFError)
-    def handle_csrf_error(error):
-        logger.warning(
-            "CSRF validation failed | reason=%s",
-            error.description,
-        )
-
-        return render_template("errors/csrf.html"), 400
 
     # === HTTP ===
     @app.errorhandler(HTTPException)

@@ -7,8 +7,6 @@
     <h1 class="mb-4">Registrar disponibilidad de alumno</h1>
 
     <form method="post" action="{{ url_for('availability.register') }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
         <div class="mb-4">
             <label for="student_id" class="form-label">ID del alumno</label>
             <input id="student_id" name="student_id" type="number" class="form-control" min="1" step="1" required

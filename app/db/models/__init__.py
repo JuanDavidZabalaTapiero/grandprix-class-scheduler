@@ -9,7 +9,9 @@ from .lesson_status import LessonStatus
 from .lesson_type import LessonType
 from .student import Student
 from .student_availability import StudentAvailability
+from .student_medical_exam import StudentMedicalExam
 from .student_note import StudentNote
+from .student_preference import StudentPreference
 from .vehicle import Vehicle
 
 __all__ = [
@@ -26,4 +28,6 @@ __all__ = [
     "AvailabilityBlock",
     "StudentAvailability",
     "StudentNote",
+    "StudentPreference",
+    "StudentMedicalExam",
 ]

@@ -13,12 +13,31 @@ class Student(db.Model):
     document_id = db.Column(db.String(50), unique=True, nullable=False)
     name = db.Column(db.String(255), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
+    has_balance = db.Column(
+        db.Boolean,
+        default=False,
+        server_default=db.false(),
+        nullable=False,
+    )
     created_at = db.Column(
-        db.DateTime, server_default=func.current_timestamp(), nullable=False
+        db.DateTime,
+        server_default=func.current_timestamp(),
+        nullable=False,
     )
 
     # RELATIONSHIPS
     enrollments = db.relationship("Enrollment", back_populates="student")
+    preferences = db.relationship(
+        "StudentPreference",
+        back_populates="student",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    medical_exams = db.relationship(
+        "StudentMedicalExam",
+        back_populates="student",
+        cascade="all, delete-orphan",
+    )
 
     # ABSENCE
     @property

@@ -18,7 +18,6 @@
         <h5 class="fw-semibold text-secondary mb-3">Inhabilitar Fecha</h5>
 
         <form method="post">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
           <div class="mb-3">
             <label for="date" class="form-label small fw-medium text-muted"
@@ -100,11 +99,6 @@
                     action="{{url_for('instructors.delete_blocked_day_route', blocked_day_id=day.id)}}"
                     method="post"
                   >
-                    <input
-                      type="hidden"
-                      name="csrf_token"
-                      value="{{ csrf_token() }}"
-                    />
 
                     <button
                       type="submit"

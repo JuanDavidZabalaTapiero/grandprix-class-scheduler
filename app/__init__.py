@@ -5,7 +5,7 @@ from app.core.logging_config import configure_logging
 
 from .blueprints import register_blueprints
 from .config import Config
-from .extensions import csrf, db, migrate
+from .extensions import db, migrate
 
 # =========================
 # CONFIG VALIDATION
@@ -38,7 +38,6 @@ def create_app() -> Flask:
     # === EXTENSIONES ===
     db.init_app(app)
     migrate.init_app(app, db)
-    csrf.init_app(app)
 
     # === MODELOS (MIGRACIONES) ===
     from app.db import models  # noqa: F401
