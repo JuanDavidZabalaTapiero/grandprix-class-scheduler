@@ -32,16 +32,6 @@ migrate = Migrate()
 
 ---
 
-## CSRFProtect
-
-Protege los formularios contra ataques **Cross-Site Request Forgery**.
-
-```python
-csrf = CSRFProtect()
-```
-
----
-
 # Inicialización en la aplicación
 
 Las extensiones se inicializan dentro del **App Factory**.
@@ -49,5 +39,4 @@ Las extensiones se inicializan dentro del **App Factory**.
 ```python
 db.init_app(app)
 migrate.init_app(app, db)
-csrf.init_app(app)
 ```

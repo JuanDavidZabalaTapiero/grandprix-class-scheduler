@@ -8,9 +8,8 @@ La aplicación implementa una arquitectura de errores basada en **excepciones pe
 
 La aplicación distingue varios tipos de errores:
 
-1️⃣ Errores de aplicación  
-2️⃣ Errores de base de datos  
-3️⃣ Errores HTTP  
+1️⃣ Errores de aplicación
+3️⃣ Errores HTTP
 4️⃣ Errores inesperados
 
 Todos los errores se manejan centralmente en:
@@ -63,16 +62,6 @@ Cuando ocurre un `AppError`:
 
 ```python
 @app.errorhandler(AppError)
-```
-
----
-
-# Error CSRF
-
-Los errores de validación CSRF son manejados separadamente.
-
-```python
-@app.errorhandler(CSRFError)
 ```
 
 ---

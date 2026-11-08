@@ -6,7 +6,7 @@ Los formularios del proyecto se implementan utilizando:
 Flask-WTF
 ```
 
-Esto permite integrar **WTForms** con Flask y agregar protección **CSRF** automáticamente.
+Esto permite integrar **WTForms** con Flask.
 
 ---
 
@@ -54,21 +54,3 @@ form = StudentForm()
 if form.validate_on_submit():
     data = form.data
 ```
-
----
-
-# Protección CSRF
-
-Flask-WTF incluye protección CSRF automáticamente mediante:
-
-```bash
-CSRFProtect
-```
-
-La extensión se inicializa en:
-
-```bash
-app/extensions.py
-```
-
-Esto protege los formularios contra ataques de falsificación de solicitudes.
