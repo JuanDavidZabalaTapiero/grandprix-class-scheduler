@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+
+{% block title %}Registro de alumno{% endblock %} 
+
+{% block main %}
+<div class="container py-4 py-lg-5">
+  <div class="mx-auto" style="max-width: 1100px">
+    <header class="mb-4">
+      <p class="text-primary fw-semibold text-uppercase small mb-2">Registro</p>
+      <h1 class="h2 fw-bold mb-2">Nuevo alumno</h1>
+      <p class="text-secondary mb-0">
+        Registra los datos, matrículas y disponibilidad del alumno.
+      </p>
+    </header>
+
+    <form method="post" class="d-grid gap-4">
+      <!-- Datos del alumno -->
+      <section class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-semibold mb-4">Datos del alumno</h2>
+
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="student_document_id" class="form-label">
+                Documento
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                name="student_document_id"
+                id="student_document_id"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label for="student_name" class="form-label">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                name="student_name"
+                id="student_name"
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label for="student_phone" class="form-label">Teléfono</label>
+              <input
+                type="tel"
+                class="form-control"
+                name="student_phone"
+                id="student_phone"
+              />
+            </div>
+
+            <div class="col-12">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="student_has_balance"
+                  id="student_has_balance"
+                />
+                <label class="form-check-label" for="student_has_balance">
+                  Tiene saldo pendiente
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Matrículas -->
+      <section class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-semibold mb-1">Matrículas</h2>
+          <p class="text-secondary small mb-3">
+            Selecciona las categorías del alumno.
+          </p>
+
+          <div class="d-flex flex-wrap gap-2">
+            {% for category in categories %}
+            <div>
+              <input
+                type="checkbox"
+                class="btn-check"
+                name="category_ids"
+                id="category-{{ category.id }}"
+                value="{{ category.id }}"
+                autocomplete="off"
+              />
+              <label
+                class="btn btn-outline-primary rounded-pill"
+                for="category-{{ category.id }}"
+              >
+                {{ category.name }}
+              </label>
+            </div>
+            {% else %}
+            <p class="text-secondary mb-0">No hay categorías registradas.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      <!-- Disponibilidad de lunes a viernes -->
+      <section class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="mb-3">
+            <h2 class="h5 fw-semibold mb-1">Disponibilidad</h2>
+            <p class="text-secondary small mb-0">
+              Selecciona los bloques en los que el alumno puede tomar clases.
+            </p>
+          </div>
+
+          <h3 class="h6 fw-semibold mb-3">Lunes a viernes</h3>
+
+          <div class="table-responsive">
+            <table
+              class="table table-bordered table-hover align-middle text-center mb-0"
+            >
+              <thead class="table-light">
+                <tr>
+                  <th scope="col" class="text-start text-nowrap">Horario</th>
+                  {% for day_name, column_key in weekday_columns %}
+                  <th scope="col">{{ day_name }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for row in weekday_matrix.rows %}
+                <tr>
+                  <th scope="row" class="text-start text-nowrap">
+                    {{ row.time_slot }}
+                  </th>
+
+                  {% for day_name, column_key in weekday_columns %} {% set
+                  block_id = row[column_key] %}
+                  <td>
+                    {% if block_id is not none %}
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      name="availability_block_ids"
+                      value="{{ block_id }}"
+                      aria-label="{{ day_name }} {{ row.time_slot }}"
+                    />
+                    {% else %}
+                    <span class="text-body-tertiary">—</span>
+                    {% endif %}
+                  </td>
+                  {% endfor %}
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="6" class="text-secondary py-4">
+                    No hay horarios disponibles entre semana.
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="h6 fw-semibold mt-4 mb-3">Sábado</h3>
+
+          <div class="table-responsive">
+            <table
+              class="table table-bordered table-hover align-middle text-center mb-0"
+            >
+              <thead class="table-light">
+                <tr>
+                  <th scope="col" class="text-start">Horario</th>
+                  <th scope="col">Disponible</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for row in saturday_matrix.rows %}
+                <tr>
+                  <th scope="row" class="text-start text-nowrap">
+                    {{ row.time_slot }}
+                  </th>
+                  <td>
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      name="availability_block_ids"
+                      value="{{ row.saturday }}"
+                      aria-label="Sábado {{ row.time_slot }}"
+                    />
+                  </td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="2" class="text-secondary py-4">
+                    No hay horarios disponibles para el sábado.
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Examen médico y preferencias -->
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <section class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+              <h2 class="h5 fw-semibold mb-1">Examen médico</h2>
+              <p class="text-secondary small mb-3">
+                Puedes dejar estas fechas vacías.
+              </p>
+
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label for="exam_date" class="form-label">
+                    Fecha del examen
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    name="exam_date"
+                    id="exam_date"
+                  />
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="expiration_date" class="form-label">
+                    Fecha de vencimiento
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    name="expiration_date"
+                    id="expiration_date"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="col-lg-6">
+          <section class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+              <h2 class="h5 fw-semibold mb-3">Preferencias</h2>
+
+              <div class="form-check form-switch">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  role="switch"
+                  name="wants_automatic"
+                  id="wants_automatic"
+                  value="1"
+                />
+                <label class="form-check-label" for="wants_automatic">
+                  Prefiere carro automático
+                </label>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Nota -->
+      <section class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-semibold mb-1">Nota del alumno</h2>
+          <p class="text-secondary small mb-3">
+            Agrega información útil para coordinar las clases.
+          </p>
+
+          <label for="student_note" class="form-label">Nota</label>
+          <textarea
+            class="form-control"
+            name="student_note"
+            id="student_note"
+            rows="4"
+            placeholder="Escribe una nota..."
+          ></textarea>
+        </div>
+      </section>
+
+      <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary px-4">
+          Registrar alumno
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

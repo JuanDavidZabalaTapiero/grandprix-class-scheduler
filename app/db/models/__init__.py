@@ -1,4 +1,5 @@
 from .availability_block import AvailabilityBlock
+from .availability_time_slot import AvailabilityTimeSlot
 from .blocked_days import BlockedDay
 from .category import Category
 from .enrollment import Enrollment
@@ -26,6 +27,7 @@ __all__ = [
     "Lesson",
     "BlockedDay",
     "AvailabilityBlock",
+    "AvailabilityTimeSlot",
     "StudentAvailability",
     "StudentNote",
     "StudentPreference",

@@ -38,6 +38,11 @@ class Student(db.Model):
         back_populates="student",
         cascade="all, delete-orphan",
     )
+    availabilities = db.relationship(
+        "StudentAvailability",
+        back_populates="student",
+        cascade="all, delete-orphan",
+    )
 
     # ABSENCE
     @property

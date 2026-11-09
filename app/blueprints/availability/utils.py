@@ -1,151 +1,96 @@
 from app.db.models import (
     AvailabilityBlock,
-    Enrollment,
-    Student,
-    StudentAvailability,
+    AvailabilityTimeSlot,
 )
 from app.extensions import db
-from sqlalchemy import select
 
-WEEKDAYS = [
-    (0, "Lunes"),
-    (1, "Martes"),
-    (2, "Miércoles"),
-    (3, "Jueves"),
-    (4, "Viernes"),
+WEEKDAY_COLUMNS = [
+    (0, "Lunes", "monday"),
+    (1, "Martes", "tuesday"),
+    (2, "Miércoles", "wednesday"),
+    (3, "Jueves", "thursday"),
+    (4, "Viernes", "friday"),
 ]
 
-
-def _build_grid(blocks, weekdays, students_by_block):
-    rows_by_time = {}
-
-    for block in blocks:
-        key = (block.start_time, block.end_time)
-
-        if key not in rows_by_time:
-            start = block.start_time.strftime("%I:%M %p").lstrip("0").lower()
-            end = block.end_time.strftime("%I:%M %p").lstrip("0").lower()
-
-            rows_by_time[key] = {
-                "time_label": f"{start} - {end}",
-                "students_by_weekday": {weekday: [] for weekday, _ in weekdays},
-            }
-
-        rows_by_time[key]["students_by_weekday"][block.weekday] = students_by_block.get(
-            block.id, []
-        )
-
-    return {
-        "weekdays": weekdays,
-        "rows": list(rows_by_time.values()),
-    }
+# ======================================================================
+# REGISTRO DE HORARIOS
+# ======================================================================
 
 
-def get_availability_grids():
+def _format_time_slot(time_slot):
+    start = time_slot.start_time.strftime("%I:%M %p").lstrip("0").lower()
+    end = time_slot.end_time.strftime("%I:%M %p").lstrip("0").lower()
+    return f"{start} - {end}"
+
+
+def get_weekday_availability_matrix():
     blocks = (
-        db.session.query(AvailabilityBlock)
+        db.session.query(AvailabilityBlock, AvailabilityTimeSlot)
+        .join(
+            AvailabilityTimeSlot,
+            AvailabilityTimeSlot.id == AvailabilityBlock.time_slot_id,
+        )
         .filter(
-            AvailabilityBlock.weekday.between(0, 5),
+            AvailabilityBlock.weekday.between(0, 4),
             AvailabilityBlock.enabled.is_(True),
         )
         .order_by(
-            AvailabilityBlock.start_time,
-            AvailabilityBlock.end_time,
+            AvailabilityTimeSlot.start_time,
+            AvailabilityTimeSlot.end_time,
             AvailabilityBlock.weekday,
         )
         .all()
     )
 
-    block_ids = [block.id for block in blocks]
-    students_by_block = {}
-    seen_student_block_pairs = set()
+    rows_by_time_slot = {}
 
-    if block_ids:
-        available_students = (
-            db.session.query(
-                StudentAvailability.availability_block_id,
-                Student.id,
-                Student.name,
-            )
-            .join(
-                Student,
-                Student.id == StudentAvailability.student_id,
-            )
-            .join(
-                Enrollment,
-                Enrollment.student_id == Student.id,
-            )
-            .filter(
-                StudentAvailability.availability_block_id.in_(block_ids),
-                Enrollment.schedule_completed.is_(False),
-            )
-            .order_by(Student.created_at, Student.id)
-            .all()
+    for block, time_slot in blocks:
+        key = (time_slot.start_time, time_slot.end_time)
+
+        if key not in rows_by_time_slot:
+            rows_by_time_slot[key] = {
+                "time_slot": _format_time_slot(time_slot),
+                **{column_key: None for _, _, column_key in WEEKDAY_COLUMNS},
+            }
+
+        column_key = next(
+            column_key
+            for weekday, _, column_key in WEEKDAY_COLUMNS
+            if weekday == block.weekday
         )
-
-        for block_id, student_id, student_name in available_students:
-            pair = (block_id, student_id)
-
-            # Evita repetir al alumno en el mismo bloque si tiene
-            # más de una matrícula pendiente.
-            if pair in seen_student_block_pairs:
-                continue
-
-            seen_student_block_pairs.add(pair)
-            students_by_block.setdefault(block_id, []).append(student_name)
-
-    weekday_blocks = [block for block in blocks if block.weekday <= 4]
-    saturday_blocks = [block for block in blocks if block.weekday == 5]
+        rows_by_time_slot[key][column_key] = block.id
 
     return {
-        "weekdays_grid": _build_grid(
-            weekday_blocks,
-            WEEKDAYS,
-            students_by_block,
-        ),
-        "saturday_grid": _build_grid(
-            saturday_blocks,
-            [(5, "Sábado")],
-            students_by_block,
-        ),
+        "weekdays": [name for _, name, _ in WEEKDAY_COLUMNS],
+        "rows": list(rows_by_time_slot.values()),
     }
 
 
-def get_enabled_availability_blocks():
-    return db.session.scalars(
-        select(AvailabilityBlock)
-        .where(AvailabilityBlock.enabled.is_(True))
-        .order_by(
-            AvailabilityBlock.weekday,
-            AvailabilityBlock.start_time,
+def get_saturday_availability_matrix():
+    blocks = (
+        db.session.query(AvailabilityBlock, AvailabilityTimeSlot)
+        .join(
+            AvailabilityTimeSlot,
+            AvailabilityTimeSlot.id == AvailabilityBlock.time_slot_id,
         )
-    ).all()
-
-
-def build_weekday_rows(blocks):
-    # Una fila por cada combinación única de hora de inicio y fin.
-    slots = sorted(
-        {(block.start_time, block.end_time) for block in blocks if block.weekday < 5}
+        .filter(
+            AvailabilityBlock.weekday == 5,
+            AvailabilityBlock.enabled.is_(True),
+        )
+        .order_by(
+            AvailabilityTimeSlot.start_time,
+            AvailabilityTimeSlot.end_time,
+        )
+        .all()
     )
 
-    rows = []
-
-    for start_time, end_time in slots:
-        blocks_by_weekday = {
-            block.weekday: block
-            for block in blocks
-            if block.weekday < 5
-            and block.start_time == start_time
-            and block.end_time == end_time
-        }
-
-        rows.append(
+    return {
+        "weekdays": ["Sábado"],
+        "rows": [
             {
-                "time_label": (
-                    f"{start_time.strftime('%H:%M')}–{end_time.strftime('%H:%M')}"
-                ),
-                "blocks_by_weekday": blocks_by_weekday,
+                "time_slot": _format_time_slot(time_slot),
+                "saturday": block.id,
             }
-        )
-
-    return rows
+            for block, time_slot in blocks
+        ],
+    }

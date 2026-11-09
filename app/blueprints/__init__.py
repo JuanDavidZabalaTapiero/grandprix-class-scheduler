@@ -1,4 +1,3 @@
-from .availability import availability_bp
 from .categories import categories_bp
 from .core.routes import core_bp
 from .enrollments import enrollments_bp
@@ -26,7 +25,6 @@ def register_blueprints(app):
     app.register_blueprint(lesson_statuses_bp)
     app.register_blueprint(lessons_bp)
     app.register_blueprint(sales_bp)
-    app.register_blueprint(availability_bp)
 
     # APIs
     app.register_blueprint(students_api)

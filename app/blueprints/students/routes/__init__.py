@@ -1,1 +1,1 @@
-from . import home, crud  # noqa
+from . import home, crud, registration  # noqa
