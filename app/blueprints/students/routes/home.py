@@ -26,3 +26,13 @@ def absences():
     students = run_query(lambda: student_services.get_students_with_absences(year))
 
     return render_template("students/absences.html", students=students, year=year)
+
+
+@students_bp.get("/pending-enrollments")
+def pending_enrollments():
+    students = run_query(student_services.get_students_with_pending_enrollments)
+
+    return render_template(
+        "students/pending_enrollments.html",
+        students=students,
+    )

@@ -1,1 +1,1 @@
-from . import home, register, delete  # noqa
+from . import home, register, delete, edit  # noqa

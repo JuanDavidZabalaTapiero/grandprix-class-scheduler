@@ -1,0 +1,77 @@
+{% extends "base.html" %} 
+
+{% block title %}Alumnos pendientes de programación{% endblock %}
+
+{% block main %}
+<div class="container py-4">
+  <h1 class="h3 mb-3">Alumnos pendientes de programación</h1>
+
+  <a
+    href="{{ url_for('availability.planning') }}"
+    class="btn btn-outline-primary mb-4"
+  >
+    Ver planificación general
+  </a>
+
+  {% if students %}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Fecha de registro</th>
+          <th>Alumno</th>
+          <th>Matrículas pendientes</th>
+          <th>Horarios disponibles</th>
+          <th>Notas</th>
+          <th>Vehículo automático</th>
+          <th>Tiene saldo</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in students %}
+        <tr>
+          <td>{{ item.student.created_at.strftime("%d/%m/%Y") }}</td>
+          <td>{{ item.student.name }}</td>
+
+          <td>
+            {% for enrollment in item.pending_enrollments %}
+            <span class="badge text-bg-primary me-1 mb-1">
+              {{ enrollment.category.name }}
+            </span>
+            {% endfor %}
+          </td>
+
+          <td>
+            <a
+              href="{{ url_for('availability.student_schedule', student_id=item.student.id) }}"
+              class="btn btn-sm btn-outline-primary"
+            >
+              Ver horarios
+            </a>
+          </td>
+
+          <td>
+            {% if item.notes %}
+            <ul class="mb-0 ps-3">
+              {% for note in item.notes %}
+              <li>{{ note.note }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </td>
+
+          <td>{% if item.wants_automatic %} Sí {% else %} No {% endif %}</td>
+          <td>{% if item.has_balance %} Sí {% else %} No {% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-info mb-0">
+    No hay alumnos con matrículas pendientes de programación.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

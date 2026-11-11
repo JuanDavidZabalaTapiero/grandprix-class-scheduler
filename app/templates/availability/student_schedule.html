@@ -1,0 +1,126 @@
+{% extends "base.html" %} 
+
+{% block title %}Disponibilidad de {{ student.name }}{% endblock %} 
+
+{% block main %}
+<div class="container py-4 py-lg-5">
+  <header
+    class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4"
+  >
+    <div>
+      <p class="text-primary fw-semibold text-uppercase small mb-2">
+        Disponibilidad del alumno
+      </p>
+      <h1 class="h2 fw-bold mb-1">{{ student.name }}</h1>
+      <p class="text-secondary mb-0">
+        Los bloques marcados como “Sí” corresponden a horarios que el alumno
+        indicó como disponibles.
+      </p>
+    </div>
+
+    <a
+      href="{{ url_for('students.pending_enrollments') }}"
+      class="btn btn-outline-secondary"
+    >
+      Volver a alumnos pendientes
+    </a>
+  </header>
+
+  <section class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-4">
+      <h2 class="h5 fw-semibold mb-3">Lunes a viernes</h2>
+
+      <div class="table-responsive">
+        <table
+          class="table table-bordered table-hover align-middle text-center mb-0"
+        >
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="text-start text-nowrap">Horario</th>
+              {% for day_name, column_key in weekday_columns %}
+              <th scope="col">{{ day_name }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for row in weekday_matrix.rows %}
+            <tr>
+              <th scope="row" class="text-start text-nowrap">
+                {{ row.time_slot }}
+              </th>
+
+              {% for day_name, column_key in weekday_columns %} {% set cell =
+              row[column_key] %}
+              <td>
+                {% if cell %} {% if cell.available %}
+                <span class="badge text-bg-success">Sí</span>
+                {% else %}
+                <span class="badge text-bg-light border text-secondary"
+                  >No</span
+                >
+                {% endif %} {% else %}
+                <span class="text-body-tertiary">—</span>
+                {% endif %}
+              </td>
+              {% endfor %}
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="6" class="text-center text-secondary py-4">
+                No hay bloques disponibles entre semana.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <h2 class="h5 fw-semibold mb-3">Sábado</h2>
+
+      <div class="table-responsive">
+        <table
+          class="table table-bordered table-hover align-middle text-center mb-0"
+        >
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="text-start text-nowrap">Horario</th>
+              <th scope="col">Sábado</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for row in saturday_matrix.rows %} {% set cell = row["saturday"]
+            %}
+            <tr>
+              <th scope="row" class="text-start text-nowrap">
+                {{ row.time_slot }}
+              </th>
+              <td>
+                {% if cell.available %}
+                <span class="badge text-bg-success">Sí</span>
+                {% else %}
+                <span class="badge text-bg-light border text-secondary"
+                  >No</span
+                >
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="2" class="text-center text-secondary py-4">
+                No hay bloques disponibles para el sábado.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

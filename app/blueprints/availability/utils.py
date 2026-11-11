@@ -200,3 +200,83 @@ def get_weekday_pending_students_matrix():
 def get_saturday_pending_students_matrix():
     saturday_column = [(5, "Sábado", "saturday")]
     return _build_pending_students_matrix(saturday_column)
+
+
+# ======================================================================
+# HORARIOS DE UN ALUMNO
+# ======================================================================
+
+
+def _build_student_availability_matrix(student_id, weekday_columns):
+    weekdays = [weekday for weekday, _, _ in weekday_columns]
+
+    blocks = (
+        db.session.query(AvailabilityBlock, AvailabilityTimeSlot)
+        .join(
+            AvailabilityTimeSlot,
+            AvailabilityTimeSlot.id == AvailabilityBlock.time_slot_id,
+        )
+        .filter(
+            AvailabilityBlock.weekday.in_(weekdays),
+            AvailabilityBlock.enabled.is_(True),
+        )
+        .order_by(
+            AvailabilityTimeSlot.start_time,
+            AvailabilityTimeSlot.end_time,
+            AvailabilityBlock.weekday,
+        )
+        .all()
+    )
+
+    block_ids = [block.id for block, _ in blocks]
+
+    if block_ids:
+        selected_block_ids = {
+            row[0]
+            for row in (
+                db.session.query(StudentAvailability.availability_block_id)
+                .filter(
+                    StudentAvailability.student_id == student_id,
+                    StudentAvailability.availability_block_id.in_(block_ids),
+                )
+                .all()
+            )
+        }
+    else:
+        selected_block_ids = set()
+
+    rows_by_time_slot = {}
+
+    for block, time_slot in blocks:
+        time_key = (time_slot.start_time, time_slot.end_time)
+
+        if time_key not in rows_by_time_slot:
+            rows_by_time_slot[time_key] = {
+                "time_slot": _format_time_slot(time_slot),
+                **{column_key: None for _, _, column_key in weekday_columns},
+            }
+
+        column_key = next(
+            column_key
+            for weekday, _, column_key in weekday_columns
+            if weekday == block.weekday
+        )
+
+        rows_by_time_slot[time_key][column_key] = {
+            "block_id": block.id,
+            "available": block.id in selected_block_ids,
+        }
+
+    return {
+        "weekdays": [name for _, name, _ in weekday_columns],
+        "rows": list(rows_by_time_slot.values()),
+    }
+
+
+def get_student_weekday_availability_matrix(student_id):
+    return _build_student_availability_matrix(student_id, WEEKDAY_COLUMNS)
+
+
+def get_student_saturday_availability_matrix(student_id):
+    saturday_column = [(5, "Sábado", "saturday")]
+    return _build_student_availability_matrix(student_id, saturday_column)
