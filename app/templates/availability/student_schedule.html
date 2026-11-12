@@ -1,6 +1,6 @@
 {% extends "base.html" %} 
 
-{% block title %}Disponibilidad de {{ student.name }}{% endblock %} 
+{% block title %}Disponibilidad de {{ student.name }}{% endblock %}
 
 {% block main %}
 <div class="container py-4 py-lg-5">
@@ -18,12 +18,21 @@
       </p>
     </div>
 
-    <a
-      href="{{ url_for('students.pending_enrollments') }}"
-      class="btn btn-outline-secondary"
-    >
-      Volver a alumnos pendientes
-    </a>
+    <div class="d-flex flex-wrap gap-2">
+      <a
+        href="{{ url_for('availability.edit_student_schedule', student_id=student.id) }}"
+        class="btn btn-primary"
+      >
+        Editar disponibilidad
+      </a>
+
+      <a
+        href="{{ url_for('students.pending_enrollments') }}"
+        class="btn btn-outline-secondary"
+      >
+        Volver a alumnos pendientes
+      </a>
+    </div>
   </header>
 
   <section class="card border-0 shadow-sm mb-4">

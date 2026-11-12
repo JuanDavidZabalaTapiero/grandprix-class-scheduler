@@ -21,6 +21,7 @@ from app.db.models import (
     StudentPreference,
 )
 from app.extensions import db
+from app.forms.normalizers import normalize_text
 
 # ======================================================================
 # FUNCIÓN AUXILIAR
@@ -131,6 +132,10 @@ def onboarding():
         int(block_id) for block_id in request.form.getlist("availability_block_ids")
     ]
 
+    # NORMALIZACIÓN
+    student_document_id = normalize_text(request.form.get("student_document_id"))
+    student_name = normalize_text(request.form.get("student_name"))
+    student_phone = normalize_text(request.form.get("student_phone"))
     exam_date = request.form.get("exam_date", "").strip()
     expiration_date = request.form.get("expiration_date", "").strip()
     note = request.form.get("student_note", "").strip()
@@ -138,9 +143,9 @@ def onboarding():
     try:
         run_service(
             lambda: _save_student_onboarding(
-                document_id=request.form.get("student_document_id"),
-                name=request.form.get("student_name"),
-                phone=request.form.get("student_phone"),
+                document_id=student_document_id,
+                name=student_name,
+                phone=student_phone,
                 has_balance="student_has_balance" in request.form,
                 category_ids=category_ids,
                 availability_block_ids=availability_block_ids,
