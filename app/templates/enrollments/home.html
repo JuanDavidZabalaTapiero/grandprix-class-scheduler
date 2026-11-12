@@ -2,7 +2,7 @@
 
 {% from "macros/buttons.html" import delete_button, edit_button %} 
 
-{% block title %}Matrícula{% endblock %} 
+{% block title %}Matrícula{% endblock %}
 
 {% block css %}
 <link
@@ -38,8 +38,7 @@
             type="checkbox"
             role="switch"
             id="schedule-completed"
-            name="schedule_completed"
-            {% if enrollment.schedule_completed %}checked{% endif %}
+            name="schedule_completed" {% if enrollment.schedule_completed %}checked{% endif %}
             onchange="this.form.requestSubmit()"
           />
           <label class="form-check-label" for="schedule-completed">
@@ -134,7 +133,10 @@
               data-field="lesson_type_id"
             >
               {% for type in lesson_types %}
-              <option value="{{type.id}}" {% if type.id == lesson.lesson_type.id %}selected{% endif %}>
+              <option
+                value="{{type.id}}"
+                {% if type.id == lesson.lesson_type.id %}selected{% endif %}
+              >
                 {{type.name}}
               </option>
               {% endfor %}
@@ -149,7 +151,10 @@
               data-field="lesson_status_id"
             >
               {% for status in lesson_statuses %}
-              <option value="{{status.id}}" {% if status.id == lesson.lesson_status.id %}selected{% endif %}>
+              <option
+                value="{{status.id}}"
+                {% if status.id=="lesson.lesson_status.id" %}selected{% endif %}
+              >
                 {{status.name}}
               </option>
               {% endfor %}
@@ -162,7 +167,8 @@
               type="checkbox"
               class="form-check-input lesson-input"
               data-id="{{lesson.id}}"
-              data-field="is_paid" {% if lesson.is_paid %}checked{% endif %}
+              data-field="is_paid"
+              {% if lesson.is_paid %}checked{% endif %}
             />
           </td>
 
@@ -357,7 +363,7 @@
           <td class="fw-semibold">Hora</td>
           {% for instructor in instructors %}
           <td>
-            <select id="select-{{instructor.id}}" class="form-select mt-2">
+            <select id="select-{{instructor.id}}" class="form-select mt-2" data-instructor-name="{{ instructor.name }}">
               {% for relation in instructor.instructor_vehicles %}
               <option
                 value="{{relation.id}}"
@@ -383,13 +389,45 @@
     Agendar
   </button>
 
+  <!-- CLASES SELECCIONADAS -->
+  <section
+    class="card shadow-sm mt-3 mb-3"
+    aria-labelledby="selected-lessons-title"
+  >
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 id="selected-lessons-title" class="h5 mb-0">
+          Clases seleccionadas
+        </h2>
+        <span
+          id="selected-lessons-count"
+          class="badge text-bg-primary"
+          aria-label="Cantidad de clases seleccionadas"
+          >0</span
+        >
+      </div>
+
+      <p id="selected-lessons-empty" class="text-muted mb-0">
+        Aún no has seleccionado clases.
+      </p>
+
+      <ol
+        id="selected-lessons-list"
+        class="list-group list-group-numbered d-none"
+        aria-live="polite"
+      ></ol>
+    </div>
+  </section>
+
   {% else %}
   <div class="alert alert-info">
     No hay instructores activos con vehículos disponibles en este momento
   </div>
   {% endif %}
 </div>
-{% endblock %} {% block scripts %}
+{% endblock %} 
+
+{% block scripts %}
 <script type="module">
   import { attachDeleteConfirmation } from "{{ url_for('static', filename='js/ui/confirmDelete.js') }}";
   import { initSchedule } from "{{ url_for('static', filename='js/lessons/schedule.js') }}";
@@ -405,6 +443,7 @@
     initToggleChangeMode,
     saveChange,
   } from "{{ url_for('static', filename='js/lessons/events/changeModeEvents.js') }}";
+  import { initSelectedLessonsPanel } from "{{ url_for('static', filename='js/lessons/selectedLessonsPanel.js') }}";
 
   // =========================
   // MATRÍCULA
@@ -441,6 +480,8 @@
     dateId: "date-input",
     containerId: "lessons-body",
   });
+
+  initSelectedLessonsPanel();
 
   // REGISTRAR CLASES
   initSaveLessons({ buttonId: "save-lessons" });

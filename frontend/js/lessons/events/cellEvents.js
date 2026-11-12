@@ -2,6 +2,7 @@ import { showFlashFixed } from "../../ui/flash.js";
 import { getScheduleRefs } from "../scheduleRefs.js";
 import { changeMode, validateSlot, toggleLesson } from "../state.js";
 import { rerenderSchedule } from "../schedule.js";
+import { renderSelectedLessons } from "../selectedLessonsPanel.js";
 
 // =========================
 // HELPERS
@@ -98,6 +99,7 @@ export function handleLessonClick({ lessonTd, row, item }) {
   if (!handleValidationResult(result)) return;
 
   // RE-RENDER
+  renderSelectedLessons();
   rerenderSchedule();
 }
 
