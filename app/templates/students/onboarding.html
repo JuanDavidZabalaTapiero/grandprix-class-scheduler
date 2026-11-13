@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 
 {% block title %}Registro de alumno{% endblock %} 
 
@@ -143,6 +143,7 @@
                       class="form-check-input"
                       name="availability_block_ids"
                       value="{{ block_id }}"
+                      data-availability-day="{{ column_key }}"
                       aria-label="{{ day_name }} {{ row.time_slot }}"
                     />
                     {% else %}
@@ -159,6 +160,21 @@
                 </tr>
                 {% endfor %}
               </tbody>
+              <tfoot class="table-light">
+                <tr>
+                  <th scope="row" class="text-start">Día disponible</th>
+                  {% for day_name, column_key in weekday_columns %}
+                  <td>
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="select-all-{{ column_key }}"
+                      data-select-day="{{ column_key }}"
+                    />
+                  </td>
+                  {% endfor %}
+                </tr>
+              </tfoot>
             </table>
           </div>
 
@@ -187,6 +203,7 @@
                       class="form-check-input"
                       name="availability_block_ids"
                       value="{{ row.saturday }}"
+                      data-availability-day="saturday"
                       aria-label="Sábado {{ row.time_slot }}"
                     />
                   </td>
@@ -199,6 +216,19 @@
                 </tr>
                 {% endfor %}
               </tbody>
+              <tfoot class="table-light">
+                <tr>
+                  <th scope="row" class="text-start">Día disponible</th>
+                  <td>
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="select-all-saturday"
+                      data-select-day="saturday"
+                    />
+                  </td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </div>
@@ -293,4 +323,52 @@
     </form>
   </div>
 </div>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector('form[method="post"]');
+
+    if (!form) return;
+
+    const updateMasterCheckbox = (day) => {
+      const master = form.querySelector(`[data-select-day="${day}"]`);
+      const checkboxes = form.querySelectorAll(
+        `[data-availability-day="${day}"]`,
+      );
+
+      const checkedCount = [...checkboxes].filter(
+        (checkbox) => checkbox.checked,
+      ).length;
+
+      master.disabled = checkboxes.length === 0;
+      master.checked =
+        checkboxes.length > 0 && checkedCount === checkboxes.length;
+      master.indeterminate =
+        checkedCount > 0 && checkedCount < checkboxes.length;
+    };
+
+    form.querySelectorAll("[data-select-day]").forEach((master) => {
+      const day = master.dataset.selectDay;
+      const checkboxes = form.querySelectorAll(
+        `[data-availability-day="${day}"]`,
+      );
+
+      master.addEventListener("change", () => {
+        checkboxes.forEach((checkbox) => {
+          checkbox.checked = master.checked;
+        });
+
+        updateMasterCheckbox(day);
+      });
+
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", () => {
+          updateMasterCheckbox(day);
+        });
+      });
+
+      updateMasterCheckbox(day);
+    });
+  });
+</script>
 {% endblock %}

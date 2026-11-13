@@ -21,3 +21,14 @@ class StudentDocumentAlreadyExists(StudentError):
 class StudentHasEnrollments(StudentError):
     default_message = "No se puede eliminar el alumno porque tiene matrículas asociadas"
     status_code = 409
+
+
+# === OTHER ===
+class StudentMedicalExamNotFound(StudentError):
+    default_message = "No existe ese examen médico para el alumno"
+    status_code = 404
+
+
+class StudentNoteNotFound(StudentError):
+    default_message = "No existe esa nota para el alumno"
+    status_code = 404

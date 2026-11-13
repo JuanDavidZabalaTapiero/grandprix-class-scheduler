@@ -1,8 +1,8 @@
 {% extends "base.html" %} 
 
-{% block title %}Alumnos pendientes por programar
+{% block title %}Alumnos pendientes por programar{% endblock %}
 
-{% endblock %} {% block main %}
+{% block main %}
 <div class="container py-4 py-lg-5">
   <header class="mb-4">
     <p class="text-primary fw-semibold text-uppercase small mb-2">
@@ -35,15 +35,25 @@
             <tr>
               <th scope="row" class="text-nowrap">{{ row.time_slot }}</th>
 
-              {% for day_name, column_key in weekday_columns %}
+              {% for day_name, column_key in weekday_columns %} 
+              
+              {% set students = row[column_key]["students"] %}
               <td>
-                {% set students = row[column_key]["students"] %} 
-                
                 {% if students %}
                 <div class="d-flex flex-column gap-1">
                   {% for student in students %}
-                  <div class="rounded border bg-light px-2 py-1">
-                    {{ student["student_name"] }}
+                  <div class="rounded border px-2 py-2 {% if student['has_scheduled_lessons'] %}bg-warning-subtle border-warning-subtle{% else %}bg-light{% endif %}">
+                    <div class="fw-semibold">{{ student["student_name"] }}</div>
+
+                    <div class="d-flex flex-wrap gap-1 mt-1">
+                      {% for category_name in student["pending_enrollments"] %}
+                      <span
+                        class="badge rounded-pill bg-light text-primary border"
+                      >
+                        {{ category_name }}
+                      </span>
+                      {% endfor %}
+                    </div>
                   </div>
                   {% endfor %}
                 </div>
@@ -89,8 +99,18 @@
                 {% if students %}
                 <div class="d-flex flex-column gap-1">
                   {% for student in students %}
-                  <div class="rounded border bg-light px-2 py-1">
-                    {{ student["student_name"] }}
+                  <div class="rounded border px-2 py-2 {% if student['has_scheduled_lessons'] %}bg-warning-subtle border-warning-subtle{% else %}bg-light{% endif %}">
+                    <div class="fw-semibold">{{ student["student_name"] }}</div>
+
+                    <div class="d-flex flex-wrap gap-1 mt-1">
+                      {% for category_name in student["pending_enrollments"] %}
+                      <span
+                        class="badge rounded-pill bg-light text-primary border"
+                      >
+                        {{ category_name }}
+                      </span>
+                      {% endfor %}
+                    </div>
                   </div>
                   {% endfor %}
                 </div>

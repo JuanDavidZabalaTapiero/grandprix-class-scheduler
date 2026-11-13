@@ -1,6 +1,7 @@
 from app.db.models import (
     AvailabilityBlock,
     AvailabilityTimeSlot,
+    Category,
     Enrollment,
     Student,
     StudentAvailability,
@@ -156,6 +157,11 @@ def _build_pending_students_matrix(weekday_columns):
                 StudentAvailability.availability_block_id,
                 Student.id,
                 Student.name,
+                Enrollment.id,
+                Category.name,
+                Student.enrollments.any(Enrollment.lessons.any()).label(
+                    "has_scheduled_lessons"
+                ),
             )
             .join(
                 Student,
@@ -165,27 +171,53 @@ def _build_pending_students_matrix(weekday_columns):
                 Enrollment,
                 Enrollment.student_id == Student.id,
             )
+            .join(
+                Category,
+                Category.id == Enrollment.category_id,
+            )
             .filter(
                 StudentAvailability.availability_block_id.in_(block_ids),
                 Enrollment.schedule_completed.is_(False),
             )
-            .order_by(Student.created_at, Student.id)
+            .order_by(
+                Student.created_at,
+                Student.id,
+                Enrollment.created_at,
+                Enrollment.id,
+            )
             .all()
         )
 
-        seen_students = set()
+        students_by_cell = {}
+        seen_enrollments = set()
 
-        for block_id, student_id, student_name in assignments:
+        for (
+            block_id,
+            student_id,
+            student_name,
+            enrollment_id,
+            category_name,
+            has_scheduled_lessons,
+        ) in assignments:
             time_key, column_key, cell_students = students_by_block[block_id]
             student_cell_key = (time_key, column_key, student_id)
 
-            # Si tiene varias matrículas pendientes, aparece una sola vez
-            # en la misma celda.
-            if student_cell_key in seen_students:
-                continue
+            if student_cell_key not in students_by_cell:
+                student_data = {
+                    "student_name": student_name,
+                    "pending_enrollments": [],
+                    "has_scheduled_lessons": has_scheduled_lessons,
+                }
+                students_by_cell[student_cell_key] = student_data
+                cell_students.append(student_data)
 
-            seen_students.add(student_cell_key)
-            cell_students.append({"student_name": student_name})
+            enrollment_key = (student_cell_key, enrollment_id)
+
+            if enrollment_key not in seen_enrollments:
+                students_by_cell[student_cell_key]["pending_enrollments"].append(
+                    category_name
+                )
+                seen_enrollments.add(enrollment_key)
 
     return {
         "weekdays": [name for _, name, _ in weekday_columns],

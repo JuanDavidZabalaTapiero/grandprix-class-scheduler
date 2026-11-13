@@ -1,7 +1,16 @@
-{% from "macros/forms.html" import render_field %}
+{% from "macros/forms.html" import render_field %} 
 
 {{ form.hidden_tag() }}
 
 {{ render_field(form.document_id) }}
 {{ render_field(form.name) }}
 {{ render_field(form.phone) }}
+
+{% if action_label == "Actualizar" and request.view_args.get("student_id") %}
+<a
+  href="{{ url_for('students.details', student_id=request.view_args.get('student_id')) }}"
+  class="btn btn-outline-primary my-3"
+>
+  Saldo, preferencias, examen y notas
+</a>
+{% endif %}

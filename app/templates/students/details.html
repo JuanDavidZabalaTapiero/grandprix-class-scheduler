@@ -1,0 +1,270 @@
+{% extends "base.html" %} 
+
+{% block title %}Detalles de {{ student.name }}{% endblock %} 
+
+{% block main %}
+<div class="container py-4 py-lg-5">
+  <header
+    class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4"
+  >
+    <div>
+      <p class="text-primary fw-semibold text-uppercase small mb-2">
+        Información del alumno
+      </p>
+      <h1 class="h2 fw-bold mb-1">{{ student.name }}</h1>
+      <p class="text-secondary mb-0">
+        Documento: {{ student.document_id }} · Teléfono: {{ student.phone }}
+      </p>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+      <a
+        href="{{ url_for('students.edit_form', student_id=student.id) }}"
+        class="btn btn-outline-primary"
+      >
+        Editar datos básicos
+      </a>
+      <a
+        href="{{ url_for('students.home') }}"
+        class="btn btn-outline-secondary"
+      >
+        Volver a alumnos
+      </a>
+    </div>
+  </header>
+
+  <div class="row g-4">
+    <!-- Saldo -->
+    <div class="col-lg-6">
+      <section class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-semibold mb-3">Saldo</h2>
+
+          <form
+            method="post"
+            action="{{ url_for('students.update_balance', student_id=student.id) }}"
+          >
+            <div class="form-check form-switch mb-3">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="has_balance"
+                name="has_balance"
+                {%
+                if
+                student.has_balance
+                %}checked{%
+                endif
+                %}
+              />
+              <label class="form-check-label" for="has_balance">
+                Tiene saldo pendiente
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar saldo</button>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <!-- Preferencia -->
+    <div class="col-lg-6">
+      <section class="card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-semibold mb-3">Preferencias</h2>
+
+          <form
+            method="post"
+            action="{{ url_for('students.update_preferences', student_id=student.id) }}"
+          >
+            <div class="form-check form-switch mb-3">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="wants_automatic"
+                name="wants_automatic"
+                {%
+                if
+                preference
+                and
+                preference.wants_automatic
+                %}checked{%
+                endif
+                %}
+              />
+              <label class="form-check-label" for="wants_automatic">
+                Prefiere carro automático
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              Guardar preferencia
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <!-- Exámenes médicos -->
+    <div class="col-12">
+      <section class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-semibold mb-1">Examen médico</h2>
+          <p class="text-secondary small mb-4">
+            Puedes registrar un nuevo examen o corregir uno existente.
+          </p>
+
+          <form
+            method="post"
+            action="{{ url_for('students.create_medical_exam', student_id=student.id) }}"
+            class="border rounded-3 p-3 mb-4"
+          >
+            <h3 class="h6 fw-semibold mb-3">Registrar examen</h3>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label for="new-exam-date" class="form-label">
+                  Fecha del examen
+                </label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="new-exam-date"
+                  name="exam_date"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label for="new-expiration-date" class="form-label">
+                  Fecha de vencimiento
+                </label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="new-expiration-date"
+                  name="expiration_date"
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Añadir examen</button>
+          </form>
+
+          {% if medical_exams %}
+          <div class="d-grid gap-3">
+            {% for exam in medical_exams %}
+            <form
+              method="post"
+              action="{{ url_for('students.edit_medical_exam', student_id=student.id, medical_exam_id=exam.id) }}"
+              class="border rounded-3 p-3"
+            >
+              <h3 class="h6 fw-semibold mb-3">
+                Examen del {{ exam.exam_date.strftime("%d/%m/%Y") }}
+              </h3>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label for="exam-date-{{ exam.id }}" class="form-label">
+                    Fecha del examen
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="exam-date-{{ exam.id }}"
+                    name="exam_date"
+                    value="{{ exam.exam_date.isoformat() }}"
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="expiration-date-{{ exam.id }}" class="form-label">
+                    Fecha de vencimiento
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="expiration-date-{{ exam.id }}"
+                    name="expiration_date"
+                    value="{{ exam.expiration_date.isoformat() }}"
+                  />
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-outline-primary">
+                Guardar cambios
+              </button>
+            </form>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p class="text-secondary mb-0">
+            No hay exámenes médicos registrados.
+          </p>
+          {% endif %}
+        </div>
+      </section>
+    </div>
+
+    <!-- Notas -->
+    <div class="col-12">
+      <section class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="h5 fw-semibold mb-1">Notas</h2>
+          <p class="text-secondary small mb-4">
+            Las notas existentes se conservan; puedes añadir otra o editar una.
+          </p>
+
+          <form
+            method="post"
+            action="{{ url_for('students.create_note', student_id=student.id) }}"
+            class="mb-4"
+          >
+            <label for="new-note" class="form-label">Nueva nota</label>
+            <textarea
+              class="form-control mb-3"
+              id="new-note"
+              name="note"
+              rows="3"
+              placeholder="Escribe una nota..."
+            ></textarea>
+
+            <button type="submit" class="btn btn-primary">Añadir nota</button>
+          </form>
+
+          {% if notes %}
+          <div class="d-grid gap-3">
+            {% for note in notes %}
+            <form
+              method="post"
+              action="{{ url_for('students.edit_note', student_id=student.id, note_id=note.id) }}"
+              class="border rounded-3 p-3"
+            >
+              <label for="note-{{ note.id }}" class="form-label">
+                Nota del {{ note.created_at.strftime("%d/%m/%Y %H:%M") }}
+              </label>
+              <textarea
+                class="form-control mb-3"
+                id="note-{{ note.id }}"
+                name="note"
+                rows="3"
+              >{{ note.note }}
+            </textarea>
+
+              <button type="submit" class="btn btn-outline-primary">
+                Guardar cambios
+              </button>
+            </form>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p class="text-secondary mb-0">No hay notas registradas.</p>
+          {% endif %}
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+{% endblock %}

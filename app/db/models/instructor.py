@@ -20,3 +20,8 @@ class Instructor(db.Model):
         "InstructorVehicle", back_populates="instructor"
     )
     blocked_days = db.relationship("BlockedDay", back_populates="instructor")
+    blocked_slots = db.relationship(
+        "InstructorBlockedSlot",
+        back_populates="instructor",
+        cascade="all, delete-orphan",
+    )
