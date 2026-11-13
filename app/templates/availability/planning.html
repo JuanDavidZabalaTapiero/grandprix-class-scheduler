@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
 {% block title %}Alumnos pendientes por programar{% endblock %}
 
@@ -35,14 +35,16 @@
             <tr>
               <th scope="row" class="text-nowrap">{{ row.time_slot }}</th>
 
-              {% for day_name, column_key in weekday_columns %} 
+              {% for day_name, column_key in weekday_columns %}
               
               {% set students = row[column_key]["students"] %}
               <td>
                 {% if students %}
                 <div class="d-flex flex-column gap-1">
                   {% for student in students %}
-                  <div class="rounded border px-2 py-2 {% if student['has_scheduled_lessons'] %}bg-warning-subtle border-warning-subtle{% else %}bg-light{% endif %}">
+                  <div
+                    class="rounded border px-2 py-2 {% if student['has_scheduled_lessons'] %}bg-warning-subtle border-warning-subtle{% else %}bg-light{% endif %}"
+                  >
                     <div class="fw-semibold">{{ student["student_name"] }}</div>
 
                     <div class="d-flex flex-wrap gap-1 mt-1">
@@ -73,6 +75,48 @@
           </tbody>
         </table>
       </div>
+
+      <h3 class="h6 fw-semibold mt-4 mb-3">Cantidad de alumnos por horario</h3>
+
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle text-center mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="text-start text-nowrap">Horario</th>
+              {% for day_name, column_key in weekday_columns %}
+              <th scope="col">{{ day_name }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for row in weekday_matrix.rows %}
+            <tr>
+              <th scope="row" class="text-start text-nowrap">
+                {{ row.time_slot }}
+              </th>
+
+              {% for day_name, column_key in weekday_columns %} {% set
+              student_count = row[column_key]["students"]|length %}
+              <td>
+                <span
+                  class="badge rounded-pill {% if student_count %}text-bg-primary{% else %}bg-light text-secondary border{% endif %}"
+                >
+                  {{ student_count }}
+                </span>
+              </td>
+              {% endfor %}
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="6" class="text-center text-secondary py-3">
+                No hay horarios entre semana para contar.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -94,12 +138,14 @@
             <tr>
               <th scope="row" class="text-nowrap">{{ row.time_slot }}</th>
               <td>
-                {% set students = row["saturday"]["students"] %} 
+                {% set students = row["saturday"]["students"] %}
                 
                 {% if students %}
                 <div class="d-flex flex-column gap-1">
                   {% for student in students %}
-                  <div class="rounded border px-2 py-2 {% if student['has_scheduled_lessons'] %}bg-warning-subtle border-warning-subtle{% else %}bg-light{% endif %}">
+                  <div
+                    class="rounded border px-2 py-2 {% if student['has_scheduled_lessons'] %}bg-warning-subtle border-warning-subtle{% else %}bg-light{% endif %}"
+                  >
                     <div class="fw-semibold">{{ student["student_name"] }}</div>
 
                     <div class="d-flex flex-wrap gap-1 mt-1">
@@ -123,6 +169,43 @@
             <tr>
               <td colspan="2" class="text-center text-secondary py-4">
                 No hay bloques disponibles para el sábado.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="h6 fw-semibold mt-4 mb-3">Cantidad de alumnos por horario</h3>
+
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle text-center mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="text-start text-nowrap">Horario</th>
+              <th scope="col">Sábado</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for row in saturday_matrix.rows %} {% set student_count =
+            row["saturday"]["students"]|length %}
+            <tr>
+              <th scope="row" class="text-start text-nowrap">
+                {{ row.time_slot }}
+              </th>
+              <td>
+                <span
+                  class="badge rounded-pill {% if student_count %}text-bg-primary{% else %}bg-light text-secondary border{% endif %}"
+                >
+                  {{ student_count }}
+                </span>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="2" class="text-center text-secondary py-3">
+                No hay horarios de sábado para contar.
               </td>
             </tr>
             {% endfor %}
