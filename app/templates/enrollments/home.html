@@ -153,7 +153,7 @@
               {% for status in lesson_statuses %}
               <option
                 value="{{status.id}}"
-                {% if status.id=="lesson.lesson_status.id" %}selected{% endif %}
+                {% if status.id == lesson.lesson_status_id %}selected{% endif %}
               >
                 {{status.name}}
               </option>

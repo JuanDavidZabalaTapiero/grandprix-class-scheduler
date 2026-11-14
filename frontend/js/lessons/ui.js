@@ -8,42 +8,35 @@ import { applyLessonStyles } from "./styles.js";
 export function renderSchedule(container, lessons, date, totals = {}) {
   if (!container) return;
 
-  // LIMPIAR CONTENEDOR
   container.innerHTML = "";
 
-  // RENDER
   lessons.forEach((row) => {
     const tr = document.createElement("tr");
 
-    // HORA
     const hourTd = document.createElement("td");
     hourTd.textContent = row.hour_formatted;
     tr.appendChild(hourTd);
 
-    // CLASES
     row.instructors.forEach((item) => {
       const lessonTd = document.createElement("td");
+      const isBlocked = item.is_blocked || item.is_time_blocked;
 
-      if (item.is_blocked) {
-        // === DÍA BLOQUEADO ===
-        lessonTd.classList.add("cell-blocked");
-      } else if (item.lesson) {
-        // === CLASE OCUPADA ===
-
-        // CONTENIDO
+      if (item.lesson) {
         lessonTd.textContent = `${item.lesson.student} (${item.lesson.category}) | ${item.lesson.vehicle_license} (${item.lesson.vehicle_type})`;
 
-        // EVENTO
         lessonTd.addEventListener("click", () => {
           handleRegisteredClick({ lesson: item.lesson });
         });
 
-        // === CSS ===
-
-        // NORMAL
         applyLessonStyles(lessonTd, item.lesson);
 
-        // CHANGE MODE
+        if (isBlocked) {
+          lessonTd.classList.add("cell-blocked");
+          lessonTd.title = item.is_blocked
+            ? "Clase en un día bloqueado"
+            : "Clase en un horario bloqueado";
+        }
+
         if (
           changeMode.active &&
           changeMode.selection.origin &&
@@ -59,46 +52,36 @@ export function renderSchedule(container, lessons, date, totals = {}) {
           lessonTd.classList.add("change-target");
         }
 
-        // SELECTED IN CHANGE
-
-        const isChosen = lessonsToChange.some((c) => {
-          // ORIGIN
-          if (c.originId === item.lesson.id) return true;
-
-          // TARGET
-          if (c.target === item.lesson.id) return true;
-
-          return false;
-        });
+        const isChosen = lessonsToChange.some(
+          (change) =>
+            change.originId === item.lesson.id ||
+            change.target === item.lesson.id,
+        );
 
         if (isChosen) {
           lessonTd.classList.add("change-chosen");
         }
+      } else if (isBlocked) {
+        lessonTd.classList.add("cell-blocked");
+        lessonTd.title = item.is_blocked
+          ? "Instructor bloqueado durante todo el día"
+          : "Instructor bloqueado en este horario";
       } else {
-        // === CLASE DISPONIBLE ===
-
-        // EVENTO
         lessonTd.addEventListener("click", () => {
           handleLessonClick({ lessonTd, row, item });
         });
 
-        // === CSS ===
-
-        // VERIFICAR SELECCIÓN
-        const hour = row.hour;
-        const instructorId = item.id;
         const selected = selectedLessons.some(
-          (l) =>
-            l.date === date &&
-            l.hour === hour &&
-            l.instructor_id === instructorId,
+          (lesson) =>
+            lesson.date === date &&
+            lesson.hour === row.hour &&
+            lesson.instructor_id === item.id,
         );
 
         if (selected) {
           lessonTd.classList.add("selected");
         }
 
-        // CHANGE MODE
         const target = changeMode.selection.target;
 
         if (
@@ -112,16 +95,14 @@ export function renderSchedule(container, lessons, date, totals = {}) {
           lessonTd.classList.add("change-target");
         }
 
-        // SELECTED TO CHANGE
-
-        const isChosenTarget = lessonsToChange.some((c) => {
-          const t = c.target;
+        const isChosenTarget = lessonsToChange.some((change) => {
+          const target = change.target;
 
           return (
-            typeof t === "object" &&
-            t.date === date &&
-            t.hour === row.hour &&
-            t.instructor_id === item.id
+            typeof target === "object" &&
+            target.date === date &&
+            target.hour === row.hour &&
+            target.instructor_id === item.id
           );
         });
 
@@ -135,10 +116,6 @@ export function renderSchedule(container, lessons, date, totals = {}) {
 
     container.appendChild(tr);
   });
-
-  // =========================
-  // FILA TOTAL
-  // =========================
 
   const totalTr = document.createElement("tr");
 

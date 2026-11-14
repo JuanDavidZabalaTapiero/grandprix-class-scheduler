@@ -1,13 +1,19 @@
 from app.core.utils.time import format_time
 
 
-def build_scheduling(hours, instructors, lessons, blocked_days=None):
-
-    # === DATOS DE EJEMPLO ===
+def build_scheduling(
+    hours,
+    instructors,
+    lessons,
+    blocked_days=None,
+    blocked_slots=None,
+):
     if blocked_days is None:
         blocked_days = []
 
-    # === MAP LESSONS ===
+    if blocked_slots is None:
+        blocked_slots = []
+
     lesson_map = {
         (lesson.start_time, lesson.instructor_vehicle.instructor_id): {
             "id": lesson.id,
@@ -21,20 +27,23 @@ def build_scheduling(hours, instructors, lessons, blocked_days=None):
         for lesson in lessons
     }
 
-    # === MAP BLOCKED DAYS ===
-    blocked_instructor_ids = {block.instructor_id for block in blocked_days}
+    blocked_instructor_ids = {blocked_day.instructor_id for blocked_day in blocked_days}
 
-    # === ARRAY VEHICLES ID ===
+    blocked_slot_keys = {
+        (blocked_slot.instructor_id, blocked_slot.start_time)
+        for blocked_slot in blocked_slots
+    }
+
     vehicles_by_hour = {}
 
     for lesson in lessons:
-        hour = lesson.start_time
         vehicle_id = lesson.instructor_vehicle.vehicle.id
-        vehicles_by_hour.setdefault(hour, set()).add(vehicle_id)
+        vehicles_by_hour.setdefault(lesson.start_time, set()).add(vehicle_id)
 
-    vehicles_by_hour = {str(hour): list(v) for hour, v in vehicles_by_hour.items()}
+    vehicles_by_hour = {
+        str(hour): list(vehicle_ids) for hour, vehicle_ids in vehicles_by_hour.items()
+    }
 
-    # === DICT ===
     return [
         {
             "hour": str(hour),
@@ -42,11 +51,16 @@ def build_scheduling(hours, instructors, lessons, blocked_days=None):
             "vehicles_ids": vehicles_by_hour.get(str(hour), []),
             "instructors": [
                 {
-                    "id": i.id,
-                    "is_blocked": i.id in blocked_instructor_ids,
-                    "lesson": lesson_map.get((hour, i.id)),
+                    "id": instructor.id,
+                    "is_blocked": instructor.id in blocked_instructor_ids,
+                    "is_time_blocked": (
+                        instructor.id,
+                        hour,
+                    )
+                    in blocked_slot_keys,
+                    "lesson": lesson_map.get((hour, instructor.id)),
                 }
-                for i in instructors
+                for instructor in instructors
             ],
         }
         for hour in hours

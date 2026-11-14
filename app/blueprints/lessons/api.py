@@ -2,7 +2,10 @@ from datetime import time
 
 from flask import Blueprint, flash, jsonify, request
 
-from app.blueprints.blocked_days.services import get_blocked_days_by_date
+from app.blueprints.blocked_days.services import (
+    get_blocked_days_by_date,
+    get_blocked_slots_by_date,
+)
 from app.blueprints.instructors.services.crud import instructor_services
 from app.core.exceptions import AppError
 from app.core.transactions import run_query, run_service
@@ -28,9 +31,16 @@ def get_schedule():
         )
 
         blocked_days = run_query(lambda: get_blocked_days_by_date(date))
+        blocked_slots = run_query(lambda: get_blocked_slots_by_date(date))
 
         # === BUILD ===
-        lessons_dict = build_scheduling(hours, instructors, lessons, blocked_days)
+        lessons_dict = build_scheduling(
+            hours,
+            instructors,
+            lessons,
+            blocked_days,
+            blocked_slots,
+        )
 
         # === RESPONSE ===
         return jsonify({"lessons": lessons_dict, "totals": totals})
