@@ -68,6 +68,15 @@ class StudentService(CRUDServices):
 
         student_ids = [student.id for student in students]
 
+        students_with_scheduled_lessons = set(
+            db.session.scalars(
+                select(Enrollment.student_id)
+                .join(Lesson, Lesson.enrollment_id == Enrollment.id)
+                .where(Enrollment.student_id.in_(student_ids))
+                .distinct()
+            ).all()
+        )
+
         notes = db.session.scalars(
             select(StudentNote)
             .where(StudentNote.student_id.in_(student_ids))
@@ -98,6 +107,8 @@ class StudentService(CRUDServices):
                         else False
                     ),
                     "has_balance": student.has_balance,
+                    "has_scheduled_lessons": student.id
+                    in students_with_scheduled_lessons,
                 }
             )
 

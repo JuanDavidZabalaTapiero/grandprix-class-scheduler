@@ -30,7 +30,7 @@
 
       <tbody>
         {% for item in students %}
-        <tr>
+        <tr class="{% if item.has_scheduled_lessons %}table-warning{% endif %}">
           <td>{{ item.student.created_at.strftime("%d/%m/%Y") }}</td>
           <td>{{ item.student.name }}</td>
 
