@@ -1,1 +1,1 @@
-var e={dateInput:null,container:null};export function setScheduleRefs(n){var t=n.dateInput,u=n.container;e.dateInput=t,e.container=u}export function getScheduleRefs(){return e}
+var a={dateInput:null,container:null,availabilityByDay:{}};export function setScheduleRefs(t){var e=t.dateInput,n=t.container,i=t.availabilityByDay,l=void 0===i?{}:i;a.dateInput=e,a.container=n,a.availabilityByDay=l}export function getScheduleRefs(){return a}

@@ -7,13 +7,24 @@ import { getScheduleRefs, setScheduleRefs } from "./scheduleRefs.js";
 // CARGAR CLASES
 // =========================
 
-export async function loadSchedule(dateInput, container) {
+export async function loadSchedule(
+  dateInput,
+  container,
+  availabilityByDay = {},
+) {
   try {
-    const data = await getSchedule(dateInput.value);
-    renderSchedule(container, data.lessons, dateInput.value, data.totals);
-  } catch (err) {
+    const schedule = await getSchedule(dateInput.value);
+
+    renderSchedule(
+      container,
+      schedule.lessons,
+      dateInput.value,
+      schedule.totals,
+      availabilityByDay,
+    );
+  } catch (error) {
     container.innerHTML = "";
-    showFlash("danger", err.message);
+    showFlash("danger", error.message);
   }
 }
 
@@ -22,29 +33,34 @@ export async function loadSchedule(dateInput, container) {
 // =========================
 
 export function rerenderSchedule() {
-  const { dateInput, container } = getScheduleRefs();
-  if (!dateInput || !container) return;
+  const { dateInput, container, availabilityByDay } = getScheduleRefs();
 
-  loadSchedule(dateInput, container);
+  if (dateInput && container) {
+    loadSchedule(dateInput, container, availabilityByDay);
+  }
 }
 
 // =========================
 // INICIALIZACIÓN
 // =========================
 
-export function initSchedule({ dateId, containerId }) {
-  // === ELEMENTOS ===
-  const date = document.getElementById(dateId);
+export function initSchedule({ dateId, containerId, availabilityByDay = {} }) {
+  const dateInput = document.getElementById(dateId);
   const container = document.getElementById(containerId);
 
-  if (!date || !container) return;
+  if (!dateInput || !container) {
+    return;
+  }
 
-  // === GUARDAR REFS ===
-  setScheduleRefs({ dateInput: date, container: container });
+  setScheduleRefs({
+    dateInput,
+    container,
+    availabilityByDay,
+  });
 
-  // === CARGA INICIAL ===
-  loadSchedule(date, container);
+  loadSchedule(dateInput, container, availabilityByDay);
 
-  // === EVENTO CHANGE ===
-  date.addEventListener("change", () => loadSchedule(date, container));
+  dateInput.addEventListener("change", () => {
+    loadSchedule(dateInput, container, availabilityByDay);
+  });
 }

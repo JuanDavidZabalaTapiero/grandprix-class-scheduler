@@ -57,6 +57,14 @@ td[class*="lesson-"] {
   --bs-table-color: #fff;
 }
 
+#lessons-body td.student-available {
+  background-color: #d9f2df;
+}
+
+#lessons-body td.student-available.selected {
+  background-color: #1d4ed8;
+}
+
 // === CHANGE ===
 
 td.change-origin,

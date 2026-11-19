@@ -17,6 +17,10 @@
 
 {% block main %}
 <div class="container">
+  <div id="student-availability-data" class="d-none">
+    {{ availability_by_day | tojson }}
+  </div>
+
   <!-- CARD -->
   <div class="border rounded-3 p-3 mb-4 bg-white shadow-sm">
     <!-- HEADER -->
@@ -445,6 +449,9 @@
   } from "{{ url_for('static', filename='js/lessons/events/changeModeEvents.js') }}";
   import { initSelectedLessonsPanel } from "{{ url_for('static', filename='js/lessons/selectedLessonsPanel.js') }}";
 
+  const availabilityDataElement = document.getElementById("student-availability-data");
+  const availabilityByDay = JSON.parse(availabilityDataElement.textContent);
+
   // =========================
   // MATRÍCULA
   // =========================
@@ -479,6 +486,7 @@
   initSchedule({
     dateId: "date-input",
     containerId: "lessons-body",
+    availabilityByDay,
   });
 
   initSelectedLessonsPanel();

@@ -5,81 +5,137 @@ import {
 } from "./events/cellEvents.js";
 import { applyLessonStyles } from "./styles.js";
 
-export function renderSchedule(container, lessons, date, totals = {}) {
-  if (!container) return;
+export function renderSchedule(
+  container,
+  rows,
+  selectedDate,
+  totals = {},
+  availabilityByDay = {},
+) {
+  if (!container) {
+    return;
+  }
+
+  const date = new Date(`${selectedDate}T00:00:00`);
+  const weekday = (date.getDay() + 6) % 7;
+  const intervals = availabilityByDay[String(weekday)] || [];
+  const availableHours = getAvailableHours(intervals);
+  const availableTimes = availabilityByDay[String(weekday)] || [];
 
   container.innerHTML = "";
 
-  lessons.forEach((row) => {
+  // FUNCIÓN AUXILIAR
+  function getAvailableHours(intervals) {
+    const hours = new Set();
+
+    intervals.forEach(({ start, end }) => {
+      const [startHour, startMinute] = start.split(":").map(Number);
+      const [endHour, endMinute] = end.split(":").map(Number);
+
+      const startMinutes = startHour * 60 + startMinute;
+      const endMinutes = endHour * 60 + endMinute;
+
+      for (
+        let hour = startHour;
+        hour * 60 < endMinutes && hour * 60 >= startMinutes;
+        hour += 1
+      ) {
+        hours.add(`${String(hour).padStart(2, "0")}:00`);
+      }
+    });
+
+    return hours;
+  }
+
+  rows.forEach((row) => {
     const tr = document.createElement("tr");
+    const hourCell = document.createElement("td");
 
-    const hourTd = document.createElement("td");
-    hourTd.textContent = row.hour_formatted;
-    tr.appendChild(hourTd);
+    hourCell.textContent = row.hour_formatted;
+    tr.appendChild(hourCell);
 
-    row.instructors.forEach((item) => {
-      const lessonTd = document.createElement("td");
-      const isBlocked = item.is_blocked || item.is_time_blocked;
+    row.instructors.forEach((instructor) => {
+      const cell = document.createElement("td");
+      const isBlocked = instructor.is_blocked || instructor.is_time_blocked;
+      const isAvailable = availableHours.has(row.hour.slice(0, 5));
 
-      if (item.lesson) {
-        lessonTd.textContent = `${item.lesson.student} (${item.lesson.category}) | ${item.lesson.vehicle_license} (${item.lesson.vehicle_type})`;
+      if (
+        isAvailable &&
+        !instructor.lesson &&
+        !instructor.is_blocked &&
+        !instructor.is_time_blocked
+      ) {
+        cell.classList.add("student-available");
+      }
 
-        lessonTd.addEventListener("click", () => {
-          handleRegisteredClick({ lesson: item.lesson });
+      if (instructor.lesson) {
+        cell.textContent =
+          `${instructor.lesson.student} (${instructor.lesson.category}) | ` +
+          `${instructor.lesson.vehicle_license} (${instructor.lesson.vehicle_type})`;
+
+        cell.addEventListener("click", () => {
+          handleRegisteredClick({ lesson: instructor.lesson });
         });
 
-        applyLessonStyles(lessonTd, item.lesson);
+        applyLessonStyles(cell, instructor.lesson);
 
         if (isBlocked) {
-          lessonTd.classList.add("cell-blocked");
-          lessonTd.title = item.is_blocked
+          cell.classList.add("cell-blocked");
+          cell.title = instructor.is_blocked
             ? "Clase en un día bloqueado"
             : "Clase en un horario bloqueado";
         }
 
         if (
           changeMode.active &&
-          changeMode.selection.origin &&
-          changeMode.selection.origin.id === item.lesson.id
+          changeMode.selection.origin?.id === instructor.lesson.id
         ) {
-          lessonTd.classList.add("change-origin");
+          cell.classList.add("change-origin");
         }
 
         if (
           changeMode.active &&
-          changeMode.selection.target === item.lesson.id
+          changeMode.selection.target === instructor.lesson.id
         ) {
-          lessonTd.classList.add("change-target");
+          cell.classList.add("change-target");
         }
 
-        const isChosen = lessonsToChange.some(
-          (change) =>
-            change.originId === item.lesson.id ||
-            change.target === item.lesson.id,
-        );
-
-        if (isChosen) {
-          lessonTd.classList.add("change-chosen");
+        if (
+          lessonsToChange.some(
+            (lesson) =>
+              lesson.originId === instructor.lesson.id ||
+              lesson.targetId === instructor.lesson.id,
+          )
+        ) {
+          cell.classList.add("change-chosen");
         }
       } else if (isBlocked) {
-        lessonTd.classList.add("cell-blocked");
-        lessonTd.title = item.is_blocked
+        cell.classList.add("cell-blocked");
+        cell.title = instructor.is_blocked
           ? "Instructor bloqueado durante todo el día"
           : "Instructor bloqueado en este horario";
       } else {
-        lessonTd.addEventListener("click", () => {
-          handleLessonClick({ lessonTd, row, item });
+        if (isAvailable) {
+          cell.classList.add("student-available");
+        }
+
+        cell.addEventListener("click", () => {
+          handleLessonClick({
+            lessonTd: cell,
+            row,
+            item: instructor,
+          });
         });
 
-        const selected = selectedLessons.some(
+        const isSelected = selectedLessons.some(
           (lesson) =>
-            lesson.date === date &&
+            lesson.date === selectedDate &&
             lesson.hour === row.hour &&
-            lesson.instructor_id === item.id,
+            lesson.instructor_id === instructor.id,
         );
 
-        if (selected) {
-          lessonTd.classList.add("selected");
+        if (isSelected) {
+          cell.classList.add("selected");
         }
 
         const target = changeMode.selection.target;
@@ -88,50 +144,48 @@ export function renderSchedule(container, lessons, date, totals = {}) {
           changeMode.active &&
           target &&
           typeof target === "object" &&
-          target.date === date &&
+          target.date === selectedDate &&
           target.hour === row.hour &&
-          target.instructor_id === item.id
+          target.instructor_id === instructor.id
         ) {
-          lessonTd.classList.add("change-target");
+          cell.classList.add("change-target");
         }
 
-        const isChosenTarget = lessonsToChange.some((change) => {
-          const target = change.target;
+        const isChangeChosen = lessonsToChange.some(
+          (lesson) =>
+            typeof lesson.target === "object" &&
+            lesson.target.date === selectedDate &&
+            lesson.target.hour === row.hour &&
+            lesson.target.instructor_id === instructor.id,
+        );
 
-          return (
-            typeof target === "object" &&
-            target.date === date &&
-            target.hour === row.hour &&
-            target.instructor_id === item.id
-          );
-        });
-
-        if (isChosenTarget) {
-          lessonTd.classList.add("change-chosen");
+        if (isChangeChosen) {
+          cell.classList.add("change-chosen");
         }
       }
 
-      tr.appendChild(lessonTd);
+      tr.appendChild(cell);
     });
 
     container.appendChild(tr);
   });
 
-  const totalTr = document.createElement("tr");
+  const totalRow = document.createElement("tr");
+  const totalLabel = document.createElement("td");
 
-  const totalLabelTd = document.createElement("td");
-  totalLabelTd.textContent = "Total";
-  totalLabelTd.classList.add("fw-bold");
-  totalTr.appendChild(totalLabelTd);
+  totalLabel.textContent = "Total";
+  totalLabel.classList.add("fw-bold");
+  totalRow.appendChild(totalLabel);
 
-  if (lessons.length > 0) {
-    lessons[0].instructors.forEach((item) => {
-      const td = document.createElement("td");
-      td.textContent = totals[item.id] || 0;
-      td.classList.add("fw-bold");
-      totalTr.appendChild(td);
+  if (rows.length > 0) {
+    rows[0].instructors.forEach((instructor) => {
+      const totalCell = document.createElement("td");
+
+      totalCell.textContent = totals[instructor.id] || 0;
+      totalCell.classList.add("fw-bold");
+      totalRow.appendChild(totalCell);
     });
   }
 
-  container.appendChild(totalTr);
+  container.appendChild(totalRow);
 }
